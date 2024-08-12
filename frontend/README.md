@@ -9,11 +9,16 @@ Para a instalação das dependências, execução e build do projeto, será nece
 ## INSTALAÇÃO
 
 1. Clone o repositório na sua máquina:
-   // ANCHOR atualizar link de clone
 
-```bash
-git clone git@gitlab.com:dsds3/aps2024.git
-```
+  1. Com SSH: 
+    ```bash
+    git clone git@github.com:luciofdsantos/APS-2023.2-FitPersonal.git
+    ```
+  
+  2. Com HTTPS: 
+    ```bash
+    git clone https://github.com/luciofdsantos/APS-2023.2-FitPersonal.git
+    ```
 
 2. Navegue para o diretório do projeto e instale as dependências:
 

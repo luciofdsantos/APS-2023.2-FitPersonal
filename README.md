@@ -1,25 +1,36 @@
 # APS-2023.2-Fitness
 
-Seções que devem ser adicionadas no README.md
-Sobre o Projeto
+# **Sobre o Projeto**
 
-A primeira seção Sobre o Projeto deve apresentar a finalidade do projeto e do repositório, por exemplo:
+Repositório destinado ao desenvolvimento do trabalho da disciplina Análise de Projeto de Sistemas do Instituto Federal do Norte de Minas Gerais (IFNMG - Montes Claros) do curso de Ciência da Computação. Nele estará mantido o processo de documentação de requisitos, modelagem, análise e código desenvolvido pela turma. O tema escolhido foi **FitPersonal** , o qual foi submetidos a etapa de elicitação de requisitos, elaboração, análise do projeto e desenvolvimento do código, snedo as técnicas utilizadas em conformidade com a disciplina.
 
-"Repositório destinado ao desenvolvimento do trabalho da disciplina Análise de Projeto de Sistemas do Instituto Federal do Norte de Minas Gerais (IFNMG - Montes Claros) do curso de Ciência da Computação. Nele estará mantido o processo de documentação de requisitos, modelagem, análise e código desenvolvido pela turma. O tema escolhido foi <nome_projeto_aqui> , o qual foi submetidos a etapa de elicitação de requisitos, elaboração, análise do projeto e desenvolvimento do código, snedo as técnicas utilizadas em conformidade com a disciplina. "
+#  **O que é o FitPersonal**
 
-O que é o <nome_projeto_aqui>
-A Segunda seção O que é o <nome_projeto_aqui> apresenta o significado do tema do projeto escolhido. Assim, adicione um parágrafo ou dois para possibilitar o entendimento do domínio do projeto.
+O **FitPersonal** é um sistema de gerenciamento de conteúdo (CMS - Content Management System), trata-se de um web site que mantem de forma atualizada informações do curso.
 
-Desenvolvedores
-A terceira e última seção Desenvolvedores apresenta os colaboradores do repositório. Adicione uma tabela com os membros do grupo da disciplina. A tabela deve ter 4 colunas (Foto, Nome, GitHub, papel no projeto). GitHub é o endereço para o repositório do aluno e o papel no projeto deve indicar as atividades realizadas tanto no desenvolvimento quanto na documentação.
+O principal objetivo do **Portal Ciência da Computação** é fortalecer a comunicação entre a comunidade acadêmica e sociedade, centralizando as informações e atividades desenvolvidas no meio acadêmico referente ao curos. No **Portal Ciência da Computação** é possível encontrar projetos em andamentos, TCC's, notícias, colegiados, além de informações do curso como grade de horários, matriz do curso e PPC.
 
-Divisão dos diretórios
-O repositório será dividido em dois diretórios: docs, src e HOW-TO.
+# **Desenvolvedores**
 
-O diretório docs deve conter todos os documentos desenvolvidos durante o projeto, sendo eles divididos em: Visão do Negócio, Casos de Uso, Diagrama de Domínio, Diagrama de Sequência de Sistema, Especificação Suplementar e o Projeto de Arquitetura, Feedback sobre o Desenvolvimento.
+| Foto | Nome | Github | Papel |
+| --- | --- | --- | --- |
+| <img src="https://github.com/dayanyylima.png" width="60px;"/><br /> | Dayany Lima Santos | https://github.com/dayanyylima | |
+| <img src="https://github.com/deisesan.png" width="60px;"/><br /> | Deise Santana dos Santos | https://github.com/deisesan | |
+| <img src="https://github.com/grahduarte12.png" width="60px;"/><br /> | Graciely | https://github.com/grahduarte12
+ | Gerente de Design, Desenvolvedor Front-end,  Desenvolvedor Back-end |
+| <img src="https://github.com/Lorena-Avelino.png" width="60px;"/><br /> | Lorena | https://github.com/Lorena-Avelino | Desenvolvedor Front-end |
+| <img src="https://github.com/warleyramires.png" width="60px;"/><br /> | Warley | https://github.com/warleyramires | Desenvolvedor Front-end |
 
-O diretório src é o clone do repositório que vocês utilizaram para o desenvolvimento do sistema. Detalhe importante, cuidado em deixar senhas que serão utilizadas no servidor.
+Graciely: gracielyduarte2015@gmail.com
+Lorena: lado2@aluno.ifnmg.edu.br
+Warley:  warleyramiresgoncalves@gmail.com
 
-O diretório HOW-TO é um guia sobre como subir o projeto, além de ilustrar as versões das ferramentas utilizadas.
+# Documentação do Projeto
 
-Uma Maneira simples de gerar documentação usando o estilo Markdown é usando o MkDocs (https://www.mkdocs.org/), acaba criando uma página bem intuitiva para toda a documentação e é possível integrar no GitHub.
+1. [Visão do Negócio]()
+2. [Casos de Uso]()
+3. [Diagrama de Class]()
+4. [Modelo de Domínio]()
+5. [Diagrama de Sequência de Sistema]()
+6. [Projeto de Arquitetura]()
+7. [Feedback sobre o Desenvolvimento]()
