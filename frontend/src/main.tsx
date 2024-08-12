@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './screens/Home';
+import Dashboard from './screens/Dashboard';
 
 const rootElement = document.getElementById('root');
 
@@ -8,7 +8,7 @@ if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <Home />
+      <Dashboard />
     </React.StrictMode>
   );
 } else {

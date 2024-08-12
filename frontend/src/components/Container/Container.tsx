@@ -14,7 +14,7 @@ const Container: React.FC<ContainerProps> = ({ children, ...props }) => {
         margin: '16px',
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        minHeight: '100vh'
       }}
       {...props}
     >

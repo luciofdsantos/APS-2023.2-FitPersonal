@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
+    "baseUrl": "./",
+    "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react-jsx",
-    "lib": ["DOM", "ES2020"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "types": ["vite/client"]
   },
-  "include": ["src/**/*", "vite.config.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src", "./**/*.ts", "./**/*.tsx"],
+  "exclude": ["node_modules", "build"]
 }
