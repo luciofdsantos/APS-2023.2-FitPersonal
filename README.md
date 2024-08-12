@@ -21,10 +21,6 @@ O principal objetivo do **Portal Ciência da Computação** é fortalecer a comu
 | <img src="https://github.com/Lorena-Avelino.png" width="60px;"/><br /> | Lorena | https://github.com/Lorena-Avelino | Desenvolvedor Front-end |
 | <img src="https://github.com/warleyramires.png" width="60px;"/><br /> | Warley | https://github.com/warleyramires | Desenvolvedor Front-end |
 
-Graciely: gracielyduarte2015@gmail.com
-Lorena: lado2@aluno.ifnmg.edu.br
-Warley:  warleyramiresgoncalves@gmail.com
-
 # Documentação do Projeto
 
 1. [Visão do Negócio]()

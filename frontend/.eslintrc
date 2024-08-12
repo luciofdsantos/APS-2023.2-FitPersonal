@@ -1,28 +1,31 @@
 {
   "root": true,
-  "env": { "browser": true, "es2020": true },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended-type-checked", 
-    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:prettier/recommended",
-    "prettier"
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
   ],
-  "ignorePatterns": ["dist", ".eslintrc.cjs"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["react-refresh", "prettier"],
-  "rules": {"camelcase": "off",
-    "prettier/prettier": ["error"],
-    "react-refresh/only-export-components": [
-      "warn",
-      { "allowConstantExport": true }
-    ]
-  },
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": ["./tsconfig.json", "./tsconfig.node.json", "./tsconfig.app.json"],
-  }
+    "project": ["./tsconfig.json", "./tsconfig.app.json", "./tsconfig.node.json", "./tsconfig.lint.json", "./tsconfig.config.json"]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "camelcase": "off"
+  },
+  "ignorePatterns": ["vite.config.ts"]
 }
