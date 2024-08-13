@@ -24,7 +24,7 @@ O principal objetivo do **Portal Ciência da Computação** é fortalecer a comu
 
 1. [Visão do Negócio]()
 2. [Casos de Uso]()
-3. [Diagrama de Class]()
+3. [Diagrama de Classe]()
 4. [Modelo de Domínio]()
 5. [Diagrama de Sequência de Sistema]()
 6. [Projeto de Arquitetura]()
