@@ -97,7 +97,7 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
+export default function Treinos() {
   const [open, setOpen] = useState<boolean>(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -132,7 +132,7 @@ export default function Dashboard() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Treinos
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
