@@ -38,6 +38,11 @@ public class TreinoService {
     public List<Treino> findAllTreinos(){
         return treinoRepository.findAll();
     }
+
+    public Optional<Treino> findTreinoById(Long id) {
+        return treinoRepository.findById(id);
+    }
+
     public void deleteTreinoById(Long id){
          treinoRepository.deleteById(id);
     }

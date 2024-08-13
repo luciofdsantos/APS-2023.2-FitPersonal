@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -30,5 +31,18 @@ public class TreinoController {
     public List<Treino> getAllTreinos() {
         return treinoService.findAllTreinos();
     }
+
+    @GetMapping("/api/treinos/{id}")
+    public ResponseEntity<Treino> findById(@PathVariable Long id) {
+        Optional<Treino> treinoOpt = treinoService.findTreinoById(id);
+
+        if (treinoOpt.isPresent()) {
+            return ResponseEntity.ok(treinoOpt.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
 
 }
