@@ -5,8 +5,6 @@ import Copyright from '../Copyright';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
 
-const drawerWidth = 240;
-
 type LayoutProps = {
   appBarText: string;
   items: {
@@ -28,6 +26,8 @@ export default function CustomLayout({
   items,
   children
 }: LayoutProps) {
+  const drawerWidth = 240;
+
   const [open, setOpen] = useState<boolean>(true);
 
   const toggleDrawer = () => {

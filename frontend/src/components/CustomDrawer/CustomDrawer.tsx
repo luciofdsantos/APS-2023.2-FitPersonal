@@ -14,7 +14,7 @@ type DrawerProps = {
 };
 
 const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open'
+  shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
 })<DrawerProps>(({ theme, open, drawerWidth }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
@@ -50,7 +50,7 @@ type CustomDrawerProps = {
   }[];
 };
 
-export default function CustomAppBar({
+export default function CustomDrawer({
   open,
   drawerWidth,
   toggleDrawer,
