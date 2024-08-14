@@ -15,10 +15,11 @@ type CustomCardProps = {
     label: string;
     value: string;
   }[];
+  editLink?: string;
   style?: SxProps<Theme>;
 };
 
-export default function CustomCard({ title, items, style }: CustomCardProps) {
+export default function CustomCard({ title, items, style, editLink = '/editar-treino' }: CustomCardProps) {
   return (
     <Card sx={style}>
       <CardContent>
@@ -48,7 +49,7 @@ export default function CustomCard({ title, items, style }: CustomCardProps) {
               startIcon: <EditIcon />,
               backgroundColor: 'transparent',
               iconColor: '#6842FF',
-              href: '/editar-treino'
+              href: editLink
             }
           ]}
         />
