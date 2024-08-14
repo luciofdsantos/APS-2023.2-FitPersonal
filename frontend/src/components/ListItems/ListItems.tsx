@@ -1,42 +1,37 @@
-import * as React from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
+import {
+  Grid,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export default function ListItems() {
+type ListItemsProps = {
+  items: {
+    text: string;
+    Icon: React.ElementType;
+    path: string;
+  }[];
+  open: boolean;
+};
+
+export default function ListItems({ items, open }: ListItemsProps) {
+  const navigate = useNavigate();
+
+  const handleClick = (path: string) => {
+    navigate(path);
+  };
+
   return (
-    <React.Fragment>
-      <ListItemButton>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItemButton>
-
-      <ListItemButton>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Customers" />
-      </ListItemButton>
-
-      <ListItemButton>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
-      </ListItemButton>
-
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Integrations" />
-      </ListItemButton>
-    </React.Fragment>
+    <Grid item xs={12} md={8} lg={9}>
+      {items.map((item, index) => (
+        <ListItemButton key={index} onClick={() => handleClick(item.path)}>
+          <ListItemIcon>
+            <item.Icon />
+          </ListItemIcon>
+          {open && <ListItemText primary={item.text} />}
+        </ListItemButton>
+      ))}
+    </Grid>
   );
 }
