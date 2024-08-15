@@ -2,6 +2,7 @@ package com.fitpersonal.fitpersonal.controllers;
 
 import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.services.ExercicioService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping
-@RestController("/api/exercicios")
+@RestController
+@RequestMapping("/api/exercicios")
 public class ExercicioController {
     @Autowired
     private ExercicioService exercicioService;
@@ -38,6 +39,7 @@ public class ExercicioController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Void> deleteExercicio(@PathVariable Long id) {
         exercicioService.deleteExercicio(id);
         return ResponseEntity.ok().build();
