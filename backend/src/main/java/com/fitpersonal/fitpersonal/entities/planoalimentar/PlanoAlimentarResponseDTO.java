@@ -1,12 +1,12 @@
 package com.fitpersonal.fitpersonal.entities.planoalimentar;
 
 import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoResponseDTO;
-import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public record PlanoAlimentarResponseDTO(
+        Long id,
         Float totalConsumoCarboidrato,
         Float totalConsumoProteina,
         Float totalConsumoGordura,
@@ -14,6 +14,7 @@ public record PlanoAlimentarResponseDTO(
 
     public PlanoAlimentarResponseDTO(PlanoAlimentar planoAlimentar) {
         this(
+                planoAlimentar.getId(),
                 planoAlimentar.getTotalConsumoCarboidrato(),
                 planoAlimentar.getTotalConsumoProteina(),
                 planoAlimentar.getTotalConsumoGordura(),
