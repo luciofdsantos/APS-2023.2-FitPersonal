@@ -13,4 +13,5 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
         }
     }
-}
+
+
