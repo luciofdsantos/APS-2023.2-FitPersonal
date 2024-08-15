@@ -14,18 +14,17 @@ O principal objetivo do **Portal Ciência da Computação** é fortalecer a comu
 
 | Foto | Nome | Github | Papel |
 | --- | --- | --- | --- |
-| <img src="https://github.com/dayanyylima.png" width="60px;"/><br /> | Dayany Lima Santos | https://github.com/dayanyylima | |
-| <img src="https://github.com/deisesan.png" width="60px;"/><br /> | Deise Santana dos Santos | https://github.com/deisesan | |
-| <img src="https://github.com/grahduarte12.png" width="60px;"/><br /> | Graciely | https://github.com/grahduarte12
- | Gerente de Design, Desenvolvedor Front-end,  Desenvolvedor Back-end |
-| <img src="https://github.com/Lorena-Avelino.png" width="60px;"/><br /> | Lorena | https://github.com/Lorena-Avelino | Desenvolvedor Front-end |
-| <img src="https://github.com/warleyramires.png" width="60px;"/><br /> | Warley | https://github.com/warleyramires | Desenvolvedor Front-end |
+| <img src="https://github.com/dayanylima.png" width="60px;"/><br /> | Dayany Lima Santos | https://github.com/dayanylima | Desenvolvedora Back-end |
+| <img src="https://github.com/deisesan.png" width="60px;"/><br /> | Deise Santana dos Santos | https://github.com/deisesan | Desenvolvedora Front-end |
+| <img src="https://github.com/grahduarte12.png" width="60px;"/><br /> | Graciely | https://github.com/grahduarte12 | Desenvolvedora Back-end |
+| <img src="https://github.com/Lorena-Avelino.png" width="60px;"/><br /> | Lorena | https://github.com/Lorena-Avelino | Desenvolvedora Front-end |
+| <img src="https://github.com/warleyramires.png" width="60px;"/><br /> | Warley | https://github.com/warleyramires | Desenvolvedor Back-end |
 
 # Documentação do Projeto
 
 1. [Visão do Negócio]()
 2. [Casos de Uso]()
-3. [Diagrama de Class]()
+3. [Diagrama de Classe]()
 4. [Modelo de Domínio]()
 5. [Diagrama de Sequência de Sistema]()
 6. [Projeto de Arquitetura]()
