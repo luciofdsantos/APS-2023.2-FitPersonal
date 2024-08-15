@@ -3,14 +3,17 @@ package com.fitpersonal.fitpersonal.controllers;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentarRequestDTO;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentarResponseDTO;
+import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 import com.fitpersonal.fitpersonal.repositories.PlanoAlimentarRepository;
+import com.fitpersonal.fitpersonal.repositories.RefeicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List; // Adicione esta linha
-import java.util.stream.Collectors; // Adicione esta linha
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/planoalimentar")
@@ -19,11 +22,35 @@ public class PlanoAlimentarController {
     @Autowired
     private PlanoAlimentarRepository planoAlimentarRepository;
 
+    @Autowired
+    private RefeicaoRepository refeicaoRepository;
+
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<PlanoAlimentarResponseDTO> savePlanoAlimentar(@RequestBody PlanoAlimentarRequestDTO data) {
         PlanoAlimentar planoAlimentarData = new PlanoAlimentar(data);
         PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentarData);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PlanoAlimentarResponseDTO(savedPlanoAlimentar));
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/withrefeicoes")
+    @Transactional
+    public ResponseEntity<PlanoAlimentarResponseDTO> savePlanoAlimentarWithRefeicoes(@RequestBody PlanoAlimentarRequestDTO data) {
+        PlanoAlimentar planoAlimentar = new PlanoAlimentar();
+        planoAlimentar.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
+        planoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
+        planoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
+
+        List<Refeicao> refeicoes = data.refeicoes().stream()
+                .map(refeicaoDTO -> new Refeicao(refeicaoDTO, planoAlimentar))
+                .collect(Collectors.toList());
+
+        planoAlimentar.setRefeicoes(refeicoes);
+
+        PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentar);
+
+        // Não é necessário salvar as refeições separadamente devido à configuração de cascata
         return ResponseEntity.status(HttpStatus.CREATED).body(new PlanoAlimentarResponseDTO(savedPlanoAlimentar));
     }
 
@@ -53,5 +80,32 @@ public class PlanoAlimentarController {
         } else {
             return ResponseEntity.notFound().build(); // HTTP 404 Not Found
         }
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/{id}")
+    public ResponseEntity<PlanoAlimentarResponseDTO> updatePlanoAlimentar(@PathVariable Long id, @RequestBody PlanoAlimentarRequestDTO data) {
+        return planoAlimentarRepository.findById(id)
+                .map(existingPlanoAlimentar -> {
+                    existingPlanoAlimentar.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
+                    existingPlanoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
+                    existingPlanoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
+
+                    // Atualizar refeições se necessário
+                    if (data.refeicoes() != null) {
+                        List<Refeicao> updatedRefeicoes = data.refeicoes().stream()
+                                .map(refeicaoDTO -> new Refeicao(refeicaoDTO, existingPlanoAlimentar))
+                                .collect(Collectors.toList());
+
+                        existingPlanoAlimentar.setRefeicoes(updatedRefeicoes);
+
+                        // Salvar as refeições associadas
+                        refeicaoRepository.saveAll(updatedRefeicoes);
+                    }
+
+                    PlanoAlimentar updatedPlanoAlimentar = planoAlimentarRepository.save(existingPlanoAlimentar);
+                    return ResponseEntity.ok(new PlanoAlimentarResponseDTO(updatedPlanoAlimentar));
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se não encontrar
     }
 }

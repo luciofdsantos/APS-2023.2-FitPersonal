@@ -1,12 +1,14 @@
 package com.fitpersonal.fitpersonal.entities.planoalimentar;
 
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
+import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "planoalimentar")
@@ -31,7 +33,12 @@ public class PlanoAlimentar {
         this.totalConsumoCarboidrato = dto.totalConsumoCarboidrato();
         this.totalConsumoProteina = dto.totalConsumoProteina();
         this.totalConsumoGordura = dto.totalConsumoGordura();
-        this.refeicoes = dto.refeicoes();
+        this.refeicoes = new ArrayList<>();
+        if (dto.refeicoes() != null) {
+            for (RefeicaoRequestDTO refeicaoDTO : dto.refeicoes()) {
+                this.refeicoes.add(new Refeicao(refeicaoDTO, this));
+            }
+        }
     }
 
 

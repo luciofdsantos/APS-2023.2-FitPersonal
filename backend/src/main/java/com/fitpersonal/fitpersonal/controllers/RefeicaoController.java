@@ -25,14 +25,22 @@ public class RefeicaoController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public ResponseEntity<RefeicaoResponseDTO> saveRefeicao(@RequestBody RefeicaoRequestDTO dto, @RequestParam Long planoAlimentarId) {
-        return planoAlimentarRepository.findById(planoAlimentarId)
-                .map(planoAlimentar -> {
-                    Refeicao refeicao = new Refeicao(dto, planoAlimentar);
-                    Refeicao savedRefeicao = refeicaoRepository.save(refeicao);
-                    return ResponseEntity.status(HttpStatus.CREATED).body(new RefeicaoResponseDTO(savedRefeicao));
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se planoAlimentar não for encontrado
+    public ResponseEntity<RefeicaoResponseDTO> saveRefeicao(@RequestBody RefeicaoRequestDTO dto, @RequestParam(required = false) Long planoAlimentarId) {
+        if (planoAlimentarId != null) {
+            // Caso exista plano alimentar associado
+            return planoAlimentarRepository.findById(planoAlimentarId)
+                    .map(planoAlimentar -> {
+                        Refeicao refeicao = new Refeicao(dto, planoAlimentar);
+                        Refeicao savedRefeicao = refeicaoRepository.save(refeicao);
+                        return ResponseEntity.status(HttpStatus.CREATED).body(new RefeicaoResponseDTO(savedRefeicao));
+                    })
+                    .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se planoAlimentar não for encontrado
+        } else {
+            // Caso não exista plano alimentar associado
+            Refeicao refeicao = new Refeicao(dto, null); // Não associar a nenhum plano alimentar
+            Refeicao savedRefeicao = refeicaoRepository.save(refeicao);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new RefeicaoResponseDTO(savedRefeicao));
+        }
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
