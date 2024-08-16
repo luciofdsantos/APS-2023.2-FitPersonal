@@ -1,24 +1,13 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  SxProps,
-  Theme,
-  CardActions
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Card, CardContent, Typography, CardActions } from '@mui/material';
 import GroupButtons from '../GroupButtons';
+import { TypeCard } from 'src/types';
 
-type CustomCardProps = {
-  title: string;
-  items: {
-    label: string;
-    value: string;
-  }[];
-  style?: SxProps<Theme>;
-};
-
-export default function CustomCard({ title, items, style }: CustomCardProps) {
+export default function CustomCard({
+  title,
+  items,
+  style,
+  buttons
+}: TypeCard.CustomCardProps) {
   return (
     <Card sx={style}>
       <CardContent>
@@ -41,18 +30,11 @@ export default function CustomCard({ title, items, style }: CustomCardProps) {
           </Typography>
         ))}
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <GroupButtons
-          buttons={[
-            {
-              startIcon: <EditIcon />,
-              backgroundColor: 'transparent',
-              iconColor: '#6842FF',
-              href: '/editar-treino'
-            }
-          ]}
-        />
-      </CardActions>
+      {buttons && (
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <GroupButtons buttons={buttons} />
+        </CardActions>
+      )}
     </Card>
   );
 }

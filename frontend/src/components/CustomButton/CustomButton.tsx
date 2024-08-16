@@ -1,17 +1,12 @@
-import { SxProps, Button, Theme } from '@mui/material';
+import { Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-
-type CustomButtonProps = {
-  style?: SxProps<Theme>;
-  text: string;
-  href?: string;
-};
+import { TypeButton } from 'src/types';
 
 export default function CustomButton({
   style,
   text,
   href = '#'
-}: CustomButtonProps) {
+}: TypeButton.CustomButtonProps) {
   return (
     <Button variant="contained" component={RouterLink} sx={style} to={href}>
       {text}

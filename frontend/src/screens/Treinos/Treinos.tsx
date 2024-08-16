@@ -2,22 +2,26 @@ import { GroupButtons, CustomCard, CustomLayout } from '../../components';
 // import { useQuery } from '@tanstack/react-query';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
+import EditIcon from '@mui/icons-material/Edit';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
+// const endpoint = 'http://localhost:8080/api/treinos';
+
 export default function Novo() {
-  // https://tanstack.com/query/latest/docs/framework/react/guides/query-functions
   // const { data, isFetching } = useQuery({
   //   queryKey: ['treinos'],
   //   queryFn: async () => {
-  //     const response = await fetch('endpoint');
+  //     const response = await fetch(endpoint);
   //     if (!response.ok) {
-  //       throw new Error('Erro ao buscar treinos.');
+  //       const errorMessage = await response.text();
+  //       throw new Error(`Erro ao buscar treinos: ${errorMessage}`);
   //     }
   //     return response.json();
   //   }
   // });
 
+  // console.log('data -> ', isFetching);
   // console.log('data -> ', data);
 
   return (
@@ -34,6 +38,15 @@ export default function Novo() {
               borderRadius: '16px',
               boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
             }}
+            buttons={[
+              {
+                startIcon: <EditIcon />,
+                href: '/editar-treino',
+                backgroundColor: 'transparent',
+                iconColor: '#6842FF',
+                border: 'none'
+              }
+            ]}
           />
         </Grid>
       </Grid>
