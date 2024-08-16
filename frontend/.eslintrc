@@ -27,7 +27,8 @@
       {
         "trailingComma": "none"
       }
-    ]
+    ],
+    "@typescript-eslint/no-namespace": "off"
   },
   "ignorePatterns": ["node_modules/", "vite.config.ts"]
 }
