@@ -1,6 +1,9 @@
 package com.fitpersonal.fitpersonal.entities.dtos;
 
-public class UsuarioDTO {
+import lombok.Data;
+
+@Data
+public class UsuarioRequestDTO {
     private String nome;
     private String sobrenome;
     private String email;
