@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.exercicio;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class Exercicio {
     private Boolean finalizado;
 
     @ManyToOne
-    @JoinColumn(name = "treino_id")
+//    @JoinColumn(name = "treino_id")
+    @JsonIgnore
     private Treino treino;
 }

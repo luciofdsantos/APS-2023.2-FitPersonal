@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,12 @@ public class Treino {
     private String nome;
     private String descricao;
 
-    private LocalTime tempoTotal;
-    private LocalTime metaTempo;
+//    private LocalDateTime tempoTotal;
+//    private LocalDateTime metaTempo;
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+//    @ManyToOne
+//    @JoinColumn(name = "usuario_id")
+//    private Usuario usuario;
 
     @OneToMany(mappedBy = "treino", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<Exercicio> exercicios = new ArrayList<>();
