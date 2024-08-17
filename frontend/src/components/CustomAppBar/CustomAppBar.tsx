@@ -13,6 +13,12 @@ const StyledAppBar = styled(MuiAppBar, {
 })<TypeAppBar.AppBarProps>(({ theme, open, drawerWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',
+  backgroundImage: `url('src/assets/images/bar.png')`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  height: 200,
+  width: '100%',
+  position: 'fixed',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
@@ -37,7 +43,10 @@ export default function CustomAppBar({
     <StyledAppBar position="absolute" open={open} drawerWidth={drawerWidth}>
       <Toolbar
         sx={{
-          pr: '24px'
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
         <IconButton
@@ -57,7 +66,12 @@ export default function CustomAppBar({
           variant="h6"
           color="inherit"
           noWrap
-          sx={{ flexGrow: 1 }}
+          sx={{
+            textAlign: 'center',
+            flexGrow: 1,
+            width: 'calc(100% - 72px)',
+            position: 'relative'
+          }}
         >
           {appBarText}
         </Typography>
