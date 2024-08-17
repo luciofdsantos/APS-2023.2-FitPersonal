@@ -6,6 +6,7 @@ export namespace TypeButton {
   export type Button = {
     text?: string;
     href?: string;
+    type?: 'button' | 'submit' | 'reset';
     variant?: 'text' | 'outlined' | 'contained';
     startIcon?: ReactNode;
     backgroundColor?: string;

@@ -5,6 +5,7 @@ import { TypeCopyright } from './TypeCopyright';
 import { TypeDrawer } from './TypeDrawer';
 import { TypeLayout } from './TypeLayout';
 import { TypeItem } from './TypeItem';
+import { TypeTreinos } from './TypeTreinos';
 
 export {
   TypeAppBar,
@@ -13,5 +14,6 @@ export {
   TypeCopyright,
   TypeDrawer,
   TypeLayout,
-  TypeItem
+  TypeItem,
+  TypeTreinos
 };

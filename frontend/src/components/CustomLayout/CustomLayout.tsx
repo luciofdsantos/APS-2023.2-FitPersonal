@@ -29,12 +29,14 @@ export default function CustomLayout({
     >
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+
         <CustomAppBar
           open={open}
-          appBarText={appBarText}
+          appBarText={appBarText.toUpperCase()}
           toggleDrawer={toggleDrawer}
           drawerWidth={drawerWidth}
         />
+
         <CustomDrawer
           open={open}
           toggleDrawer={toggleDrawer}
@@ -51,7 +53,8 @@ export default function CustomLayout({
                 : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
-            overflow: 'auto'
+            overflow: 'auto',
+            pt: 16
           }}
         >
           <Toolbar />

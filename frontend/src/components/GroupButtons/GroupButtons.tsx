@@ -22,6 +22,7 @@ export default function GroupButtons({
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
+          pt: 2,
           pb: 2
         }}
       >
@@ -30,6 +31,7 @@ export default function GroupButtons({
             key={index}
             variant={button.variant || 'contained'}
             href={button.href}
+            type={button.type}
             onClick={onClick}
             startIcon={button.startIcon}
             sx={{
