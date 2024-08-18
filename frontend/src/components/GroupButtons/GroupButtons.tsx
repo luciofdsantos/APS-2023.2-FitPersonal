@@ -4,7 +4,6 @@ import { TypeButton } from 'src/types';
 export default function GroupButtons({
   buttons,
   style,
-  onClick,
   boxShadow = false
 }: TypeButton.GroupButtonsProps) {
   return (
@@ -32,7 +31,7 @@ export default function GroupButtons({
             variant={button.variant || 'contained'}
             href={button.href}
             type={button.type}
-            onClick={onClick}
+            onClick={button.onClick}
             startIcon={button.startIcon}
             sx={{
               ml: index > 0 ? 3 : 0,

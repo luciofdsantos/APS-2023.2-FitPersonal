@@ -7,9 +7,9 @@ import { TypeTreinos } from 'src/types';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
-const endpoint = 'http://149.100.154.48:3000/treinos';
+const endpoint = 'http://mineifnmg.net:3000/treinos';
 
-export default function Novo() {
+export default function Treinos() {
   const { data: treinos, isSuccess } = useQuery({
     queryKey: ['treinos'],
     queryFn: async () => {
@@ -22,6 +22,28 @@ export default function Novo() {
     },
     retry: false
   });
+
+  const { data: exercises } = useQuery({
+    queryKey: ['exercises'],
+    queryFn: async () => {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          'x-rapidapi-host': 'exercisedb.p.rapidapi.com',
+          'x-rapidapi-key': 'a2feefd8a7mshe21f638ca82fb6fp134a83jsn32ad89e20e6e'
+        }
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao buscar exercises: ${errorMessage}`);
+      }
+      return response.json();
+    },
+    retry: false
+  });
+
+  console.log('exercises ->', exercises);
 
   return (
     <CustomLayout appBarText="Treinos" items={items}>
