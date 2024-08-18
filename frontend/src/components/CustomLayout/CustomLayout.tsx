@@ -1,31 +1,16 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { Box, Container, CssBaseline, Toolbar } from '@mui/material';
 import Copyright from '../Copyright';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
-
-type LayoutProps = {
-  appBarText: string;
-  items: {
-    text: string;
-    Icon: React.ElementType;
-    path: string;
-  }[];
-  children: ReactNode;
-};
-
-const defaultTheme = createTheme({
-  typography: {
-    fontFamily: 'Inter, Arial, sans-serif'
-  }
-});
+import { TypeLayout } from 'src/types';
 
 export default function CustomLayout({
   appBarText,
   items,
   children
-}: LayoutProps) {
+}: TypeLayout.LayoutProps) {
   const drawerWidth = 240;
 
   const [open, setOpen] = useState<boolean>(true);
@@ -35,15 +20,23 @@ export default function CustomLayout({
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider
+      theme={createTheme({
+        typography: {
+          fontFamily: 'Inter, Arial, sans-serif'
+        }
+      })}
+    >
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+
         <CustomAppBar
           open={open}
-          appBarText={appBarText}
+          appBarText={appBarText.toUpperCase()}
           toggleDrawer={toggleDrawer}
           drawerWidth={drawerWidth}
         />
+
         <CustomDrawer
           open={open}
           toggleDrawer={toggleDrawer}
@@ -60,7 +53,8 @@ export default function CustomLayout({
                 : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
-            overflow: 'auto'
+            overflow: 'auto',
+            pt: 16
           }}
         >
           <Toolbar />

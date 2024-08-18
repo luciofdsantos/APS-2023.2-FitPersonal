@@ -1,11 +1,8 @@
 import { Fragment } from 'react';
-import { SxProps, Link, Theme, Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
+import { TypeCopyright } from 'src/types';
 
-type CopyrightProps = {
-  style?: SxProps<Theme>;
-};
-
-export default function Copyright({ style }: CopyrightProps) {
+export default function Copyright({ style }: TypeCopyright.Copyright) {
   return (
     <Fragment>
       <Typography

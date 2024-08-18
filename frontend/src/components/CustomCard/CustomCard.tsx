@@ -1,59 +1,72 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  SxProps,
-  Theme,
-  CardActions
-} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import GroupButtons from '../GroupButtons';
+import { TypeCard } from 'src/types';
 
-type CustomCardProps = {
-  title: string;
-  items: {
-    label: string;
-    value: string;
-  }[];
-  editLink?: string;
-  style?: SxProps<Theme>;
-};
-
-export default function CustomCard({ title, items, style, editLink = '/editar-treino' }: CustomCardProps) {
+export default function CustomCard({
+  title,
+  items,
+  style,
+  buttons
+}: TypeCard.CustomCardProps) {
   return (
-    <Card sx={style}>
-      <CardContent>
+    <Card
+      sx={{
+        ...style,
+        borderRadius: '16px',
+        boxShadow: 3,
+        overflow: 'hidden',
+        minWidth: 300,
+        maxWidth: 400,
+        margin: 2
+      }}
+    >
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          padding: 3
+        }}
+      >
         <Typography
           gutterBottom
           variant="h5"
           component="div"
-          sx={{ color: '#6842FF', fontSize: '20px' }}
+          sx={{
+            color: '#6842FF',
+            fontSize: '24px',
+            fontWeight: 'bold'
+          }}
         >
           {title}
         </Typography>
-        {items.map((item, index) => (
-          <Typography
-            key={index}
-            variant="body2"
-            color="text.secondary"
-            sx={{ color: '#FFFFFF' }}
-          >
-            {item.label}: {item.value}
-          </Typography>
-        ))}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1
+          }}
+        >
+          {items.map((item, index) => (
+            <Typography
+              key={index}
+              variant="body1"
+              sx={{
+                color: '#FFFFFF',
+                fontSize: '16px'
+              }}
+            >
+              <strong>{item.label}:</strong> {item.value}
+            </Typography>
+          ))}
+        </Box>
+
+        {buttons && (
+          <Box sx={{ mt: 2 }}>
+            <GroupButtons buttons={buttons} />
+          </Box>
+        )}
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <GroupButtons
-          buttons={[
-            {
-              startIcon: <EditIcon />,
-              backgroundColor: 'transparent',
-              iconColor: '#6842FF',
-              href: editLink
-            }
-          ]}
-        />
-      </CardActions>
     </Card>
   );
 }

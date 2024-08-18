@@ -7,15 +7,11 @@ import {
   Toolbar
 } from '@mui/material';
 import ListItems from '../ListItems';
-
-type DrawerProps = {
-  open?: boolean;
-  drawerWidth: number;
-};
+import { TypeDrawer } from 'src/types';
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
-})<DrawerProps>(({ theme, open, drawerWidth }) => ({
+})<TypeDrawer.DrawerProps>(({ theme, open, drawerWidth }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -39,23 +35,12 @@ const Drawer = styled(MuiDrawer, {
   }
 }));
 
-type CustomDrawerProps = {
-  open: boolean;
-  drawerWidth: number;
-  toggleDrawer: () => void;
-  items: {
-    text: string;
-    Icon: React.ElementType;
-    path: string;
-  }[];
-};
-
 export default function CustomDrawer({
   open,
   drawerWidth,
   toggleDrawer,
   items
-}: CustomDrawerProps) {
+}: TypeDrawer.CustomDrawerProps) {
   return (
     <Drawer variant="permanent" drawerWidth={drawerWidth} open={open}>
       <Toolbar

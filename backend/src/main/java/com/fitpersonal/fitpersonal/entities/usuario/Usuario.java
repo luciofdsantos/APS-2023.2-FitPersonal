@@ -29,6 +29,6 @@ public abstract class Usuario {
 
     private String tipoUsuario;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Treino> treinos;
+//    @OneToMany(mappedBy = "usuario")
+//    private List<Treino> treinos;
 }

@@ -6,17 +6,19 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-
-type AppBarProps = {
-  open?: boolean;
-  drawerWidth: number;
-};
+import { TypeAppBar } from 'src/types';
 
 const StyledAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
+})<TypeAppBar.AppBarProps>(({ theme, open, drawerWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',
+  backgroundImage: `url('src/assets/images/bar.png')`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  height: 200,
+  width: '100%',
+  position: 'fixed',
   transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen
@@ -31,24 +33,20 @@ const StyledAppBar = styled(MuiAppBar, {
   })
 }));
 
-type CustomAppBarProps = {
-  open: boolean;
-  appBarText: string;
-  toggleDrawer: () => void;
-  drawerWidth: number;
-};
-
 export default function CustomAppBar({
   open,
   appBarText,
   toggleDrawer,
   drawerWidth
-}: CustomAppBarProps) {
+}: TypeAppBar.CustomAppBarProps) {
   return (
     <StyledAppBar position="absolute" open={open} drawerWidth={drawerWidth}>
       <Toolbar
         sx={{
-          pr: '24px'
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
       >
         <IconButton
@@ -68,7 +66,12 @@ export default function CustomAppBar({
           variant="h6"
           color="inherit"
           noWrap
-          sx={{ flexGrow: 1 }}
+          sx={{
+            textAlign: 'center',
+            flexGrow: 1,
+            width: 'calc(100% - 72px)',
+            position: 'relative'
+          }}
         >
           {appBarText}
         </Typography>
