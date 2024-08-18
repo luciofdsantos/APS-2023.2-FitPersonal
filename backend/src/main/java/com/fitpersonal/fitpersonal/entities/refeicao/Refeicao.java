@@ -23,6 +23,9 @@ public class Refeicao {
     private String alimento;
     private Float quantidade;
     private Float kcal;
+    private Float carboidrato;
+    private Float proteina;
+    private Float gordura;
 
     @Enumerated(EnumType.STRING)
     private TipoRefeicao tipoRefeicao;
@@ -35,6 +38,9 @@ public class Refeicao {
         this.alimento = dto.alimento();
         this.quantidade = dto.quantidade();
         this.kcal = dto.kcal();
+        this.carboidrato = dto.carboidrato();
+        this.proteina = dto.proteina();
+        this.gordura = dto.gordura();
         this.tipoRefeicao = dto.tipoRefeicao();
         this.planoAlimentar = planoAlimentar;
     }

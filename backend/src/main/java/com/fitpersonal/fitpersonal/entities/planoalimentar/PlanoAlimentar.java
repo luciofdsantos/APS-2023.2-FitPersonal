@@ -22,6 +22,7 @@ public class PlanoAlimentar {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private Float totalConsumoKcal;
     private Float totalConsumoCarboidrato;
     private Float totalConsumoProteina;
     private Float totalConsumoGordura;
@@ -30,6 +31,7 @@ public class PlanoAlimentar {
     private List<Refeicao> refeicoes;
 
     public PlanoAlimentar(PlanoAlimentarRequestDTO dto) {
+        this.totalConsumoKcal = dto.totalConsumoKcal();
         this.totalConsumoCarboidrato = dto.totalConsumoCarboidrato();
         this.totalConsumoProteina = dto.totalConsumoProteina();
         this.totalConsumoGordura = dto.totalConsumoGordura();
@@ -39,6 +41,7 @@ public class PlanoAlimentar {
                 this.refeicoes.add(new Refeicao(refeicaoDTO, this));
             }
         }
+        updateTotais();
     }
 
 
@@ -51,4 +54,23 @@ public class PlanoAlimentar {
         this.refeicoes.remove(refeicao);
         refeicao.setPlanoAlimentar(null);
     }
+
+    public void updateTotais() {
+        this.totalConsumoKcal = (float) refeicoes.stream()
+                .mapToDouble(Refeicao::getKcal)
+                .sum();
+
+        this.totalConsumoCarboidrato = (float) refeicoes.stream()
+                .mapToDouble(Refeicao::getCarboidrato)
+                .sum();
+
+        this.totalConsumoProteina = (float) refeicoes.stream()
+                .mapToDouble(Refeicao::getProteina)
+                .sum();
+
+        this.totalConsumoGordura = (float) refeicoes.stream()
+                .mapToDouble(Refeicao::getGordura)
+                .sum();
+    }
+
 }

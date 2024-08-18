@@ -7,6 +7,9 @@ public record RefeicaoResponseDTO(
         String alimento,
         Float quantidade,
         Float kcal,
+        Float carboidrato,
+        Float proteina,
+        Float gordura,
         TipoRefeicao tipoRefeicao) {
 
     public RefeicaoResponseDTO(Refeicao refeicao) {
@@ -15,6 +18,9 @@ public record RefeicaoResponseDTO(
                 refeicao.getAlimento(),
                 refeicao.getQuantidade(),
                 refeicao.getKcal(),
+                refeicao.getCarboidrato(),
+                refeicao.getProteina(),
+                refeicao.getGordura(),
                 refeicao.getTipoRefeicao()
         );
     }
