@@ -24,13 +24,17 @@ public class RefeicaoController {
     private PlanoAlimentarRepository planoAlimentarRepository;
 
     @PostMapping
-    public ResponseEntity<RefeicaoResponseDTO> saveRefeicao(@RequestBody RefeicaoRequestDTO dto) {
-        if (dto.planoAlimentarId() == null) {
-            // Retorna um erro indicando que o plano alimentar é obrigatório
+    public ResponseEntity<RefeicaoResponseDTO> saveRefeicao(
+            @RequestParam(required = false) Long planoalimentarId,
+            @RequestBody RefeicaoRequestDTO dto) {
+
+        Long idPlanoAlimentar = (planoalimentarId != null && planoalimentarId > 0) ? planoalimentarId : dto.planoAlimentarId();
+
+        if (idPlanoAlimentar == null || idPlanoAlimentar <= 0) {
             return ResponseEntity.badRequest().body(null); // HTTP 400 Bad Request
         }
 
-        return planoAlimentarRepository.findById(dto.planoAlimentarId())
+        return planoAlimentarRepository.findById(idPlanoAlimentar)
                 .map(planoAlimentar -> {
                     Refeicao refeicao = new Refeicao(dto, planoAlimentar);
                     Refeicao savedRefeicao = refeicaoRepository.save(refeicao);
@@ -41,12 +45,10 @@ public class RefeicaoController {
 
                     return ResponseEntity.status(HttpStatus.CREATED).body(new RefeicaoResponseDTO(savedRefeicao));
                 })
-                .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se planoAlimentar não for encontrado
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(null)); // HTTP 404 Not Found se planoAlimentar não for encontrado
     }
 
-
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<RefeicaoResponseDTO> getAll() {
         return refeicaoRepository.findAll().stream()
