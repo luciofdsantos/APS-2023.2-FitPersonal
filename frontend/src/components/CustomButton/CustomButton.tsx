@@ -1,4 +1,4 @@
-gimport { Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { TypeButton } from 'src/types';
 
