@@ -19,11 +19,12 @@ public class TreinoController {
     private TreinoService treinoService;
 
     // Criar um Treino
-    @PostMapping
-    public ResponseEntity<Treino> salvaTreino(@RequestBody Treino treino) {
-        Treino treinoSalvo = treinoService.createTreino(treino);
-        return new ResponseEntity<>(treinoSalvo, HttpStatus.CREATED);
+    @PostMapping("/addTreino")
+    public ResponseEntity<Treino> createTreino(@RequestBody Treino treino) {
+        Treino novoTreino = treinoService.createTreino(treino);
+        return new ResponseEntity<>(novoTreino, HttpStatus.CREATED);
     }
+
 
     // Criar um Treino com Exercícios
     @PostMapping("/com-exercicios")
