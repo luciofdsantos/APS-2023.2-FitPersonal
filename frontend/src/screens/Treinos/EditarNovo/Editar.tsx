@@ -3,6 +3,7 @@ import { AutoComplete, GroupButtons, CustomLayout } from '../../../components';
 import { Dashboard } from '@mui/icons-material';
 import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { useParams, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
 
 interface FormData {
@@ -42,7 +43,30 @@ const createTreino = async (
   return response.json();
 };
 
-export default function Novo() {
+const updateTreino = async (
+  id: string,
+  treino: FormData & { exercicios: (string | number)[] }
+) => {
+  const response = await fetch(`${endpoint}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(treino)
+  });
+
+  if (!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(`Erro ao atualizar treino: ${errorMessage}`);
+  }
+
+  return response.json();
+};
+
+export default function EditarNovo() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     descricao: ''
@@ -51,8 +75,6 @@ export default function Novo() {
   const [selectedExercises, setSelectedExercises] = useState<
     SelectOptionType[]
   >([]);
-
-  console.log('selectedExercises ->', selectedExercises);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -64,29 +86,64 @@ export default function Novo() {
       if (selectedExercises.length === 0)
         validationErrors.exercicios = 'Exercícios é obrigatório *';
 
-      setErrors(validationErrors);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        throw new Error('Validação falhou');
+      }
 
       const treinoData = {
         ...formData,
         exercicios: selectedExercises.map((ex) => ex.id)
       };
 
-      return createTreino(treinoData);
+      if (id) {
+        return updateTreino(id, treinoData);
+      } else {
+        return createTreino(treinoData);
+      }
     },
-    onError: (error: Error) => console.error(error.message)
+    onSuccess: () => {
+      setErrors({});
+      navigate('/treinos');
+    },
+    onError: (error: Error) => {
+      console.error(error.message);
+    }
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+
+    if (name in errors) {
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
+    }
   };
 
   const handleChangeExercise = (newValues: SelectOptionType[]) => {
     setSelectedExercises(newValues);
+
+    if (errors.exercicios) {
+      setErrors((prevErrors) => ({ ...prevErrors, exercicios: undefined }));
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const validationErrors: FormErrors = {};
+    if (!formData.nome)
+      validationErrors.nome = 'Nome do treino é obrigatório *';
+    if (!formData.descricao)
+      validationErrors.descricao = 'Descrição é obrigatória *';
+    if (selectedExercises.length === 0)
+      validationErrors.exercicios = 'Exercícios é obrigatório *';
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     mutation.mutate();
   };
 
@@ -107,6 +164,7 @@ export default function Novo() {
               onChange={handleChange}
               error={!!errors.nome}
               helperText={errors.nome}
+              // disabled={isLoading}
             />
           </Grid>
 
@@ -120,6 +178,7 @@ export default function Novo() {
               onChange={handleChange}
               error={!!errors.descricao}
               helperText={errors.descricao}
+              // disabled={isLoading}
             />
           </Grid>
 
@@ -133,6 +192,7 @@ export default function Novo() {
               setValue={handleChangeExercise}
               multiple
               error={errors.exercicios}
+              // disabled={isLoading}
             />
           </Grid>
         </Grid>

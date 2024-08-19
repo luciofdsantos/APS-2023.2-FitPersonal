@@ -28,8 +28,6 @@ export default function Treinos() {
     retry: false
   });
 
-  console.log('treinos ->', treinos);
-
   return (
     <CustomLayout appBarText="Treinos" items={items}>
       <Grid container spacing={3}>
