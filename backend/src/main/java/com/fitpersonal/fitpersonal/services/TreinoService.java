@@ -1,6 +1,8 @@
 package com.fitpersonal.fitpersonal.services;
 
+import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
+import com.fitpersonal.fitpersonal.repositories.ExercicioRepository;
 import com.fitpersonal.fitpersonal.repositories.TreinoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class TreinoService {
     @Autowired
     private TreinoRepository treinoRepository;
 
+    @Autowired
+    private ExercicioRepository exercicioRepository;
+
     public Treino createTreino(Treino treino){
         return treinoRepository.save(treino);
     }
@@ -24,8 +29,6 @@ public class TreinoService {
             Treino treino = optionalTreino.get();
             treino.setNome(treinoAtualizado.getNome());
             treino.setDescricao(treinoAtualizado.getDescricao());
-            treino.setTempoTotal(treinoAtualizado.getTempoTotal());
-            treino.setMetaTempo(treinoAtualizado.getMetaTempo());
             treino.setExercicios(treinoAtualizado.getExercicios());
 
             treinoRepository.save(treino);
@@ -38,7 +41,28 @@ public class TreinoService {
     public List<Treino> findAllTreinos(){
         return treinoRepository.findAll();
     }
+
+    public Optional<Treino> findTreinoById(Long id) {
+        return treinoRepository.findById(id);
+    }
+
     public void deleteTreinoById(Long id){
          treinoRepository.deleteById(id);
     }
+
+    //Criar um treino com os exercícios precadastrados;
+
+    public Treino createTreinoWithExercicios(Treino treino, List<Exercicio> exercicios) {
+        // Salva o treino
+        Treino savedTreino = treinoRepository.save(treino);
+
+        // Define o treino para cada exercício e salva
+        for (Exercicio exercicio : exercicios) {
+            exercicio.setTreino(savedTreino);
+            exercicioRepository.save(exercicio);
+        }
+
+        return savedTreino;
+    }
+
 }
