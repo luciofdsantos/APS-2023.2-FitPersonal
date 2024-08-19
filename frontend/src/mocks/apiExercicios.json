@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "nome": "Agachamento Livre",
+    "inicio": "2024-08-05",
+    "fim": "2024-08-05",
+    "grupoMuscular": "Pernas",
+    "series": 4,
+    "repeticoes": 10,
+    "carga": 80,
+    "finalizado": false
+  },
+  {
+    "id": 2,
+    "nome": "Leg Press",
+    "inicio": "2024-08-06",
+    "fim": "2024-08-06",
+    "grupoMuscular": "Pernas",
+    "series": 3,
+    "repeticoes": 12,
+    "carga": 100,
+    "finalizado": false
+  },
+  {
+    "id": 3,
+    "nome": "Extensão de Pernas",
+    "inicio": "2024-08-07",
+    "fim": "2024-08-07",
+    "grupoMuscular": "Pernas",
+    "series": 3,
+    "repeticoes": 15,
+    "carga": 50,
+    "finalizado": false
+  }
+]

@@ -1,11 +1,9 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { GroupButtons, CustomLayout } from '../../../components';
-import {
-  Dashboard,
-  Add as AddIcon,
-  Remove as RemoveIcon
-} from '@mui/icons-material';
-import { Grid, TextField, IconButton } from '@mui/material';
+import { AutoComplete, GroupButtons, CustomLayout } from '../../../components';
+import { Dashboard } from '@mui/icons-material';
+import { Grid, TextField } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import apiExercicios from '../../../mocks/apiExercicios.json';
 
 interface FormData {
   nome: string;
@@ -15,43 +13,34 @@ interface FormData {
 interface FormErrors {
   nome?: string;
   descricao?: string;
+  exercicios?: string;
 }
 
-interface ExerciseFieldProps {
-  value: string;
-  onChange: (value: string) => void;
-  onRemove: () => void;
-  size: number;
+interface SelectOptionType {
+  id: string | number;
+  nome: string;
 }
 
-const ExerciseField = ({
-  value,
-  onChange,
-  onRemove,
-  size
-}: ExerciseFieldProps) => (
-  <Grid container spacing={2} alignItems="center" sx={{ pb: 1 }}>
-    <Grid item xs={11}>
-      <TextField
-        fullWidth
-        label="Exercício"
-        variant="outlined"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </Grid>
+const endpoint = 'http://92.113.32.219:8080/api/treinos';
 
-    {size > 1 && (
-      <Grid item xs={1}>
-        <IconButton onClick={onRemove} color="error">
-          <RemoveIcon />
-        </IconButton>
-      </Grid>
-    )}
-  </Grid>
-);
+const createTreino = async (
+  treino: FormData & { exercicios: (string | number)[] }
+) => {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(treino)
+  });
 
-const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+  if (!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(`Erro ao criar treino: ${errorMessage}`);
+  }
+
+  return response.json();
+};
 
 export default function Novo() {
   const [formData, setFormData] = useState<FormData>({
@@ -59,46 +48,53 @@ export default function Novo() {
     descricao: ''
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [exercises, setExercises] = useState(['']);
+  const [selectedExercises, setSelectedExercises] = useState<
+    SelectOptionType[]
+  >([]);
+
+  console.log('selectedExercises ->', selectedExercises);
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const validationErrors: FormErrors = {};
+      if (!formData.nome)
+        validationErrors.nome = 'Nome do treino é obrigatório *';
+      if (!formData.descricao)
+        validationErrors.descricao = 'Descrição é obrigatória *';
+      if (selectedExercises.length === 0)
+        validationErrors.exercicios = 'Exercícios é obrigatório *';
+
+      setErrors(validationErrors);
+
+      const treinoData = {
+        ...formData,
+        exercicios: selectedExercises.map((ex) => ex.id)
+      };
+
+      return createTreino(treinoData);
+    },
+    onError: (error: Error) => console.error(error.message)
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleAddExercise = () => {
-    setExercises([...exercises, '']);
-  };
-
-  const handleRemoveExercise = (index: number) => {
-    setExercises(exercises.filter((_, i) => i !== index));
-  };
-
-  const handleChangeExercise = (index: number, newValue: string) => {
-    const updatedExercises = exercises.map((exercise, i) =>
-      i === index ? newValue : exercise
-    );
-    setExercises(updatedExercises);
-  };
-
-  const validateForm = (): boolean => {
-    const errors: FormErrors = {};
-    if (!formData.nome) errors.nome = 'Nome do treino é obrigatório *';
-    if (!formData.descricao) errors.descricao = 'Descrição é obrigatória *';
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+  const handleChangeExercise = (newValues: SelectOptionType[]) => {
+    setSelectedExercises(newValues);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Form data submitted:', formData);
-      console.log('Exercises:', exercises);
-    }
+    mutation.mutate();
   };
 
   return (
-    <CustomLayout appBarText="Treinos" items={items}>
+    <CustomLayout
+      appBarText="Treinos"
+      items={[{ text: 'Dashboard', Icon: Dashboard, path: '/' }]}
+    >
       <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -128,33 +124,22 @@ export default function Novo() {
           </Grid>
 
           <Grid item xs={12}>
-            {exercises.map((exercise, index) => (
-              <ExerciseField
-                key={index}
-                value={exercise}
-                size={exercises.length}
-                onChange={(newValue: string) =>
-                  handleChangeExercise(index, newValue)
-                }
-                onRemove={() => handleRemoveExercise(index)}
-              />
-            ))}
-
-            <GroupButtons
-              buttons={[
-                {
-                  text: 'Novo exercício',
-                  onClick: handleAddExercise,
-                  startIcon: <AddIcon />
-                }
-              ]}
+            <AutoComplete
+              name="exercicios"
+              label="Exercícios *"
+              options={apiExercicios}
+              optionLabel="nome"
+              values={selectedExercises}
+              setValue={handleChangeExercise}
+              multiple
+              error={errors.exercicios}
             />
           </Grid>
         </Grid>
 
         <GroupButtons
           buttons={[
-            { text: 'Salvar', type: 'submit' },
+            { text: 'Salvar', type: 'submit', disabled: mutation.isPending },
             { text: 'Voltar', href: '/treinos' }
           ]}
         />
