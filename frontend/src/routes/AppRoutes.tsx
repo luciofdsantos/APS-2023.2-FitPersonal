@@ -11,7 +11,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/treinos" element={<Treinos />} />
-        <Route path="/planoalimentar" element={<PlanosAlimentares />} />
+        <Route path="/planos-alimentares" element={<PlanosAlimentares />} />
         <Route path="/novo-treino/novo" element={<EditarNovo />} />
         <Route path="/novo-plano-alimentar/novo" element={<EditarNovo />} />
         <Route path="/editar-treino/:id" element={<EditarNovo />} />
