@@ -6,6 +6,7 @@ import { TypeDrawer } from './TypeDrawer';
 import { TypeLayout } from './TypeLayout';
 import { TypeItem } from './TypeItem';
 import { TypeTreinos } from './TypeTreinos';
+import { TypePlanosAlimentares } from './TypePlanosAlimentares';
 
 export {
   TypeAppBar,
@@ -15,5 +16,6 @@ export {
   TypeDrawer,
   TypeLayout,
   TypeItem,
-  TypeTreinos
+  TypeTreinos,
+  TypePlanosAlimentares
 };

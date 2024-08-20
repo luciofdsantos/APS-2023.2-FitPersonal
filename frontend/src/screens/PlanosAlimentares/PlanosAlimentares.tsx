@@ -1,0 +1,154 @@
+import { useState } from 'react';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import {
+  GroupButtons,
+  CustomCard,
+  CustomLayout,
+  ConfirmationDialog
+} from '../../components';
+import Dashboard from '@mui/icons-material/Dashboard';
+import Grid from '@mui/material/Grid';
+import { CircularProgress, Box } from '@mui/material';
+import { TypePlanosAlimentares } from 'src/types';
+import { useNavigate } from 'react-router-dom';
+import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
+
+const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+
+export default function PlanosAlimentares() {
+  const navigate = useNavigate();
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedPlanoAlimentarId, setSelectedPlanoAlimentarId] = useState<
+    number | null
+  >(null);
+
+  const {
+    data: planoalimentar,
+    isSuccess,
+    isFetching
+  } = usePlanosAlimentares();
+  const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
+    onSuccess: () => {
+      setOpenDeleteDialog(false);
+      setSelectedPlanoAlimentarId(null);
+    },
+    onError: (error) => {
+      console.error('Erro na exclusão:', error.message);
+    }
+  });
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setSelectedPlanoAlimentarId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedPlanoAlimentarId(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedPlanoAlimentarId !== null) {
+      deletePlanoAlimentar(selectedPlanoAlimentarId);
+    }
+  };
+
+  const handleEdit = (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => {
+    navigate(`/editar-plano-alimentar/${planoalimentar.id}`, {
+      state: { planoalimentar }
+    });
+  };
+
+  return (
+    <CustomLayout appBarText="Planos Alimentares" items={items}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <GroupButtons
+            buttons={[
+              {
+                text: 'Novo Plano Alimentar',
+                href: '/novo-plano-alimentar/novo'
+              }
+            ]}
+          />
+        </Grid>
+        {isFetching ? (
+          <Grid
+            item
+            xs={12}
+            container
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          </Grid>
+        ) : isSuccess && planoalimentar && planoalimentar.length > 0 ? (
+          planoalimentar.map(
+            (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => (
+              <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
+                <CustomCard
+                  title={`Plano Alimentar ${planoalimentar.id}`}
+                  items={[
+                    {
+                      label: 'Total Consumo Carboidrato',
+                      value: `${planoalimentar.totalConsumoCarboidrato}`
+                    },
+                    {
+                      label: 'Total Consumo Proteina',
+                      value: `${planoalimentar.totalConsumoProteina}`
+                    },
+                    {
+                      label: 'Total Consumo Gordura',
+                      value: `${planoalimentar.totalConsumoGordura}`
+                    },
+                    {
+                      label: 'Refeições',
+                      value: `${planoalimentar.refeicoes}`
+                    }
+                  ]}
+                  style={{
+                    backgroundColor: '#1F2229',
+                    borderRadius: '16px',
+                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
+                  }}
+                  buttons={[
+                    {
+                      startIcon: <EditIcon />,
+                      href: `/editar-plano-alimentar/${planoalimentar.id}`,
+                      onClick: () => handleEdit(planoalimentar),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    },
+                    {
+                      startIcon: <DeleteIcon />,
+                      onClick: () => handleOpenDeleteDialog(planoalimentar.id),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    }
+                  ]}
+                />
+              </Grid>
+            )
+          )
+        ) : (
+          <Grid item xs={12} sx={{ pb: 2 }}>
+            <div>Nenhum plano alimentar encontrado</div>
+          </Grid>
+        )}
+      </Grid>
+
+      <ConfirmationDialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDelete}
+        title="Confirmar Exclusão"
+        message="Tem certeza de que deseja excluir este plano alimentar?"
+      />
+    </CustomLayout>
+  );
+}
