@@ -37,10 +37,7 @@ public class PlanoAlimentarController {
     @PostMapping("/withrefeicoes")
     @Transactional
     public ResponseEntity<PlanoAlimentarResponseDTO> savePlanoAlimentarWithRefeicoes(@RequestBody PlanoAlimentarRequestDTO data) {
-        PlanoAlimentar planoAlimentar = new PlanoAlimentar();
-        planoAlimentar.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
-        planoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
-        planoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
+        PlanoAlimentar planoAlimentar = new PlanoAlimentar(data);
 
         List<Refeicao> refeicoes = data.refeicoes().stream()
                 .map(refeicaoDTO -> new Refeicao(refeicaoDTO, planoAlimentar))
@@ -48,9 +45,8 @@ public class PlanoAlimentarController {
 
         planoAlimentar.setRefeicoes(refeicoes);
 
-        PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentar);
-
         // Não é necessário salvar as refeições separadamente devido à configuração de cascata
+        PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentar);
         return ResponseEntity.status(HttpStatus.CREATED).body(new PlanoAlimentarResponseDTO(savedPlanoAlimentar));
     }
 
@@ -58,14 +54,18 @@ public class PlanoAlimentarController {
     @GetMapping("/{id}")
     public ResponseEntity<PlanoAlimentarResponseDTO> getPlanoAlimentarById(@PathVariable Long id) {
         return planoAlimentarRepository.findById(id)
-                .map(planoAlimentar -> ResponseEntity.ok(new PlanoAlimentarResponseDTO(planoAlimentar)))
+                .map(planoAlimentar -> {
+                    planoAlimentar.updateTotais(); // Atualiza totais antes de criar o DTO
+                    return ResponseEntity.ok(new PlanoAlimentarResponseDTO(planoAlimentar));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<List<PlanoAlimentarResponseDTO>> getAllPlanosAlimentares() {
         List<PlanoAlimentarResponseDTO> response = planoAlimentarRepository.findAll().stream()
+                .peek(PlanoAlimentar::updateTotais) // Atualiza totais antes de mapear para DTO
                 .map(PlanoAlimentarResponseDTO::new)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
@@ -87,6 +87,7 @@ public class PlanoAlimentarController {
     public ResponseEntity<PlanoAlimentarResponseDTO> updatePlanoAlimentar(@PathVariable Long id, @RequestBody PlanoAlimentarRequestDTO data) {
         return planoAlimentarRepository.findById(id)
                 .map(existingPlanoAlimentar -> {
+                    existingPlanoAlimentar.setTotalConsumoKcal(data.totalConsumoKcal());
                     existingPlanoAlimentar.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
                     existingPlanoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
                     existingPlanoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
@@ -103,9 +104,13 @@ public class PlanoAlimentarController {
                         refeicaoRepository.saveAll(updatedRefeicoes);
                     }
 
+                    // Atualizar totais baseados nas refeições
+                    existingPlanoAlimentar.updateTotais();
+
                     PlanoAlimentar updatedPlanoAlimentar = planoAlimentarRepository.save(existingPlanoAlimentar);
                     return ResponseEntity.ok(new PlanoAlimentarResponseDTO(updatedPlanoAlimentar));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se não encontrar
     }
+
 }

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 public record PlanoAlimentarResponseDTO(
         Long id,
+        Float totalConsumoKcal,
         Float totalConsumoCarboidrato,
         Float totalConsumoProteina,
         Float totalConsumoGordura,
@@ -15,6 +16,7 @@ public record PlanoAlimentarResponseDTO(
     public PlanoAlimentarResponseDTO(PlanoAlimentar planoAlimentar) {
         this(
                 planoAlimentar.getId(),
+                planoAlimentar.getTotalConsumoKcal(),
                 planoAlimentar.getTotalConsumoCarboidrato(),
                 planoAlimentar.getTotalConsumoProteina(),
                 planoAlimentar.getTotalConsumoGordura(),
