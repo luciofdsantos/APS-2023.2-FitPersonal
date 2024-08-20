@@ -9,7 +9,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/treinos" element={<Treinos />} />
-        <Route path="/novo-treino" element={<EditarNovo />} />
+        <Route path="/novo-treino/novo" element={<EditarNovo />} />
         <Route path="/editar-treino/:id" element={<EditarNovo />} />
       </Routes>
     </Router>

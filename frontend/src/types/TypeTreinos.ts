@@ -17,4 +17,16 @@ export namespace TypeTreinos {
     descricao: string;
     exercicios: Exercicio[];
   };
+
+  export type SelectOptionType = {
+    id?: string | number;
+    nome: string;
+    carga: number;
+    fim: string;
+    finalizado: boolean;
+    grupoMuscular: string;
+    inicio: string;
+    repeticoes: number;
+    series: number;
+  };
 }

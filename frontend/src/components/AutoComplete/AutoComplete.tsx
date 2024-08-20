@@ -1,25 +1,15 @@
 import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
-interface SelectOptionType {
-  id?: string | number;
-  nome: string;
-  carga: number;
-  fim: string;
-  finalizado: boolean;
-  grupoMuscular: string;
-  inicio: string;
-  repeticoes: number;
-  series: number;
-}
+import { TypeTreinos } from 'src/types';
 
 interface AutoCompleteProps {
   name: string;
   label: string;
-  options: SelectOptionType[];
-  optionLabel: keyof SelectOptionType;
-  values: SelectOptionType[];
-  setValue: (data: SelectOptionType[]) => void;
+  options: TypeTreinos.SelectOptionType[];
+  optionLabel: keyof TypeTreinos.SelectOptionType;
+  values: TypeTreinos.SelectOptionType[];
+  setValue: (data: TypeTreinos.SelectOptionType[]) => void;
   multiple?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -41,7 +31,10 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
 }) => {
   const handleChange = (
     event: React.SyntheticEvent,
-    newValue: SelectOptionType[] | SelectOptionType | null
+    newValue:
+      | TypeTreinos.SelectOptionType[]
+      | TypeTreinos.SelectOptionType
+      | null
   ) => {
     if (newValue === null) {
       setValue([]);
@@ -52,7 +45,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
   };
 
-  const filterOptions = (options: SelectOptionType[]) => {
+  const filterOptions = (options: TypeTreinos.SelectOptionType[]) => {
     if (multiple) {
       return options.filter(
         (option) => !values.some((value) => value.id === option.id)
@@ -68,6 +61,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       options={options}
       getOptionLabel={(option) => option[optionLabel] as string}
       value={values}
+      noOptionsText="Não há mais opções disponiveis"
       onChange={handleChange}
       filterOptions={filterOptions}
       isOptionEqualToValue={(option, value) => option.id === value.id}
