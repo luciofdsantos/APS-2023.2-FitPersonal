@@ -28,7 +28,7 @@ public class PlanoAlimentar {
     private Float totalConsumoGordura;
 
     @OneToMany(mappedBy = "planoAlimentar", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Refeicao> refeicoes;
+    private List<Refeicao> refeicoes = new ArrayList<Refeicao>();
 
     public PlanoAlimentar(PlanoAlimentarRequestDTO dto) {
         this.totalConsumoKcal = dto.totalConsumoKcal();
@@ -48,17 +48,16 @@ public class PlanoAlimentar {
     public void addRefeicao(Refeicao refeicao) {
         this.refeicoes.add(refeicao);
         refeicao.setPlanoAlimentar(this);
+        updateTotais();
     }
 
     public void removeRefeicao(Refeicao refeicao) {
         this.refeicoes.remove(refeicao);
         refeicao.setPlanoAlimentar(null);
+        updateTotais();
     }
 
     public void updateTotais() {
-        if (refeicoes == null) {
-            refeicoes = new ArrayList<>();
-        }
         this.totalConsumoKcal = (float) refeicoes.stream()
                 .mapToDouble(Refeicao::getKcal)
                 .sum();
