@@ -63,20 +63,20 @@ public class TreinoController {
     }
 
     // (Futuramente) Atualizar um Treino por ID
-    // @PutMapping("/{id}")
-    // public ResponseEntity<Treino> atualizaTreino(@PathVariable Long id, @RequestBody Treino treino) {
-    //     Optional<Treino> treinoExistente = treinoService.findTreinoById(id);
-    //
-    //     if (treinoExistente.isPresent()) {
-    //         Treino treinoAtualizado = treinoExistente.get();
-    //         treinoAtualizado.setNome(treino.getNome());
-    //         treinoAtualizado.setDescricao(treino.getDescricao());
-    //         // Atualize outros campos conforme necessário
-    //
-    //         treinoService.updateTreino(treinoAtualizado);
-    //         return ResponseEntity.ok(treinoAtualizado);
-    //     } else {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    //     }
-    // }
+     @PutMapping("/{id}")
+     public ResponseEntity<Treino> atualizaTreino(@PathVariable Long id, @RequestBody Treino treino) {
+         Optional<Treino> treinoExistente = treinoService.findTreinoById(id);
+
+         if (treinoExistente.isPresent()) {
+             Treino treinoAtualizado = treinoExistente.get();
+             treinoAtualizado.setNome(treino.getNome());
+             treinoAtualizado.setDescricao(treino.getDescricao());
+             // Atualize outros campos conforme necessário
+
+             treinoService.updateTreinoById(treinoAtualizado, id);
+             return ResponseEntity.ok(treinoAtualizado);
+         } else {
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+         }
+     }
 }
