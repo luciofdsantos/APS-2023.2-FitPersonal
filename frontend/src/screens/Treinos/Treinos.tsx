@@ -10,15 +10,18 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
-s} from '@mui/material';
+  DialogTitle
+} from '@mui/material';
 import { TypeTreinos } from 'src/types';
+import { useNavigate } from 'react-router-dom';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
 const endpoint = 'http://92.113.32.219:8080/api/treinos';
 
 export default function Treinos() {
+  const navigate = useNavigate();
+
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
 
@@ -77,6 +80,12 @@ export default function Treinos() {
     }
   };
 
+  const handleEdit = (treino: TypeTreinos.Treino) => {
+    navigate(`/editar-treino/${treino.id}`, {
+      state: { treino }
+    });
+  };
+
   return (
     <CustomLayout appBarText="Treinos" items={items}>
       <Grid container spacing={3}>
@@ -118,6 +127,7 @@ export default function Treinos() {
                   {
                     startIcon: <EditIcon />,
                     href: `/editar-treino/${treino.id}`,
+                    onClick: () => handleEdit(treino),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
                     border: 'none'

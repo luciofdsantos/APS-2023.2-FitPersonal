@@ -3,7 +3,7 @@ import { AutoComplete, GroupButtons, CustomLayout } from '../../../components';
 import { Dashboard } from '@mui/icons-material';
 import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
 
 interface SelectOptionType {
@@ -42,12 +42,10 @@ const createTreino = async (
     },
     body: JSON.stringify(treino)
   });
-
   if (!response.ok) {
     const errorMessage = await response.text();
     throw new Error(`Erro ao criar treino: ${errorMessage}`);
   }
-
   return response.json();
 };
 
@@ -62,30 +60,35 @@ const updateTreino = async (
     },
     body: JSON.stringify(treino)
   });
-
   if (!response.ok) {
     const errorMessage = await response.text();
     throw new Error(`Erro ao atualizar treino: ${errorMessage}`);
   }
-
   return response.json();
 };
 
 export default function EditarNovo() {
-  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const treinoData = location.state?.treino || {
+    nome: '',
+    descricao: '',
+    exercicios: []
+  };
 
   const [formData, setFormData] = useState<
     FormData & { exercicios: SelectOptionType[] }
   >({
-    nome: '',
-    descricao: '',
-    exercicios: []
+    nome: treinoData?.nome || '',
+    descricao: treinoData?.descricao || '',
+    exercicios: treinoData?.exercicios || []
   });
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedExercises, setSelectedExercises] = useState<
     SelectOptionType[]
-  >([]);
+  >(formData.exercicios);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -124,13 +127,10 @@ export default function EditarNovo() {
         })
       );
 
-      const treinoData = {
-        ...formData,
-        exercicios: filteredExercises
-      };
+      const treinoData = { ...formData, exercicios: filteredExercises };
 
-      if (id) {
-        return updateTreino(Number(id), treinoData);
+      if (formData.id) {
+        return updateTreino(Number(formData.id), treinoData);
       } else {
         return createTreino(treinoData);
       }
@@ -197,7 +197,6 @@ export default function EditarNovo() {
               onChange={handleChange}
               error={!!errors.nome}
               helperText={errors.nome}
-              // disabled={isLoading}
             />
           </Grid>
 
@@ -211,7 +210,6 @@ export default function EditarNovo() {
               onChange={handleChange}
               error={!!errors.descricao}
               helperText={errors.descricao}
-              // disabled={isLoading}
             />
           </Grid>
 
@@ -223,19 +221,20 @@ export default function EditarNovo() {
               optionLabel="nome"
               values={selectedExercises}
               setValue={handleChangeExercise}
-              multiple
               error={errors.exercicios}
               // disabled={isLoading}
             />
           </Grid>
-        </Grid>
 
-        <GroupButtons
-          buttons={[
-            { text: 'Salvar', type: 'submit', disabled: mutation.isPending },
-            { text: 'Voltar', href: '/treinos' }
-          ]}
-        />
+          <Grid item xs={12}>
+            <GroupButtons
+              buttons={[
+                { text: 'Salvar', type: 'submit' },
+                { text: 'Cancelar', onClick: () => navigate('/treinos') }
+              ]}
+            />
+          </Grid>
+        </Grid>
       </form>
     </CustomLayout>
   );

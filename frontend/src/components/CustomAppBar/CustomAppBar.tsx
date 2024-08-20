@@ -7,13 +7,14 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { TypeAppBar } from 'src/types';
+import backgroundImage from '../../assets/images/bar.png';
 
 const StyledAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
 })<TypeAppBar.AppBarProps>(({ theme, open, drawerWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',
-  backgroundImage: `url('src/assets/images/bar.png')`,
+  backgroundImage: `url(${backgroundImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   height: 200,
