@@ -1,16 +1,33 @@
+import { useState } from 'react';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { GroupButtons, CustomCard, CustomLayout } from '../../components';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
+import {
+  CircularProgress,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+s} from '@mui/material';
 import { TypeTreinos } from 'src/types';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
-const endpoint = 'http://149.100.154.48:3000/treinos';
+const endpoint = 'http://92.113.32.219:8080/api/treinos';
 
-export default function Novo() {
-  const { data: treinos, isSuccess } = useQuery({
+export default function Treinos() {
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
+
+  const {
+    data: treinos,
+    refetch,
+    isSuccess,
+    isFetching
+  } = useQuery({
     queryKey: ['treinos'],
     queryFn: async () => {
       const response = await fetch(endpoint);
@@ -23,10 +40,65 @@ export default function Novo() {
     retry: false
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`${endpoint}/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao excluir treino: ${errorMessage}`);
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      setOpenDeleteDialog(false);
+      setSelectedTreinoId(null);
+      refetch();
+    },
+    onError: (error: Error) => {
+      console.error(error.message);
+    }
+  });
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setSelectedTreinoId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedTreinoId(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedTreinoId !== null) {
+      deleteMutation.mutate(selectedTreinoId);
+    }
+  };
+
   return (
     <CustomLayout appBarText="Treinos" items={items}>
       <Grid container spacing={3}>
-        {isSuccess && treinos && treinos.length > 0 ? (
+        <Grid item xs={12}>
+          <GroupButtons
+            buttons={[{ text: 'Novo Treino', href: '/novo-treino' }]}
+          />
+        </Grid>
+
+        {isFetching ? (
+          <Grid
+            item
+            xs={12}
+            container
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          </Grid>
+        ) : isSuccess && treinos && treinos.length > 0 ? (
           treinos.map((treino: TypeTreinos.Treino) => (
             <Grid item xs={12} md={8} lg={4} key={treino.id}>
               <CustomCard
@@ -45,14 +117,14 @@ export default function Novo() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    // href: `/editar-treino/${treino.id}`,
+                    href: `/editar-treino/${treino.id}`,
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
                     border: 'none'
                   },
                   {
                     startIcon: <DeleteIcon />,
-                    // href: `/deletar-treino/${treino.id}`,
+                    onClick: () => handleOpenDeleteDialog(treino.id),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
                     border: 'none'
@@ -68,7 +140,23 @@ export default function Novo() {
         )}
       </Grid>
 
-      <GroupButtons buttons={[{ text: 'Novo Treino', href: '/novo-treino' }]} />
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogContent>
+          <p>Tem certeza de que deseja excluir este treino?</p>
+        </DialogContent>
+        <DialogActions>
+          <GroupButtons
+            buttons={[
+              { text: 'Cancelar', onClick: () => handleCloseDeleteDialog() },
+              {
+                text: 'Excluir',
+                onClick: () => handleDelete()
+              }
+            ]}
+          />
+        </DialogActions>
+      </Dialog>
     </CustomLayout>
   );
 }

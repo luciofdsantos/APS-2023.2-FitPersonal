@@ -11,6 +11,7 @@ export namespace TypeButton {
     backgroundColor?: string;
     iconColor?: string;
     border?: string;
+    disabled?: boolean;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
   };
 
