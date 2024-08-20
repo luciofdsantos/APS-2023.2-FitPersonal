@@ -36,8 +36,8 @@ public class Exercicio {
     private Integer carga;
     private Boolean finalizado;
 
-    @ManyToOne
-//    @JoinColumn(name = "treino_id")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "treino_id")
     @JsonIgnore
     private Treino treino;
 }

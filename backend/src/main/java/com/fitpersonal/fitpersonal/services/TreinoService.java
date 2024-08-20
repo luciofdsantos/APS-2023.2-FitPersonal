@@ -19,7 +19,12 @@ public class TreinoService {
     @Autowired
     private ExercicioRepository exercicioRepository;
 
-    public Treino createTreino(Treino treino){
+    public Treino createTreino(Treino treino) {
+        // Atribui o treino a cada exercício
+        for (Exercicio exercicio : treino.getExercicios()) {
+            exercicio.setTreino(treino);
+        }
+
         return treinoRepository.save(treino);
     }
 
