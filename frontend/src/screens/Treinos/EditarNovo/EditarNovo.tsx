@@ -6,7 +6,20 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
 
+interface SelectOptionType {
+  id?: string | number;
+  nome: string;
+  carga: number;
+  fim: string;
+  finalizado: boolean;
+  grupoMuscular: string;
+  inicio: string;
+  repeticoes: number;
+  series: number;
+}
+
 interface FormData {
+  id?: number;
   nome: string;
   descricao: string;
 }
@@ -17,15 +30,10 @@ interface FormErrors {
   exercicios?: string;
 }
 
-interface SelectOptionType {
-  id: string | number;
-  nome: string;
-}
-
-const endpoint = 'http://92.113.32.219:8080/api/treinos';
+const endpoint = 'http://92.113.32.219:8080/api/treinos/addTreino';
 
 const createTreino = async (
-  treino: FormData & { exercicios: (string | number)[] }
+  treino: FormData & { exercicios: SelectOptionType[] }
 ) => {
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -44,8 +52,8 @@ const createTreino = async (
 };
 
 const updateTreino = async (
-  id: string,
-  treino: FormData & { exercicios: (string | number)[] }
+  id: number,
+  treino: FormData & { exercicios: SelectOptionType[] }
 ) => {
   const response = await fetch(`${endpoint}/${id}`, {
     method: 'PUT',
@@ -67,9 +75,12 @@ export default function EditarNovo() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<
+    FormData & { exercicios: SelectOptionType[] }
+  >({
     nome: '',
-    descricao: ''
+    descricao: '',
+    exercicios: []
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedExercises, setSelectedExercises] = useState<
@@ -91,13 +102,35 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
+      const filteredExercises: SelectOptionType[] = selectedExercises.map(
+        ({
+          nome,
+          carga,
+          fim,
+          finalizado,
+          grupoMuscular,
+          inicio,
+          repeticoes,
+          series
+        }) => ({
+          nome,
+          carga,
+          fim,
+          finalizado,
+          grupoMuscular,
+          inicio,
+          repeticoes,
+          series
+        })
+      );
+
       const treinoData = {
         ...formData,
-        exercicios: selectedExercises.map((ex) => ex.id)
+        exercicios: filteredExercises
       };
 
       if (id) {
-        return updateTreino(id, treinoData);
+        return updateTreino(Number(id), treinoData);
       } else {
         return createTreino(treinoData);
       }

@@ -2,8 +2,15 @@ import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
 interface SelectOptionType {
-  id: string | number;
+  id?: string | number;
   nome: string;
+  carga: number;
+  fim: string;
+  finalizado: boolean;
+  grupoMuscular: string;
+  inicio: string;
+  repeticoes: number;
+  series: number;
 }
 
 interface AutoCompleteProps {

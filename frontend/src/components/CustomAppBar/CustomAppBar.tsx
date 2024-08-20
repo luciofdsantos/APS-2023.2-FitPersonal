@@ -52,7 +52,6 @@ export default function CustomAppBar({
         <IconButton
           edge="start"
           color="inherit"
-          aria-label="open drawer"
           onClick={toggleDrawer}
           sx={{
             marginRight: '36px',
