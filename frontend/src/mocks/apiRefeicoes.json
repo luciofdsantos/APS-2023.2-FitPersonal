@@ -1,0 +1,29 @@
+[
+  {
+    "alimento": "Peito de frango",
+    "quantidade": 180.0,
+    "kcal": 270.0,
+    "carboidrato": 0.0,
+    "proteina": 27.0,
+    "gordura": 9.0,
+    "tipoRefeicao": "ALMOCO"
+  },
+  {
+    "alimento": "Quinoa",
+    "quantidade": 100.0,
+    "kcal": 120.0,
+    "carboidrato": 21.0,
+    "proteina": 4.0,
+    "gordura": 2.0,
+    "tipoRefeicao": "ALMOCO"
+  },
+  {
+    "alimento": "Laranja",
+    "quantidade": 200.0,
+    "kcal": 90.0,
+    "carboidrato": 22.0,
+    "proteina": 1.5,
+    "gordura": 0.2,
+    "tipoRefeicao": "LANCHE"
+  }
+]

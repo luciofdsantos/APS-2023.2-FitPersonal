@@ -13,206 +13,125 @@ import {
   DialogTitle
 } from '@mui/material';
 import { TypePlanosAlimentares } from 'src/types';
+import { useNavigate } from 'react-router-dom';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
-// const endpoint = 'http://149.100.154.48:300/planoAlimentar';
-
-const mockData: TypePlanosAlimentares.PlanoAlimentar[] = [
-  {
-    id: 1,
-    nome: 'Plano Alimentar 1',
-    totalConsumoCarboidrato: 400.0,
-    totalConsumoProteina: 180.0,
-    totalConsumoGordura: 120.0,
-    refeicoes: [
-      {
-        alimento: 'Pão Integral com Manteiga',
-        quantidade: 150.0,
-        kcal: 250.0,
-        tipoRefeicao: 'CAFE_DA_MANHA'
-      },
-      {
-        alimento: 'Salada de Frango com Quinoa',
-        quantidade: 250.0,
-        kcal: 500.0,
-        tipoRefeicao: 'ALMOCO'
-      },
-      {
-        alimento: 'Iogurte com Granola',
-        quantidade: 200.0,
-        kcal: 220.0,
-        tipoRefeicao: 'LANCHE'
-      },
-      {
-        alimento: 'Filé de Salmão com Arroz',
-        quantidade: 300.0,
-        kcal: 650.0,
-        tipoRefeicao: 'JANTAR'
-      }
-    ]
-  },
-  {
-    id: 2,
-    nome: 'Plano Alimentar 2',
-    totalConsumoCarboidrato: 320.0,
-    totalConsumoProteina: 150.0,
-    totalConsumoGordura: 110.0,
-    refeicoes: [
-      {
-        alimento: 'Smoothie de Banana e Aveia',
-        quantidade: 250.0,
-        kcal: 300.0,
-        tipoRefeicao: 'CAFE_DA_MANHA'
-      },
-      {
-        alimento: 'Frango Assado com Batata Doce',
-        quantidade: 200.0,
-        kcal: 450.0,
-        tipoRefeicao: 'ALMOCO'
-      },
-      {
-        alimento: 'Maçã com Amendoim',
-        quantidade: 150.0,
-        kcal: 200.0,
-        tipoRefeicao: 'LANCHE'
-      },
-      {
-        alimento: 'Lasanha de Vegetais',
-        quantidade: 300.0,
-        kcal: 600.0,
-        tipoRefeicao: 'JANTAR'
-      }
-    ]
-  },
-  {
-    id: 3,
-    nome: 'Plano Alimentar 3',
-    totalConsumoCarboidrato: 360.0,
-    totalConsumoProteina: 200.0,
-    totalConsumoGordura: 105.0,
-    refeicoes: [
-      {
-        alimento: 'Cereal com Leite',
-        quantidade: 200.0,
-        kcal: 250.0,
-        tipoRefeicao: 'CAFE_DA_MANHA'
-      },
-      {
-        alimento: 'Bife com Purê de Batata',
-        quantidade: 250.0,
-        kcal: 550.0,
-        tipoRefeicao: 'ALMOCO'
-      },
-      {
-        alimento: 'Barra de Proteína',
-        quantidade: 80.0,
-        kcal: 150.0,
-        tipoRefeicao: 'LANCHE'
-      },
-      {
-        alimento: 'Frango Grelhado com Salada',
-        quantidade: 300.0,
-        kcal: 600.0,
-        tipoRefeicao: 'JANTAR'
-      }
-    ]
-  },
-  {
-    id: 4,
-    nome: 'Plano Alimentar 4',
-    totalConsumoCarboidrato: 330.0,
-    totalConsumoProteina: 170.0,
-    totalConsumoGordura: 90.0,
-    refeicoes: [
-      {
-        alimento: 'Omelete com Espinafre',
-        quantidade: 200.0,
-        kcal: 250.0,
-        tipoRefeicao: 'CAFE_DA_MANHA'
-      },
-      {
-        alimento: 'Salmão com Arroz Integral',
-        quantidade: 220.0,
-        kcal: 500.0,
-        tipoRefeicao: 'ALMOCO'
-      },
-      {
-        alimento: 'Mix de Nozes e Frutas Secas',
-        quantidade: 100.0,
-        kcal: 180.0,
-        tipoRefeicao: 'LANCHE'
-      },
-      {
-        alimento: 'Peito de Frango com Legumes',
-        quantidade: 250.0,
-        kcal: 550.0,
-        tipoRefeicao: 'JANTAR'
-      }
-    ]
-  }
-];
+const endpoint = 'http://92.113.32.219:8080/api/planoalimentar';
 
 export default function PlanosAlimentares() {
-  // const { data: planoAlimentar, isSuccess } = useQuery({
-  //   queryKey: ['planoAlimentar'],
-  //   queryFn: async () => {
-  //     const response = await fetch(endpoint);
-  //     if (!response.ok) {
-  //       const errorMessage = await response.text();
-  //       throw new Error(`Erro ao buscar plano alimentar: ${errorMessage}`);
-  //     }
-  //     return response.json();
-  //   },
-  //   retry: false
-  // });
+  const navigate = useNavigate();
 
-  // const { data: refeicoes } = useQuery({
-  //   queryKey: ['refeicoes'],
-  //   queryFn: async () => {
-  //     const response = await fetch(endpoint, {
-  //       method: 'GET',
-  //       headers: {
-  //         'x-rapidapi-host': 'refeicoesdb.p.rapidapi.com',
-  //         'x-rapidapi-key': 'a2feefd8a7mshe21f638ca82fb6fp134a83jsn32ad89e20e6e'
-  //       }
-  //     });
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedPlanoAlimentarId, setSelectedPlanoAlimentarId] = useState<
+    number | null
+  >(null);
 
-  //     if (!response.ok) {
-  //       const errorMessage = await response.text();
-  //       throw new Error(`Erro ao buscar exercises: ${errorMessage}`);
-  //     }
-  //     return response.json();
-  //   },
-  //   retry: false
-  // });
+  const {
+    data: planoalimentar,
+    refetch,
+    isSuccess,
+    isFetching
+  } = useQuery({
+    queryKey: ['planoalimentar'],
+    queryFn: async () => {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao buscar plano alimentar: ${errorMessage}`);
+      }
+      return response.json();
+    },
+    retry: false
+  });
 
-  // console.log('refeicoes -> ', refeicoes);
-  {/* {isSuccess && planoAlimentar && planoAlimentar.length > 0 ? (
-          planoAlimentar.map(
-            (planoAlimentar: TypePlanosAlimentares.PlanoAlimentar) => ( */}
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`${endpoint}/${id}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao excluir treino: ${errorMessage}`);
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      setOpenDeleteDialog(false);
+      setSelectedPlanoAlimentarId(null);
+      refetch();
+    },
+    onError: (error: Error) => {
+      console.error(error.message);
+    }
+  });
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setSelectedPlanoAlimentarId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedPlanoAlimentarId(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedPlanoAlimentarId !== null) {
+      deleteMutation.mutate(selectedPlanoAlimentarId);
+    }
+  };
+
+  const handleEdit = (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => {
+    navigate(`/editar-plano-alimentar/${planoalimentar.id}`, {
+      state: { planoalimentar }
+    });
+  };
 
   return (
     <CustomLayout appBarText="Planos Alimentares" items={items}>
       <Grid container spacing={3}>
-        {mockData.length > 0 ? (
-          mockData.map((planoAlimentar) => (
-
-              <Grid item xs={12} md={8} lg={4} key={planoAlimentar.id}>
+        <Grid item xs={12}>
+          <GroupButtons
+            buttons={[
+              { text: 'Novo Plano Alimentar', href: '/novo-plano-alimentar' }
+            ]}
+          />
+        </Grid>
+        {isFetching ? (
+          <Grid
+            item
+            xs={12}
+            container
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          </Grid>
+        ) : isSuccess && planoalimentar && planoalimentar.length > 0 ? (
+          planoalimentar.map(
+            (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => (
+              <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
                 <CustomCard
-                  title={`Plano Alimentar ${planoAlimentar.id}`}
+                  title={`Plano Alimentar ${planoalimentar.id}`}
                   items={[
                     {
                       label: 'Total Consumo Carboidrato',
-                      value: `${planoAlimentar.totalConsumoCarboidrato}`
+                      value: `${planoalimentar.totalConsumoCarboidrato}`
                     },
                     {
                       label: 'Total Consumo Proteina',
-                      value: `${planoAlimentar.totalConsumoProteina}`
+                      value: `${planoalimentar.totalConsumoProteina}`
                     },
                     {
                       label: 'Total Consumo Gordura',
-                      value: `${planoAlimentar.totalConsumoGordura}`
+                      value: `${planoalimentar.totalConsumoGordura}`
+                    },
+                    {
+                      label: 'Refeições',
+                      value: `${planoalimentar.refeicoes}`
                     }
                   ]}
                   style={{
@@ -223,14 +142,15 @@ export default function PlanosAlimentares() {
                   buttons={[
                     {
                       startIcon: <EditIcon />,
-                      href: `/editar-plano-alimentar/${planoAlimentar.id}`,
+                      href: `/editar-plano-alimentar/${planoalimentar.id}`,
+                      onClick: () => handleEdit(planoalimentar),
                       backgroundColor: 'transparent',
                       iconColor: '#6842FF',
                       border: 'none'
                     },
                     {
                       startIcon: <DeleteIcon />,
-                      href: `/deletar-plano-alimentar/${planoAlimentar.id}`,
+                      onClick: () => handleOpenDeleteDialog(planoalimentar.id),
                       backgroundColor: 'transparent',
                       iconColor: '#6842FF',
                       border: 'none'
@@ -247,11 +167,23 @@ export default function PlanosAlimentares() {
         )}
       </Grid>
 
-      <GroupButtons
-        buttons={[
-          { text: 'Novo Plano Alimentar', href: '/novo-plano-alimentar' }
-        ]}
-      />
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>Confirmar Exclusão</DialogTitle>
+        <DialogContent>
+          <p>Tem certeza de que deseja excluir este plano alimentar?</p>
+        </DialogContent>
+        <DialogActions>
+          <GroupButtons
+            buttons={[
+              { text: 'Cancelar', onClick: () => handleCloseDeleteDialog() },
+              {
+                text: 'Excluir',
+                onClick: () => handleDelete()
+              }
+            ]}
+          />
+        </DialogActions>
+      </Dialog>
     </CustomLayout>
   );
 }
