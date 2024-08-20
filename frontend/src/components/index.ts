@@ -1,3 +1,5 @@
+import AutoComplete from './AutoComplete';
+import ConfirmationDialog from './ConfirmationDialog';
 import Copyright from './Copyright';
 import CustomAppBar from './CustomAppBar';
 import CustomButton from './CustomButton';
@@ -8,6 +10,8 @@ import GroupButtons from './GroupButtons';
 import ListItems from './ListItems';
 
 export {
+  AutoComplete,
+  ConfirmationDialog,
   Copyright,
   CustomAppBar,
   CustomButton,

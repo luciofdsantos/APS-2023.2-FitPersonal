@@ -1,32 +1,81 @@
+import { useState } from 'react';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { GroupButtons, CustomCard, CustomLayout } from '../../components';
-import { useQuery } from '@tanstack/react-query';
+import {
+  GroupButtons,
+  CustomCard,
+  CustomLayout,
+  ConfirmationDialog
+} from '../../components';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
+import { CircularProgress, Box } from '@mui/material';
 import { TypeTreinos } from 'src/types';
+import { useNavigate } from 'react-router-dom';
+import { useTreinos, useDeleteTreino } from '../../hooks';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
-const endpoint = 'http://149.100.154.48:3000/treinos';
+export default function Treinos() {
+  const navigate = useNavigate();
 
-export default function Novo() {
-  const { data: treinos, isSuccess } = useQuery({
-    queryKey: ['treinos'],
-    queryFn: async () => {
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao buscar treinos: ${errorMessage}`);
-      }
-      return response.json();
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
+
+  const { data: treinos, isSuccess, isFetching } = useTreinos();
+  const { mutate: deleteTreino } = useDeleteTreino({
+    onSuccess: () => {
+      setOpenDeleteDialog(false);
+      setSelectedTreinoId(null);
     },
-    retry: false
+    onError: (error) => {
+      console.error('Erro na exclusão:', error.message);
+    }
   });
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setSelectedTreinoId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setSelectedTreinoId(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedTreinoId !== null) {
+      deleteTreino(selectedTreinoId);
+    }
+  };
+
+  const handleEdit = (treino: TypeTreinos.Treino) => {
+    navigate(`/editar-treino/${treino.id}`, {
+      state: { treino }
+    });
+  };
 
   return (
     <CustomLayout appBarText="Treinos" items={items}>
       <Grid container spacing={3}>
-        {isSuccess && treinos && treinos.length > 0 ? (
+        <Grid item xs={12}>
+          <GroupButtons
+            buttons={[{ text: 'Novo Treino', href: '/novo-treino/novo' }]}
+          />
+        </Grid>
+
+        {isFetching ? (
+          <Grid
+            item
+            xs={12}
+            container
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <CircularProgress />
+            </Box>
+          </Grid>
+        ) : isSuccess && treinos && treinos.length > 0 ? (
           treinos.map((treino: TypeTreinos.Treino) => (
             <Grid item xs={12} md={8} lg={4} key={treino.id}>
               <CustomCard
@@ -45,14 +94,15 @@ export default function Novo() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    // href: `/editar-treino/${treino.id}`,
+                    href: `/editar-treino/${treino.id}`,
+                    onClick: () => handleEdit(treino),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
                     border: 'none'
                   },
                   {
                     startIcon: <DeleteIcon />,
-                    // href: `/deletar-treino/${treino.id}`,
+                    onClick: () => handleOpenDeleteDialog(treino.id),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
                     border: 'none'
@@ -68,7 +118,13 @@ export default function Novo() {
         )}
       </Grid>
 
-      <GroupButtons buttons={[{ text: 'Novo Treino', href: '/novo-treino' }]} />
+      <ConfirmationDialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDelete}
+        title="Confirmar Exclusão"
+        message="Tem certeza de que deseja excluir este treino?"
+      />
     </CustomLayout>
   );
 }

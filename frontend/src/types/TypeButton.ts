@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { SxProps, Theme } from '@mui/material';
-import { MouseEventHandler } from 'react';
 
 export namespace TypeButton {
   export type Button = {
@@ -12,6 +11,8 @@ export namespace TypeButton {
     backgroundColor?: string;
     iconColor?: string;
     border?: string;
+    disabled?: boolean;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
   };
 
   export type CustomButtonProps = {
@@ -22,7 +23,6 @@ export namespace TypeButton {
 
   export type GroupButtonsProps = {
     buttons: Button[];
-    onClick?: MouseEventHandler<HTMLButtonElement>;
     style?: SxProps<Theme>;
     boxShadow?: boolean;
   };

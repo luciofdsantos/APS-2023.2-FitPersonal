@@ -3,6 +3,7 @@
     "baseUrl": "./",
     "target": "esnext",
     "module": "esnext",
+    "resolveJsonModule": true,
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
