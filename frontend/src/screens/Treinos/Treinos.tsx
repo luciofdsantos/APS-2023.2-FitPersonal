@@ -1,23 +1,19 @@
 import { useState } from 'react';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { GroupButtons, CustomCard, CustomLayout } from '../../components';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import {
+  GroupButtons,
+  CustomCard,
+  CustomLayout,
+  ConfirmationDialog
+} from '../../components';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
-import {
-  CircularProgress,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle
-} from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 import { TypeTreinos } from 'src/types';
 import { useNavigate } from 'react-router-dom';
+import { useTreinos, useDeleteTreino } from '../../hooks';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
-
-const endpoint = 'http://92.113.32.219:8080/api/treinos';
 
 export default function Treinos() {
   const navigate = useNavigate();
@@ -25,42 +21,14 @@ export default function Treinos() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
 
-  const {
-    data: treinos,
-    refetch,
-    isSuccess,
-    isFetching
-  } = useQuery({
-    queryKey: ['treinos'],
-    queryFn: async () => {
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao buscar treinos: ${errorMessage}`);
-      }
-      return response.json();
-    },
-    retry: false
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await fetch(`${endpoint}/${id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao excluir treino: ${errorMessage}`);
-      }
-      return response.json();
-    },
+  const { data: treinos, isSuccess, isFetching } = useTreinos();
+  const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
       setOpenDeleteDialog(false);
       setSelectedTreinoId(null);
-      refetch();
     },
-    onError: (error: Error) => {
-      console.error(error.message);
+    onError: (error) => {
+      console.error('Erro na exclusão:', error.message);
     }
   });
 
@@ -76,7 +44,7 @@ export default function Treinos() {
 
   const handleDelete = () => {
     if (selectedTreinoId !== null) {
-      deleteMutation.mutate(selectedTreinoId);
+      deleteTreino(selectedTreinoId);
     }
   };
 
@@ -91,7 +59,7 @@ export default function Treinos() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Novo Treino', href: '/novo-treino' }]}
+            buttons={[{ text: 'Novo Treino', href: '/novo-treino/novo' }]}
           />
         </Grid>
 
@@ -150,23 +118,13 @@ export default function Treinos() {
         )}
       </Grid>
 
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Confirmar Exclusão</DialogTitle>
-        <DialogContent>
-          <p>Tem certeza de que deseja excluir este treino?</p>
-        </DialogContent>
-        <DialogActions>
-          <GroupButtons
-            buttons={[
-              { text: 'Cancelar', onClick: () => handleCloseDeleteDialog() },
-              {
-                text: 'Excluir',
-                onClick: () => handleDelete()
-              }
-            ]}
-          />
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDelete}
+        title="Confirmar Exclusão"
+        message="Tem certeza de que deseja excluir este treino?"
+      />
     </CustomLayout>
   );
 }

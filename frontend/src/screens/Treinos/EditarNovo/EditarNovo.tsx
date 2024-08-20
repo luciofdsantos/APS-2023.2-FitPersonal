@@ -5,18 +5,9 @@ import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
-
-interface SelectOptionType {
-  id?: string | number;
-  nome: string;
-  carga: number;
-  fim: string;
-  finalizado: boolean;
-  grupoMuscular: string;
-  inicio: string;
-  repeticoes: number;
-  series: number;
-}
+import { TypeTreinos } from 'src/types';
+import { useCreateTreino, useUpdateTreino } from '../../../hooks';
+import { useParams } from 'react-router-dom';
 
 interface FormData {
   id?: number;
@@ -30,44 +21,9 @@ interface FormErrors {
   exercicios?: string;
 }
 
-const endpoint = 'http://92.113.32.219:8080/api/treinos/addTreino';
-
-const createTreino = async (
-  treino: FormData & { exercicios: SelectOptionType[] }
-) => {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(treino)
-  });
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Erro ao criar treino: ${errorMessage}`);
-  }
-  return response.json();
-};
-
-const updateTreino = async (
-  id: number,
-  treino: FormData & { exercicios: SelectOptionType[] }
-) => {
-  const response = await fetch(`${endpoint}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(treino)
-  });
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Erro ao atualizar treino: ${errorMessage}`);
-  }
-  return response.json();
-};
-
 export default function EditarNovo() {
+  const { id } = useParams<{ id?: string }>();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -78,7 +34,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { exercicios: SelectOptionType[] }
+    FormData & { exercicios: TypeTreinos.SelectOptionType[] }
   >({
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
@@ -87,8 +43,29 @@ export default function EditarNovo() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedExercises, setSelectedExercises] = useState<
-    SelectOptionType[]
-  >(formData.exercicios);
+    TypeTreinos.SelectOptionType[]
+  >([]);
+
+  const { mutate: createTreino } = useCreateTreino({
+    onSuccess: () => {
+      alert('Treino criado com sucesso!');
+    },
+    onError: (error) => {
+      console.error('Erro ao criar treino:', error.message);
+      alert('Erro ao criar treino. Tente novamente.');
+    }
+  });
+
+  const { mutate: updateTreino } = useUpdateTreino({
+    onSuccess: () => {
+      alert('Treino atualizado com sucesso!');
+      navigate('/treinos');
+    },
+    onError: (error) => {
+      console.error('Erro ao atualizar treino:', error.message);
+      alert('Erro ao atualizar treino. Tente novamente.');
+    }
+  });
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -105,32 +82,33 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredExercises: SelectOptionType[] = selectedExercises.map(
-        ({
-          nome,
-          carga,
-          fim,
-          finalizado,
-          grupoMuscular,
-          inicio,
-          repeticoes,
-          series
-        }) => ({
-          nome,
-          carga,
-          fim,
-          finalizado,
-          grupoMuscular,
-          inicio,
-          repeticoes,
-          series
-        })
-      );
+      const filteredExercises: TypeTreinos.SelectOptionType[] =
+        selectedExercises.map(
+          ({
+            nome,
+            carga,
+            fim,
+            finalizado,
+            grupoMuscular,
+            inicio,
+            repeticoes,
+            series
+          }) => ({
+            nome,
+            carga,
+            fim,
+            finalizado,
+            grupoMuscular,
+            inicio,
+            repeticoes,
+            series
+          })
+        );
 
       const treinoData = { ...formData, exercicios: filteredExercises };
 
-      if (formData.id) {
-        return updateTreino(Number(formData.id), treinoData);
+      if (id) {
+        return updateTreino({ id: Number(id), treino: treinoData });
       } else {
         return createTreino(treinoData);
       }
@@ -153,7 +131,7 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeExercise = (newValues: SelectOptionType[]) => {
+  const handleChangeExercise = (newValues: TypeTreinos.SelectOptionType[]) => {
     setSelectedExercises(newValues);
 
     if (errors.exercicios) {
@@ -219,10 +197,10 @@ export default function EditarNovo() {
               label="Exercícios *"
               options={apiExercicios}
               optionLabel="nome"
+              multiple
               values={selectedExercises}
               setValue={handleChangeExercise}
               error={errors.exercicios}
-              // disabled={isLoading}
             />
           </Grid>
 
