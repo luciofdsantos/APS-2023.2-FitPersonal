@@ -5,16 +5,12 @@ import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
-
-interface SelectOptionType {
-  alimento: string;
-  quantidade: number;
-  kcal: number;
-  carboidrato: number;
-  proteina: number;
-  gordura: number;
-  tipoRefeicao: string;
-}
+import { TypePlanosAlimentares } from 'src/types';
+import {
+  useCreatePlanoAlimentar,
+  useUpdatePlanoAlimentar
+} from '../../../hooks';
+import { useParams } from 'react-router-dom';
 
 interface FormData {
   id?: number;
@@ -32,44 +28,9 @@ interface FormErrors {
   refeicoes?: string;
 }
 
-const endpoint = 'http://92.113.32.219:8080/api/refeicoes';
-
-const createPlanoAlimentar = async (
-  planoalimentar: FormData & { refeicoes: SelectOptionType[] }
-) => {
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(planoalimentar)
-  });
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Erro ao criar plano alimentar: ${errorMessage}`);
-  }
-  return response.json();
-};
-
-const updatePlanoAlimentar = async (
-  id: number,
-  planoalimentar: FormData & { refeicoes: SelectOptionType[] }
-) => {
-  const response = await fetch(`${endpoint}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(planoalimentar)
-  });
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(`Erro ao atualizar plano alimentar: ${errorMessage}`);
-  }
-  return response.json();
-};
-
 export default function EditarNovo() {
+  const { id } = useParams<{ id?: string }>();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -82,7 +43,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { refeicoes: SelectOptionType[] }
+    FormData & { refeicoes: TypePlanosAlimentares.SelectOptionType[] }
   >({
     nome: planoAlimentarData?.nome || '',
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
@@ -93,8 +54,29 @@ export default function EditarNovo() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedRefeicoes, setSelectedRefeicoes] = useState<
-    SelectOptionType[]
-  >(formData.refeicoes);
+    TypePlanosAlimentares.SelectOptionType[]
+  >([]);
+
+  const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
+    onSuccess: () => {
+      alert('Treino criado com sucesso!');
+    },
+    onError: (error) => {
+      console.error('Erro ao criar treino:', error.message);
+      alert('Erro ao criar treino. Tente novamente.');
+    }
+  });
+
+  const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
+    onSuccess: () => {
+      alert('Plano atualizado com sucesso!');
+      navigate('/plano-alimentar');
+    },
+    onError: (error) => {
+      console.error('Erro ao atualizar treino:', error.message);
+      alert('Erro ao atualizar treino. Tente novamente.');
+    }
+  });
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -107,30 +89,34 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredRefeicoes: SelectOptionType[] = selectedRefeicoes.map(
-        ({
-          alimento,
-          quantidade,
-          kcal,
-          carboidrato,
-          proteina,
-          gordura,
-          tipoRefeicao
-        }) => ({
-          alimento,
-          quantidade,
-          kcal,
-          carboidrato,
-          proteina,
-          gordura,
-          tipoRefeicao
-        })
-      );
+      const filteredRefeicoes: TypePlanosAlimentares.SelectOptionType[] =
+        selectedRefeicoes.map(
+          ({
+            alimento,
+            quantidade,
+            kcal,
+            carboidrato,
+            proteina,
+            gordura,
+            tipoRefeicao
+          }) => ({
+            alimento,
+            quantidade,
+            kcal,
+            carboidrato,
+            proteina,
+            gordura,
+            tipoRefeicao
+          })
+        );
 
       const planoAlimentarData = { ...formData, refeicoes: filteredRefeicoes };
 
-      if (formData.id) {
-        return updatePlanoAlimentar(Number(formData.id), planoAlimentarData);
+      if (id) {
+        return updatePlanoAlimentar({
+          id: Number(id),
+          planoalimentar: planoAlimentarData
+        });
       } else {
         return createPlanoAlimentar(planoAlimentarData);
       }
@@ -153,7 +139,9 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeRefeicao = (newValues: SelectOptionType[]) => {
+  const handleChangeRefeicao = (
+    newValues: TypePlanosAlimentares.SelectOptionType[]
+  ) => {
     setSelectedRefeicoes(newValues);
 
     if (errors.refeicoes) {

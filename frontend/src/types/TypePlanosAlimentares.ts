@@ -1,5 +1,6 @@
 export namespace TypePlanosAlimentares {
   export type Refeicao = {
+    id: number;
     alimento: string;
     quantidade: number;
     kcal: number;
@@ -17,5 +18,16 @@ export namespace TypePlanosAlimentares {
     totalConsumoProteina: number;
     totalConsumoGordura: number;
     refeicoes: Refeicao[];
+  };
+
+  export type SelectOptionType = {
+    id?: string | number;
+    alimento: string;
+    quantidade: number;
+    kcal: number;
+    carboidrato: number;
+    proteina: number;
+    gordura: number;
+    tipoRefeicao: string;
   };
 }

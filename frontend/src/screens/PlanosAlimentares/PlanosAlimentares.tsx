@@ -1,23 +1,19 @@
 import { useState } from 'react';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { GroupButtons, CustomCard, CustomLayout } from '../../components';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import {
+  GroupButtons,
+  CustomCard,
+  CustomLayout,
+  ConfirmationDialog
+} from '../../components';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
-import {
-  CircularProgress,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle
-} from '@mui/material';
+import { CircularProgress, Box } from '@mui/material';
 import { TypePlanosAlimentares } from 'src/types';
 import { useNavigate } from 'react-router-dom';
+import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
-
-const endpoint = 'http://92.113.32.219:8080/api/planoalimentar';
 
 export default function PlanosAlimentares() {
   const navigate = useNavigate();
@@ -29,40 +25,16 @@ export default function PlanosAlimentares() {
 
   const {
     data: planoalimentar,
-    refetch,
     isSuccess,
     isFetching
-  } = useQuery({
-    queryKey: ['planoalimentar'],
-    queryFn: async () => {
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao buscar plano alimentar: ${errorMessage}`);
-      }
-      return response.json();
-    },
-    retry: false
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await fetch(`${endpoint}/${id}`, {
-        method: 'DELETE'
-      });
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao excluir treino: ${errorMessage}`);
-      }
-      return response.json();
-    },
+  } = usePlanosAlimentares();
+  const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
     onSuccess: () => {
       setOpenDeleteDialog(false);
       setSelectedPlanoAlimentarId(null);
-      refetch();
     },
-    onError: (error: Error) => {
-      console.error(error.message);
+    onError: (error) => {
+      console.error('Erro na exclusão:', error.message);
     }
   });
 
@@ -78,7 +50,7 @@ export default function PlanosAlimentares() {
 
   const handleDelete = () => {
     if (selectedPlanoAlimentarId !== null) {
-      deleteMutation.mutate(selectedPlanoAlimentarId);
+      deletePlanoAlimentar(selectedPlanoAlimentarId);
     }
   };
 
@@ -94,7 +66,10 @@ export default function PlanosAlimentares() {
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
-              { text: 'Novo Plano Alimentar', href: '/novo-plano-alimentar' }
+              {
+                text: 'Novo Plano Alimentar',
+                href: '/novo-plano-alimentar/novo'
+              }
             ]}
           />
         </Grid>
@@ -167,23 +142,13 @@ export default function PlanosAlimentares() {
         )}
       </Grid>
 
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>Confirmar Exclusão</DialogTitle>
-        <DialogContent>
-          <p>Tem certeza de que deseja excluir este plano alimentar?</p>
-        </DialogContent>
-        <DialogActions>
-          <GroupButtons
-            buttons={[
-              { text: 'Cancelar', onClick: () => handleCloseDeleteDialog() },
-              {
-                text: 'Excluir',
-                onClick: () => handleDelete()
-              }
-            ]}
-          />
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleDelete}
+        title="Confirmar Exclusão"
+        message="Tem certeza de que deseja excluir este plano alimentar?"
+      />
     </CustomLayout>
   );
 }
