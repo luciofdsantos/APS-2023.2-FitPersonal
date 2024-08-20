@@ -56,6 +56,9 @@ public class PlanoAlimentar {
     }
 
     public void updateTotais() {
+        if (refeicoes == null) {
+            refeicoes = new ArrayList<>();
+        }
         this.totalConsumoKcal = (float) refeicoes.stream()
                 .mapToDouble(Refeicao::getKcal)
                 .sum();
