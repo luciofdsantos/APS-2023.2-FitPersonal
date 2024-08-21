@@ -11,6 +11,10 @@ public record PlanoAlimentarResponseDTO(
         Float totalConsumoCarboidrato,
         Float totalConsumoProteina,
         Float totalConsumoGordura,
+        Float metaConsumoKcal,
+        Float metaConsumoCarboidrato,
+        Float metaConsumoProteina,
+        Float metaConsumoGordura,
         List<RefeicaoResponseDTO> refeicoes) {
 
     public PlanoAlimentarResponseDTO(PlanoAlimentar planoAlimentar) {
@@ -20,6 +24,10 @@ public record PlanoAlimentarResponseDTO(
                 planoAlimentar.getTotalConsumoCarboidrato(),
                 planoAlimentar.getTotalConsumoProteina(),
                 planoAlimentar.getTotalConsumoGordura(),
+                planoAlimentar.getMetaConsumoKcal(),
+                planoAlimentar.getMetaConsumoCarboidrato(),
+                planoAlimentar.getMetaConsumoProteina(),
+                planoAlimentar.getMetaConsumoGordura(),
                 planoAlimentar.getRefeicoes().stream()
                         .map(RefeicaoResponseDTO::new)
                         .collect(Collectors.toList())

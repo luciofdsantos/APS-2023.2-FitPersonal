@@ -3,11 +3,7 @@ package com.fitpersonal.fitpersonal.entities.refeicao;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+import lombok.*;
 
 @Entity(name = "refeicao")
 @Table(name = "refeicao")

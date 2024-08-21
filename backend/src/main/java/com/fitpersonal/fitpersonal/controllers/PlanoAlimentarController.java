@@ -87,10 +87,15 @@ public class PlanoAlimentarController {
     public ResponseEntity<PlanoAlimentarResponseDTO> updatePlanoAlimentar(@PathVariable Long id, @RequestBody PlanoAlimentarRequestDTO data) {
         return planoAlimentarRepository.findById(id)
                 .map(existingPlanoAlimentar -> {
-                    existingPlanoAlimentar.setTotalConsumoKcal(data.totalConsumoKcal());
-                    existingPlanoAlimentar.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
-                    existingPlanoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
-                    existingPlanoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
+                    //Usuário não define totais, banco de dados que atualiza a partir de refeições
+                    //existingPlanoAlimentar.setTotalConsumoKcal(data.totalConsumoKcal());
+                    //.setTotalConsumoCarboidrato(data.totalConsumoCarboidrato());
+                    //existingPlanoAlimentar.setTotalConsumoProteina(data.totalConsumoProteina());
+                    //existingPlanoAlimentar.setTotalConsumoGordura(data.totalConsumoGordura());
+                    existingPlanoAlimentar.setMetaConsumoKcal(data.metaConsumoKcal());
+                    existingPlanoAlimentar.setMetaConsumoCarboidrato(data.metaConsumoCarboidrato());
+                    existingPlanoAlimentar.setMetaConsumoProteina(data.metaConsumoProteina());
+                    existingPlanoAlimentar.setMetaConsumoGordura(data.metaConsumoGordura());
 
                     // Atualizar refeições se necessário
                     if (data.refeicoes() != null) {
