@@ -140,7 +140,7 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredRefeicoes: TypePlanosAlimentares.SelectOptionType[] =
+      const filteredRefeicoes: TypePlanosAlimentares.Refeicao[] =
         selectedRefeicoes.map(
           ({
             alimento,
