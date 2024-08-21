@@ -1,13 +1,37 @@
 import { Card, CardContent, Typography, Box } from '@mui/material';
 import GroupButtons from '../GroupButtons';
-import { TypeCard } from 'src/types';
+import { SxProps, Theme } from '@mui/material';
+import { ReactNode } from 'react';
+
+export type Button = {
+  text?: string;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'text' | 'outlined' | 'contained';
+  startIcon?: ReactNode;
+  backgroundColor?: string;
+  iconColor?: string;
+  border?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+export type CustomCardProps = {
+  title: string;
+  items: {
+    label: string;
+    value: React.ReactNode;
+  }[];
+  style?: SxProps<Theme>;
+  buttons?: Button[];
+};
 
 export default function CustomCard({
   title,
   items,
   style,
   buttons
-}: TypeCard.CustomCardProps) {
+}: CustomCardProps) {
   return (
     <Card
       sx={{

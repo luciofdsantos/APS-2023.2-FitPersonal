@@ -9,9 +9,27 @@ import {
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
 import { CircularProgress, Box } from '@mui/material';
-import { TypeTreinos } from 'src/types';
 import { useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
+
+export type Exercicio = {
+  id: number;
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+};
+
+export type Treino = {
+  id: number;
+  nome: string;
+  descricao: string;
+  exercicios: Exercicio[];
+};
 
 const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
 
@@ -48,7 +66,7 @@ export default function Treinos() {
     }
   };
 
-  const handleEdit = (treino: TypeTreinos.Treino) => {
+  const handleEdit = (treino: Treino) => {
     navigate(`/editar-treino/${treino.id}`, {
       state: { treino }
     });
@@ -76,7 +94,7 @@ export default function Treinos() {
             </Box>
           </Grid>
         ) : isSuccess && treinos && treinos.length > 0 ? (
-          treinos.map((treino: TypeTreinos.Treino) => (
+          treinos.map((treino: Treino) => (
             <Grid item xs={12} md={8} lg={4} key={treino.id}>
               <CustomCard
                 title={treino.nome}

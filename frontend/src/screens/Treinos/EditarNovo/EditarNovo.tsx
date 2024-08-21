@@ -5,9 +5,13 @@ import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
-import { TypeObject } from 'src/types';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
 import { useParams } from 'react-router-dom';
+
+export type SelectTest = {
+  id: string;
+  [key: string]: string | number;
+};
 
 interface FormData {
   id?: number;
@@ -34,7 +38,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { exercicios: TypeObject.SelectTest[] }
+    FormData & { exercicios: SelectTest[] }
   >({
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
@@ -42,9 +46,7 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedExercises, setSelectedExercises] = useState<
-    TypeObject.SelectTest[]
-  >([]);
+  const [selectedExercises, setSelectedExercises] = useState<SelectTest[]>([]);
 
   const { mutate: createTreino } = useCreateTreino({
     onSuccess: () => {
@@ -106,7 +108,7 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeExercise = (newValues: TypeObject.SelectTest[]) => {
+  const handleChangeExercise = (newValues: SelectTest[]) => {
     setSelectedExercises(newValues);
 
     if (errors.exercicios) {

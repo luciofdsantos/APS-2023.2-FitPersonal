@@ -5,9 +5,19 @@ import {
   ListItemText
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { TypeItem } from 'src/types';
 
-export default function ListItems({ items, open }: TypeItem.ListItemsProps) {
+export type Item = {
+  text: string;
+  Icon: React.ElementType;
+  path: string;
+};
+
+export type ListItemsProps = {
+  items: Item[];
+  open: boolean;
+};
+
+export default function ListItems({ items, open }: ListItemsProps) {
   const navigate = useNavigate();
 
   const handleClick = (path: string) => {

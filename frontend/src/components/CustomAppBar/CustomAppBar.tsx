@@ -6,12 +6,23 @@ import {
   Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { TypeAppBar } from 'src/types';
 import backgroundImage from '../../assets/images/bar.png';
+
+export type AppBarProps = {
+  open?: boolean;
+  drawerWidth: number;
+};
+
+export type CustomAppBarProps = {
+  open: boolean;
+  appBarText: string;
+  toggleDrawer: () => void;
+  drawerWidth: number;
+};
 
 const StyledAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
-})<TypeAppBar.AppBarProps>(({ theme, open, drawerWidth }) => ({
+})<AppBarProps>(({ theme, open, drawerWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',
   backgroundImage: `url(${backgroundImage})`,
@@ -39,7 +50,7 @@ export default function CustomAppBar({
   appBarText,
   toggleDrawer,
   drawerWidth
-}: TypeAppBar.CustomAppBarProps) {
+}: CustomAppBarProps) {
   return (
     <StyledAppBar position="absolute" open={open} drawerWidth={drawerWidth}>
       <Toolbar

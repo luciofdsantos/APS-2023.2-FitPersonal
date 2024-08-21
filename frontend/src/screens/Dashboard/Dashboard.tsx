@@ -1,4 +1,3 @@
-import { Icon } from '@mui/material/';
 import { CustomLayout } from '../../components';
 import FitnessCenter from '@mui/icons-material/FitnessCenter';
 import FoodBank from '@mui/icons-material/FoodBank';

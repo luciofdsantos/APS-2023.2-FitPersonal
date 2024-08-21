@@ -3,21 +3,17 @@ import {
   AutoCompletePlanoAlimentar,
   CustomLayout,
   CustomModal
-} from '../../../components';
+} from 'src/components';
 import { Dashboard } from '@mui/icons-material';
 import { Grid, TextField, Button } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-// import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
-import { TypeObject } from 'src/types';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   useCreatePlanoAlimentar,
   useUpdatePlanoAlimentar,
   useCreateRefeicao,
   useRefeicao
 } from '../../../hooks';
-import { useParams } from 'react-router-dom';
-import { TypePlanosAlimentares } from 'src/types';
 
 interface FormData {
   id?: number;

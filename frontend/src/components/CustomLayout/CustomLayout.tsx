@@ -4,13 +4,23 @@ import { Box, Container, CssBaseline, Toolbar } from '@mui/material';
 import Copyright from '../Copyright';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
-import { TypeLayout } from 'src/types';
+import { ReactNode } from 'react';
+
+export type LayoutProps = {
+  appBarText: string;
+  items: {
+    text: string;
+    Icon: React.ElementType;
+    path: string;
+  }[];
+  children: ReactNode;
+};
 
 export default function CustomLayout({
   appBarText,
   items,
   children
-}: TypeLayout.LayoutProps) {
+}: LayoutProps) {
   const drawerWidth = 240;
 
   const [open, setOpen] = useState<boolean>(true);

@@ -9,7 +9,6 @@ import {
 import Dashboard from '@mui/icons-material/Dashboard';
 import Grid from '@mui/material/Grid';
 import { CircularProgress, Box } from '@mui/material';
-import { TypePlanosAlimentares } from 'src/types';
 import { useNavigate } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 

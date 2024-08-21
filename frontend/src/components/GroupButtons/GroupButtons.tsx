@@ -1,11 +1,31 @@
 import { Button, Box } from '@mui/material';
-import { TypeButton } from 'src/types';
+import { SxProps, Theme } from '@mui/material';
+import { ReactNode } from 'react';
+
+export type Button = {
+  text?: string;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'text' | 'outlined' | 'contained';
+  startIcon?: ReactNode;
+  backgroundColor?: string;
+  iconColor?: string;
+  border?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+export type GroupButtonsProps = {
+  buttons: Button[];
+  style?: SxProps<Theme>;
+  boxShadow?: boolean;
+};
 
 export default function GroupButtons({
   buttons,
   style,
   boxShadow = false
-}: TypeButton.GroupButtonsProps) {
+}: GroupButtonsProps) {
   return (
     <Box
       sx={{
