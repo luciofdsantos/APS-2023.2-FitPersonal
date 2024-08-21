@@ -3,10 +3,11 @@ import { TypeButton } from './TypeButton';
 import { TypeCard } from './TypeCard';
 import { TypeCopyright } from './TypeCopyright';
 import { TypeDrawer } from './TypeDrawer';
-import { TypeLayout } from './TypeLayout';
 import { TypeItem } from './TypeItem';
-import { TypeTreinos } from './TypeTreinos';
+import { TypeLayout } from './TypeLayout';
+import { TypeObject } from './TypeObject';
 import { TypePlanosAlimentares } from './TypePlanosAlimentares';
+import { TypeTreinos } from './TypeTreinos';
 
 export {
   TypeAppBar,
@@ -14,8 +15,9 @@ export {
   TypeCard,
   TypeCopyright,
   TypeDrawer,
-  TypeLayout,
   TypeItem,
-  TypeTreinos,
-  TypePlanosAlimentares
+  TypeLayout,
+  TypeObject,
+  TypePlanosAlimentares,
+  TypeTreinos
 };
