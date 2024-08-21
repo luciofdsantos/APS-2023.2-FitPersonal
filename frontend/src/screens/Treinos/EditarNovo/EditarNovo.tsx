@@ -5,7 +5,7 @@ import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiExercicios from '../../../mocks/apiExercicios.json';
-import { TypeTreinos } from 'src/types';
+import { TypeObject } from 'src/types';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { exercicios: TypeTreinos.SelectOptionType[] }
+    FormData & { exercicios: TypeObject.SelectTest[] }
   >({
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
@@ -43,7 +43,7 @@ export default function EditarNovo() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedExercises, setSelectedExercises] = useState<
-    TypeTreinos.SelectOptionType[]
+    TypeObject.SelectTest[]
   >([]);
 
   const { mutate: createTreino } = useCreateTreino({
@@ -82,31 +82,6 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredExercises: TypeTreinos.SelectOptionType[] =
-        selectedExercises.map(
-          ({
-            nome,
-            carga,
-            fim,
-            finalizado,
-            grupoMuscular,
-            inicio,
-            repeticoes,
-            series
-          }) => ({
-            nome,
-            carga,
-            fim,
-            finalizado,
-            grupoMuscular,
-            inicio,
-            repeticoes,
-            series
-          })
-        );
-
-      const treinoData = { ...formData, exercicios: filteredExercises };
-
       if (id) {
         return updateTreino({ id: Number(id), treino: treinoData });
       } else {
@@ -131,7 +106,7 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeExercise = (newValues: TypeTreinos.SelectOptionType[]) => {
+  const handleChangeExercise = (newValues: TypeObject.SelectTest[]) => {
     setSelectedExercises(newValues);
 
     if (errors.exercicios) {

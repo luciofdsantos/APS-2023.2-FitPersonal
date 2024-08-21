@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { TypePlanosAlimentares } from 'src/types';
+import { TypeObject } from 'src/types';
 
 const endpoint = 'http://92.113.32.219:8080/api/refeicoes/2652';
 
@@ -22,7 +22,7 @@ export default function useCreatePlanoAlimentar({
   return useMutation({
     mutationFn: async (
       planoalimentar: FormData & {
-        refeicoes: TypePlanosAlimentares.SelectOptionType[];
+        refeicoes: TypeObject.SelectTest[];
       }
     ) => {
       const response = await fetch(endpoint, {

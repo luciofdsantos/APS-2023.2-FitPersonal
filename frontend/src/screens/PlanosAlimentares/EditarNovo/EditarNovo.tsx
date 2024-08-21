@@ -5,7 +5,7 @@ import { Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
-import { TypePlanosAlimentares } from 'src/types';
+import { TypeObject } from 'src/types';
 import {
   useCreatePlanoAlimentar,
   useUpdatePlanoAlimentar
@@ -43,7 +43,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { refeicoes: TypePlanosAlimentares.SelectOptionType[] }
+    FormData & { refeicoes: TypeObject.SelectTest[] }
   >({
     nome: planoAlimentarData?.nome || '',
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
@@ -54,7 +54,7 @@ export default function EditarNovo() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedRefeicoes, setSelectedRefeicoes] = useState<
-    TypePlanosAlimentares.SelectOptionType[]
+    TypeObject.SelectTest[]
   >([]);
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
@@ -89,29 +89,6 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredRefeicoes: TypePlanosAlimentares.SelectOptionType[] =
-        selectedRefeicoes.map(
-          ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          }) => ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          })
-        );
-
-      const planoAlimentarData = { ...formData, refeicoes: filteredRefeicoes };
-
       if (id) {
         return updatePlanoAlimentar({
           id: Number(id),
@@ -139,9 +116,7 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeRefeicao = (
-    newValues: TypePlanosAlimentares.SelectOptionType[]
-  ) => {
+  const handleChangeRefeicao = (newValues: TypeObject.SelectTest[]) => {
     setSelectedRefeicoes(newValues);
 
     if (errors.refeicoes) {

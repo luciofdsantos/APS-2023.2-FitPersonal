@@ -1,15 +1,15 @@
 import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
-import { TypeTreinos } from 'src/types';
+import { TypeObject } from 'src/types';
 
 interface AutoCompleteProps {
   name: string;
   label: string;
-  options: TypeTreinos.SelectOptionType[];
-  optionLabel: keyof TypeTreinos.SelectOptionType;
-  values: TypeTreinos.SelectOptionType[];
-  setValue: (data: TypeTreinos.SelectOptionType[]) => void;
+  options: TypeObject.SelectTest[];
+  optionLabel: keyof TypeObject.SelectTest;
+  values: TypeObject.SelectTest[];
+  setValue: (data: TypeObject.SelectTest[]) => void;
   multiple?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -31,10 +31,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
 }) => {
   const handleChange = (
     event: React.SyntheticEvent,
-    newValue:
-      | TypeTreinos.SelectOptionType[]
-      | TypeTreinos.SelectOptionType
-      | null
+    newValue: TypeObject.SelectTest[] | TypeObject.SelectTest | null
   ) => {
     if (newValue === null) {
       setValue([]);
@@ -45,7 +42,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
   };
 
-  const filterOptions = (options: TypeTreinos.SelectOptionType[]) => {
+  const filterOptions = (options: TypeObject.SelectTest[]) => {
     if (multiple) {
       return options.filter(
         (option) => !values.some((value) => value.id === option.id)
