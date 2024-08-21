@@ -2,16 +2,19 @@ import React from 'react';
 import { Autocomplete, TextField } from '@mui/material';
 import { TypePlanosAlimentares } from 'src/types';
 
-export interface AutoCompletePlanoAlimentarProps {
+interface AutoCompletePlanoAlimentarProps {
   selectedValues: TypePlanosAlimentares.SelectOptionType[];
   onChange: (newValues: TypePlanosAlimentares.SelectOptionType[]) => void;
   error?: string;
   options: TypePlanosAlimentares.SelectOptionType[];
 }
 
-export const AutoCompletePlanoAlimentar: React.FC<
-  AutoCompletePlanoAlimentarProps
-> = ({ selectedValues, onChange, error, options }) => {
+const AutoCompletePlanoAlimentar: React.FC<AutoCompletePlanoAlimentarProps> = ({
+  selectedValues,
+  onChange,
+  error,
+  options
+}) => {
   return (
     <Autocomplete
       multiple
@@ -33,3 +36,5 @@ export const AutoCompletePlanoAlimentar: React.FC<
     />
   );
 };
+
+export default AutoCompletePlanoAlimentar;
