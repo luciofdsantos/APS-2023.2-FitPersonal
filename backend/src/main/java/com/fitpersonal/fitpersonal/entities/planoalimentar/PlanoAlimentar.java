@@ -3,10 +3,7 @@ package com.fitpersonal.fitpersonal.entities.planoalimentar;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoRequestDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +23,25 @@ public class PlanoAlimentar {
     private Float totalConsumoCarboidrato;
     private Float totalConsumoProteina;
     private Float totalConsumoGordura;
+    private Float metaConsumoKcal;
+    private Float metaConsumoCarboidrato;
+    private Float metaConsumoProteina;
+    private Float metaConsumoGordura;
 
     @OneToMany(mappedBy = "planoAlimentar", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refeicao> refeicoes = new ArrayList<>();
 
     public PlanoAlimentar(PlanoAlimentarRequestDTO dto) {
-        this.totalConsumoKcal = dto.totalConsumoKcal();
-        this.totalConsumoCarboidrato = dto.totalConsumoCarboidrato();
-        this.totalConsumoProteina = dto.totalConsumoProteina();
-        this.totalConsumoGordura = dto.totalConsumoGordura();
+        //Usuário não define totais, banco de dados que atualiza a partir de refeições
+        //this.totalConsumoKcal = dto.totalConsumoKcal();
+        //this.totalConsumoCarboidrato = dto.totalConsumoCarboidrato();
+        //this.totalConsumoProteina = dto.totalConsumoProteina();
+        //this.totalConsumoGordura = dto.totalConsumoGordura();
+        this.metaConsumoKcal = dto.metaConsumoKcal();
+        this.metaConsumoCarboidrato = dto.metaConsumoCarboidrato();
+        this.metaConsumoProteina = dto.metaConsumoProteina();
+        this.metaConsumoGordura = dto.metaConsumoGordura();
+
         this.refeicoes = new ArrayList<>();
         if (dto.refeicoes() != null) {
             for (RefeicaoRequestDTO refeicaoDTO : dto.refeicoes()) {
