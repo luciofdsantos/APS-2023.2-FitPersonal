@@ -57,17 +57,27 @@ public class TreinoService {
 
     //Criar um treino com os exercícios precadastrados;
 
+//    public Treino createTreinoWithExercicios(Treino treino, List<Exercicio> exercicios) {
+//        // Salva o treino
+//        Treino savedTreino = treinoRepository.save(treino);
+//
+//        // Define o treino para cada exercício e salva
+//        for (Exercicio exercicio : exercicios) {
+//            exercicio.setTreino(savedTreino);
+//            exercicioRepository.save(exercicio);
+//        }
+//
+//        return savedTreino;
+//    }
+
+    // Criar Treino com Exercícios
     public Treino createTreinoWithExercicios(Treino treino, List<Exercicio> exercicios) {
-        // Salva o treino
-        Treino savedTreino = treinoRepository.save(treino);
+        // Vincular cada exercício ao treino
+        exercicios.forEach(exercicio -> exercicio.setTreino(treino));
+        treino.setExercicios(exercicios);
 
-        // Define o treino para cada exercício e salva
-        for (Exercicio exercicio : exercicios) {
-            exercicio.setTreino(savedTreino);
-            exercicioRepository.save(exercicio);
-        }
-
-        return savedTreino;
+        // Salvar o treino junto com os exercícios
+        return treinoRepository.save(treino);
     }
 
 }
