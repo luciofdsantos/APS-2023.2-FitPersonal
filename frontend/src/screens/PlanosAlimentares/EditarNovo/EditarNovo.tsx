@@ -1,18 +1,14 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import {
-  AutoCompletePlanoAlimentar,
-  CustomLayout,
-  CustomModal
-} from 'src/components';
-import { Dashboard } from '@mui/icons-material';
+import { CustomLayout, CustomModal, GroupButtons } from '../../../components';
+import { Dashboard, FitnessCenter, FoodBank } from '@mui/icons-material';
 import { Grid, TextField, Button } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import {
   useCreatePlanoAlimentar,
   useUpdatePlanoAlimentar,
   useCreateRefeicao,
-  useRefeicao
+  useRefeicoes
 } from '../../../hooks';
 
 interface FormData {
@@ -41,9 +37,17 @@ interface FormErrors {
   refeicoes?: string;
 }
 
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
+}
+
 export default function EditarNovo() {
   const { id } = useParams<{ id?: string }>();
-  const { data: refeicoes, isLoading, error } = useRefeicao();
+  const { data: refeicoes, isLoading, error } = useRefeicoes();
+
+  console.log('isLoading ->', isLoading);
+  console.log('refeicoes -> ', refeicoes);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,7 +66,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { refeicoes: TypeObject.SelectTest[] }
+    FormData & { refeicoes: SelectTest[] }
   >({
     nome: planoAlimentarData?.nome || '',
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
@@ -77,21 +81,19 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedRefeicoes, setSelectedRefeicoes] = useState<
-    TypePlanosAlimentares.SelectOptionType[]
-  >([]);
+  const [selectedRefeicoes, setSelectedRefeicoes] = useState<SelectTest[]>([]);
 
   const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
-  const [newRefeicao, setNewRefeicao] =
-    useState<TypePlanosAlimentares.SelectOptionType>({
-      alimento: '',
-      quantidade: 0,
-      kcal: 0,
-      carboidrato: 0,
-      proteina: 0,
-      gordura: 0,
-      tipoRefeicao: ''
-    });
+  const [newRefeicao, setNewRefeicao] = useState<SelectTest>({
+    id: '0',
+    alimento: '',
+    quantidade: 0,
+    kcal: 0,
+    carboidrato: 0,
+    proteina: 0,
+    gordura: 0,
+    tipoRefeicao: ''
+  });
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
@@ -136,33 +138,10 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredRefeicoes: TypePlanosAlimentares.Refeicao[] =
-        selectedRefeicoes.map(
-          ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          }) => ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          })
-        );
-
-      const planoAlimentarData = { ...formData, refeicoes: filteredRefeicoes };
-
       if (id) {
         return updatePlanoAlimentar({
           id: Number(id),
-          planoalimentar: planoAlimentarData
+          planoalimentar: formData
         });
       } else {
         return createPlanoAlimentar(planoAlimentarData);
@@ -183,16 +162,6 @@ export default function EditarNovo() {
 
     if (name in errors) {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: undefined }));
-    }
-  };
-
-  const handleChangeRefeicao = (
-    newValues: TypePlanosAlimentares.SelectOptionType[]
-  ) => {
-    setSelectedRefeicoes(newValues);
-
-    if (errors.refeicoes) {
-      setErrors((prevErrors) => ({ ...prevErrors, refeicoes: undefined }));
     }
   };
 
@@ -235,6 +204,7 @@ export default function EditarNovo() {
     createRefeicao(newRefeicao);
     setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
     setNewRefeicao({
+      id: '0',
       alimento: '',
       quantidade: 0,
       kcal: 0,
@@ -245,10 +215,6 @@ export default function EditarNovo() {
     });
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>Error: {error.message}</div>;
   }
@@ -256,7 +222,15 @@ export default function EditarNovo() {
   return (
     <CustomLayout
       appBarText="Plano Alimentar"
-      items={[{ text: 'Dashboard', Icon: Dashboard, path: '/' }]}
+      items={[
+        { text: 'Dashboard', Icon: Dashboard, path: '/' },
+        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
+        {
+          text: 'Planos Alimentares',
+          Icon: FoodBank,
+          path: '/planos-alimentares'
+        }
+      ]}
     >
       <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
@@ -313,17 +287,6 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid item xs={12}>
-            <AutoCompletePlanoAlimentar
-              selectedValues={selectedRefeicoes}
-              onChange={handleChangeRefeicao}
-              error={errors.refeicoes}
-              options={refeicoes || []}
-            />
-            {errors.refeicoes && (
-              <div style={{ color: 'red' }}>{errors.refeicoes}</div>
-            )}
-          </Grid>
-          <Grid item xs={12}>
             <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
           </Grid>
           <Grid item xs={12}>
@@ -332,7 +295,7 @@ export default function EditarNovo() {
             </Button>
           </Grid>
 
-          {/* <Grid item xs={12}>
+          <Grid item xs={12}>
             <GroupButtons
               buttons={[
                 { text: 'Salvar', type: 'submit' },
@@ -342,7 +305,7 @@ export default function EditarNovo() {
                 }
               ]}
             />
-          </Grid> */}
+          </Grid>
         </Grid>
       </form>
       <CustomModal

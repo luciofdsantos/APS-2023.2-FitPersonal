@@ -2,9 +2,9 @@ import { Fragment } from 'react';
 import { Link, Typography } from '@mui/material';
 import { SxProps, Theme } from '@mui/material';
 
-export type Copyright = {
+interface Copyright {
   style?: SxProps<Theme>;
-};
+}
 
 export default function Copyright({ style }: Copyright) {
   return (

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
-export type SelectTest = {
+interface SelectTest {
   id: string;
   [key: string]: string | number;
-};
+}
 
 interface AutoCompleteProps {
   name: string;
@@ -18,6 +18,7 @@ interface AutoCompleteProps {
   fullWidth?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
   error?: string;
+  selectedValues?: SelectTest[];
 }
 
 const AutoComplete: React.FC<AutoCompleteProps> = ({

@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { TypeObject } from 'src/types';
 
 const endpoint = 'http://92.113.32.219:8080/api/treinos/addTreino';
 
@@ -13,14 +12,17 @@ interface CreateTreinoProps {
   onError: (error: Error) => void;
 }
 
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
+}
+
 export default function useCreateTreino({
   onSuccess,
   onError
 }: CreateTreinoProps) {
   return useMutation({
-    mutationFn: async (
-      treino: FormData & { exercicios: TypeObject.SelectTest[] }
-    ) => {
+    mutationFn: async (treino: FormData & { exercicios: SelectTest[] }) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {

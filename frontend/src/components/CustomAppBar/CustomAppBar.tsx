@@ -8,17 +8,17 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import backgroundImage from '../../assets/images/bar.png';
 
-export type AppBarProps = {
+interface AppBarProps {
   open?: boolean;
   drawerWidth: number;
-};
+}
 
-export type CustomAppBarProps = {
+interface CustomAppBarProps {
   open: boolean;
   appBarText: string;
   toggleDrawer: () => void;
   drawerWidth: number;
-};
+}
 
 const StyledAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'

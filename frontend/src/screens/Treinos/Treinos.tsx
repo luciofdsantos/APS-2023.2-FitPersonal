@@ -1,18 +1,21 @@
 import { useState } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import {
   GroupButtons,
   CustomCard,
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
-import Dashboard from '@mui/icons-material/Dashboard';
-import Grid from '@mui/material/Grid';
-import { CircularProgress, Box } from '@mui/material';
+import { Grid, CircularProgress, Box } from '@mui/material';
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Dashboard,
+  FoodBank
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 
-export type Exercicio = {
+interface Exercicio {
   id: number;
   nome: string;
   inicio: string;
@@ -22,16 +25,14 @@ export type Exercicio = {
   repeticoes: number;
   carga: number;
   finalizado: boolean;
-};
+}
 
-export type Treino = {
+interface Treino {
   id: number;
   nome: string;
   descricao: string;
   exercicios: Exercicio[];
-};
-
-const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+}
 
 export default function Treinos() {
   const navigate = useNavigate();
@@ -73,11 +74,21 @@ export default function Treinos() {
   };
 
   return (
-    <CustomLayout appBarText="Treinos" items={items}>
+    <CustomLayout
+      appBarText="Treinos"
+      items={[
+        { text: 'Dashboard', Icon: Dashboard, path: '/' },
+        {
+          text: 'Planos Alimentares',
+          Icon: FoodBank,
+          path: '/planos-alimentares'
+        }
+      ]}
+    >
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Novo Treino', href: '/novo-treino/novo' }]}
+            buttons={[{ text: 'Novo Treino', href: '/treinos/novo' }]}
           />
         </Grid>
 

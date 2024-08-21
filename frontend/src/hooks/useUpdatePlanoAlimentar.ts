@@ -14,20 +14,14 @@ interface FormData {
   totalConsumoGordura: number;
 }
 
-export type SelectOptionType = {
-  id?: string | number;
-  alimento: string;
-  quantidade: number;
-  kcal: number;
-  carboidrato: number;
-  proteina: number;
-  gordura: number;
-  tipoRefeicao: string;
-};
-
 interface UseUpdatePlanoAlimentarProps {
   onSuccess: () => void;
   onError: (error: Error) => void;
+}
+
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
 }
 
 export default function useUpdatePlanoAlimentar({
@@ -40,7 +34,7 @@ export default function useUpdatePlanoAlimentar({
       planoalimentar
     }: {
       id: number;
-      planoalimentar: FormData & { refeicoes: SelectOptionType[] };
+      planoalimentar: FormData & { refeicoes: SelectTest[] };
     }) => {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',

@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { TypePlanosAlimentares } from 'src/types';
 
 const planoAlimentarEndpoint = 'http://92.113.32.219:8080/api/planoalimentar';
 const refeicoesEndpoint = 'http://92.113.32.219:8080/api/refeicoes';
@@ -21,6 +20,11 @@ interface CreatePlanoAlimentarProps {
   onError: (error: Error) => void;
 }
 
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
+}
+
 export default function useCreatePlanoAlimentar({
   onSuccess,
   onError
@@ -28,10 +32,9 @@ export default function useCreatePlanoAlimentar({
   return useMutation({
     mutationFn: async (
       planoalimentar: FormData & {
-        refeicoes: TypePlanosAlimentares.Refeicao[];
+        refeicoes: SelectTest[];
       }
     ) => {
-      // Cria o plano alimentar
       const planoAlimentarResponse = await fetch(planoAlimentarEndpoint, {
         method: 'POST',
         headers: {
@@ -47,12 +50,11 @@ export default function useCreatePlanoAlimentar({
 
       const novoPlanoAlimentar = await planoAlimentarResponse.json();
 
-      // Cria as refeições associadas
       const refeicoesPromises = planoalimentar.refeicoes.map(
         async (refeicao) => {
           const refeicaoData = {
             ...refeicao,
-            planoAlimentarId: novoPlanoAlimentar.id // Associa a refeição ao plano alimentar criado
+            planoAlimentarId: novoPlanoAlimentar.id
           };
 
           const refeicaoResponse = await fetch(refeicoesEndpoint, {
@@ -72,7 +74,6 @@ export default function useCreatePlanoAlimentar({
         }
       );
 
-      // Aguarda a criação de todas as refeições
       await Promise.all(refeicoesPromises);
 
       return novoPlanoAlimentar;

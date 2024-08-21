@@ -1,33 +1,32 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://92.113.32.219:8080/api/refeicoes';
+const endpoint = 'http://92.113.32.219:8080/api/exercicios';
 
-interface UseCreateRefeicaoProps {
+interface UseCreateExercicioProps {
   onSuccess: () => void;
   onError: (error: Error) => void;
 }
 
-interface SelectTest {
-  id: string;
-  [key: string]: string | number;
+interface ObjectGeneric {
+  [key: string]: string | number | boolean;
 }
 
-export default function useCreateRefeicao({
+export default function useCreateExercicio({
   onSuccess,
   onError
-}: UseCreateRefeicaoProps) {
+}: UseCreateExercicioProps) {
   return useMutation({
-    mutationFn: async (refeicao: SelectTest) => {
+    mutationFn: async (Exercicio: ObjectGeneric) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(refeicao)
+        body: JSON.stringify(Exercicio)
       });
       if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(`Erro ao adicionar refeição: ${errorMessage}`);
+        throw new Error(`Erro ao adicionar exercício: ${errorMessage}`);
       }
       return response.json();
     },

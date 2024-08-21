@@ -8,12 +8,12 @@ import {
 } from '@mui/material';
 import ListItems from '../ListItems';
 
-export type DrawerProps = {
+interface DrawerProps {
   open?: boolean;
   drawerWidth: number;
-};
+}
 
-export type CustomDrawerProps = {
+interface CustomDrawerProps {
   open: boolean;
   drawerWidth: number;
   toggleDrawer: () => void;
@@ -22,7 +22,7 @@ export type CustomDrawerProps = {
     Icon: React.ElementType;
     path: string;
   }[];
-};
+}
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'

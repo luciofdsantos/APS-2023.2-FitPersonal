@@ -2,7 +2,7 @@ import { Button, Box } from '@mui/material';
 import { SxProps, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
-export type Button = {
+interface Button {
   text?: string;
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -13,13 +13,13 @@ export type Button = {
   border?: string;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
+}
 
-export type GroupButtonsProps = {
+interface GroupButtonsProps {
   buttons: Button[];
   style?: SxProps<Theme>;
   boxShadow?: boolean;
-};
+}
 
 export default function GroupButtons({
   buttons,

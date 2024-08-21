@@ -3,7 +3,7 @@ import GroupButtons from '../GroupButtons';
 import { SxProps, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
-export type Button = {
+interface Button {
   text?: string;
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -14,9 +14,9 @@ export type Button = {
   border?: string;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
+}
 
-export type CustomCardProps = {
+interface CustomCardProps {
   title: string;
   items: {
     label: string;
@@ -24,7 +24,7 @@ export type CustomCardProps = {
   }[];
   style?: SxProps<Theme>;
   buttons?: Button[];
-};
+}
 
 export default function CustomCard({
   title,

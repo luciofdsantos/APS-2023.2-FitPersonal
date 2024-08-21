@@ -6,7 +6,7 @@ const fetchRefeicoes = async () => {
   return response.json();
 };
 
-export function useRefeicao() {
+export default function useRefeicoes() {
   return useQuery({
     queryKey: ['fetchRefeicoes'],
     queryFn: fetchRefeicoes

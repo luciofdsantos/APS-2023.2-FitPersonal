@@ -7,16 +7,9 @@ interface FormData {
   descricao: string;
 }
 
-interface SelectOptionType {
-  id?: string | number;
-  nome: string;
-  carga: number;
-  fim: string;
-  finalizado: boolean;
-  grupoMuscular: string;
-  inicio: string;
-  repeticoes: number;
-  series: number;
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
 }
 
 interface UseUpdateTreinoProps {
@@ -34,7 +27,7 @@ export default function useUpdateTreino({
       treino
     }: {
       id: number;
-      treino: FormData & { exercicios: SelectOptionType[] };
+      treino: FormData & { exercicios: SelectTest[] };
     }) => {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',

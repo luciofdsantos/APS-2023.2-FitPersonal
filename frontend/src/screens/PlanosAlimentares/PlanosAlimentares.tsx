@@ -1,18 +1,44 @@
 import { useState } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import {
   GroupButtons,
   CustomCard,
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
-import Dashboard from '@mui/icons-material/Dashboard';
-import Grid from '@mui/material/Grid';
-import { CircularProgress, Box } from '@mui/material';
+import {
+  Dashboard,
+  FitnessCenter,
+  Edit as EditIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
+import { CircularProgress, Box, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 
-const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+interface Refeicao {
+  id?: number;
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: string;
+}
+
+interface PlanoAlimentar {
+  id: number;
+  nome?: string;
+  metaConsumoKcal: number;
+  totalConsumoKcal: number;
+  metaConsumoCarboidrato: number;
+  totalConsumoCarboidrato: number;
+  metaConsumoProteina: number;
+  totalConsumoProteina: number;
+  metaConsumoGordura: number;
+  totalConsumoGordura: number;
+  refeicoes: Refeicao[];
+}
 
 export default function PlanosAlimentares() {
   const navigate = useNavigate();
@@ -53,21 +79,27 @@ export default function PlanosAlimentares() {
     }
   };
 
-  const handleEdit = (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => {
+  const handleEdit = (planoalimentar: PlanoAlimentar) => {
     navigate(`/editar-plano-alimentar/${planoalimentar.id}`, {
       state: { planoalimentar }
     });
   };
 
   return (
-    <CustomLayout appBarText="Planos Alimentares" items={items}>
+    <CustomLayout
+      appBarText="Planos Alimentares"
+      items={[
+        { text: 'Dashboard', Icon: Dashboard, path: '/' },
+        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' }
+      ]}
+    >
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
               {
                 text: 'Novo Plano Alimentar',
-                href: '/novo-plano-alimentar/novo'
+                href: '/planos-alimentares/novo'
               }
             ]}
           />
@@ -85,110 +117,108 @@ export default function PlanosAlimentares() {
             </Box>
           </Grid>
         ) : isSuccess && planoalimentar && planoalimentar.length > 0 ? (
-          planoalimentar.map(
-            (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => (
-              <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
-                <CustomCard
-                  title={`Plano Alimentar ${planoalimentar.id}`}
-                  items={[
-                    {
-                      label: 'Meta Consumo Carboidrato',
-                      value: planoalimentar.metaConsumoCarboidrato
-                    },
-                    {
-                      label: 'Total Consumo Carboidrato',
-                      value: planoalimentar.totalConsumoCarboidrato
-                    },
-                    {
-                      label: 'Meta Consumo Proteina',
-                      value: planoalimentar.metaConsumoProteina
-                    },
-                    {
-                      label: 'Total Consumo Proteina',
-                      value: planoalimentar.totalConsumoProteina
-                    },
-                    {
-                      label: 'Meta Consumo Gordura',
-                      value: planoalimentar.metaConsumoGordura
-                    },
-                    {
-                      label: 'Total Consumo Gordura',
-                      value: planoalimentar.totalConsumoGordura
-                    },
-                    {
-                      label: 'Meta Consumo Kcal',
-                      value: planoalimentar.metaConsumoKcal
-                    },
-                    {
-                      label: 'Total Consumo Kcal',
-                      value: planoalimentar.totalConsumoKcal
-                    },
-                    {
-                      label: 'Refeições',
-                      value: planoalimentar.refeicoes.map((refeicao, index) => (
-                        <CustomCard
-                          key={index}
-                          title={`Refeição - ${refeicao.tipoRefeicao}`}
-                          items={[
-                            { label: 'Alimento', value: refeicao.alimento },
-                            {
-                              label: 'Quantidade',
-                              value: `${refeicao.quantidade} g`
-                            },
-                            { label: 'Kcal', value: `${refeicao.kcal} kcal` },
-                            {
-                              label: 'Carboidratos',
-                              value: `${refeicao.carboidrato} g`
-                            },
-                            {
-                              label: 'Proteínas',
-                              value: `${refeicao.proteina} g`
-                            },
-                            {
-                              label: 'Gorduras',
-                              value: `${refeicao.gordura} g`
-                            },
-                            {
-                              label: 'Tipo de Refeição',
-                              value: refeicao.tipoRefeicao
-                            }
-                          ]}
-                          style={{
-                            backgroundColor: '#2F323A',
-                            borderRadius: '8px',
-                            marginBottom: '8px',
-                            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
-                          }}
-                        />
-                      ))
-                    }
-                  ]}
-                  style={{
-                    backgroundColor: '#1F2229',
-                    borderRadius: '16px',
-                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
-                  }}
-                  buttons={[
-                    {
-                      startIcon: <EditIcon />,
-                      href: `/editar-plano-alimentar/${planoalimentar.id}`,
-                      onClick: () => handleEdit(planoalimentar),
-                      backgroundColor: 'transparent',
-                      iconColor: '#6842FF',
-                      border: 'none'
-                    },
-                    {
-                      startIcon: <DeleteIcon />,
-                      onClick: () => handleOpenDeleteDialog(planoalimentar.id),
-                      backgroundColor: 'transparent',
-                      iconColor: '#6842FF',
-                      border: 'none'
-                    }
-                  ]}
-                />
-              </Grid>
-            )
-          )
+          planoalimentar.map((planoalimentar: PlanoAlimentar) => (
+            <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
+              <CustomCard
+                title={`Plano Alimentar ${planoalimentar.id}`}
+                items={[
+                  {
+                    label: 'Meta Consumo Carboidrato',
+                    value: planoalimentar.metaConsumoCarboidrato
+                  },
+                  {
+                    label: 'Total Consumo Carboidrato',
+                    value: planoalimentar.totalConsumoCarboidrato
+                  },
+                  {
+                    label: 'Meta Consumo Proteina',
+                    value: planoalimentar.metaConsumoProteina
+                  },
+                  {
+                    label: 'Total Consumo Proteina',
+                    value: planoalimentar.totalConsumoProteina
+                  },
+                  {
+                    label: 'Meta Consumo Gordura',
+                    value: planoalimentar.metaConsumoGordura
+                  },
+                  {
+                    label: 'Total Consumo Gordura',
+                    value: planoalimentar.totalConsumoGordura
+                  },
+                  {
+                    label: 'Meta Consumo Kcal',
+                    value: planoalimentar.metaConsumoKcal
+                  },
+                  {
+                    label: 'Total Consumo Kcal',
+                    value: planoalimentar.totalConsumoKcal
+                  },
+                  {
+                    label: 'Refeições',
+                    value: planoalimentar.refeicoes.map((refeicao, index) => (
+                      <CustomCard
+                        key={index}
+                        title={`Refeição - ${refeicao.tipoRefeicao}`}
+                        items={[
+                          { label: 'Alimento', value: refeicao.alimento },
+                          {
+                            label: 'Quantidade',
+                            value: `${refeicao.quantidade} g`
+                          },
+                          { label: 'Kcal', value: `${refeicao.kcal} kcal` },
+                          {
+                            label: 'Carboidratos',
+                            value: `${refeicao.carboidrato} g`
+                          },
+                          {
+                            label: 'Proteínas',
+                            value: `${refeicao.proteina} g`
+                          },
+                          {
+                            label: 'Gorduras',
+                            value: `${refeicao.gordura} g`
+                          },
+                          {
+                            label: 'Tipo de Refeição',
+                            value: refeicao.tipoRefeicao
+                          }
+                        ]}
+                        style={{
+                          backgroundColor: '#2F323A',
+                          borderRadius: '8px',
+                          marginBottom: '8px',
+                          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
+                        }}
+                      />
+                    ))
+                  }
+                ]}
+                style={{
+                  backgroundColor: '#1F2229',
+                  borderRadius: '16px',
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
+                }}
+                buttons={[
+                  {
+                    startIcon: <EditIcon />,
+                    href: `/editar-plano-alimentar/${planoalimentar.id}`,
+                    onClick: () => handleEdit(planoalimentar),
+                    backgroundColor: 'transparent',
+                    iconColor: '#6842FF',
+                    border: 'none'
+                  },
+                  {
+                    startIcon: <DeleteIcon />,
+                    onClick: () => handleOpenDeleteDialog(planoalimentar.id),
+                    backgroundColor: 'transparent',
+                    iconColor: '#6842FF',
+                    border: 'none'
+                  }
+                ]}
+              />
+            </Grid>
+          ))
         ) : (
           <Grid item xs={12} sx={{ pb: 2 }}>
             <div>Nenhum plano alimentar encontrado</div>

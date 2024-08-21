@@ -6,16 +6,16 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-export type Item = {
+interface Item {
   text: string;
   Icon: React.ElementType;
   path: string;
-};
+}
 
-export type ListItemsProps = {
+interface ListItemsProps {
   items: Item[];
   open: boolean;
-};
+}
 
 export default function ListItems({ items, open }: ListItemsProps) {
   const navigate = useNavigate();

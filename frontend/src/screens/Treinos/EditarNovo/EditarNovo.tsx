@@ -1,17 +1,22 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { AutoComplete, GroupButtons, CustomLayout } from '../../../components';
-import { Dashboard } from '@mui/icons-material';
-import { Grid, TextField } from '@mui/material';
+import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
+import { Dashboard, FitnessCenter, FoodBank } from '@mui/icons-material';
+import {
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Grid,
+  TextField
+} from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import apiExercicios from '../../../mocks/apiExercicios.json';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
 import { useParams } from 'react-router-dom';
+import { useCreateExercicio } from '../../../hooks';
 
-export type SelectTest = {
-  id: string;
-  [key: string]: string | number;
-};
+interface ObjectGeneric {
+  [key: string]: string | number | boolean;
+}
 
 interface FormData {
   id?: number;
@@ -38,7 +43,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { exercicios: SelectTest[] }
+    FormData & { exercicios: ObjectGeneric[] }
   >({
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
@@ -46,7 +51,21 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedExercises, setSelectedExercises] = useState<SelectTest[]>([]);
+  const [selectedExercicios, setSelectedExercicios] = useState<ObjectGeneric[]>(
+    []
+  );
+
+  const [openAddExercicioModal, setOpenAddExercicioModal] = useState(false);
+  const [newExercicio, setNewExercicio] = useState<ObjectGeneric>({
+    nome: '',
+    inicio: '',
+    fim: '',
+    grupoMuscular: '',
+    series: 0,
+    repeticoes: 0,
+    carga: 0,
+    finalizado: false
+  });
 
   const { mutate: createTreino } = useCreateTreino({
     onSuccess: () => {
@@ -69,6 +88,17 @@ export default function EditarNovo() {
     }
   });
 
+  const { mutate: createExercicio } = useCreateExercicio({
+    onSuccess: () => {
+      alert('Exercício adicionado com sucesso!');
+      setOpenAddExercicioModal(false);
+    },
+    onError: (error) => {
+      console.error('Erro ao adicionar exercício:', error.message);
+      alert('Erro ao adicionar exercício. Tente novamente.');
+    }
+  });
+
   const mutation = useMutation({
     mutationFn: async () => {
       const validationErrors: FormErrors = {};
@@ -76,7 +106,7 @@ export default function EditarNovo() {
         validationErrors.nome = 'Nome do treino é obrigatório *';
       if (!formData.descricao)
         validationErrors.descricao = 'Descrição é obrigatória *';
-      if (selectedExercises.length === 0)
+      if (selectedExercicios.length === 0)
         validationErrors.exercicios = 'Exercícios é obrigatório *';
 
       if (Object.keys(validationErrors).length > 0) {
@@ -108,12 +138,27 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeExercise = (newValues: SelectTest[]) => {
-    setSelectedExercises(newValues);
+  const handleAddExercicio = () => {
+    setOpenAddExercicioModal(true);
+  };
 
-    if (errors.exercicios) {
-      setErrors((prevErrors) => ({ ...prevErrors, exercicios: undefined }));
-    }
+  const handleCloseModal = () => {
+    setOpenAddExercicioModal(false);
+  };
+
+  const handleSaveExercicio = () => {
+    createExercicio(newExercicio);
+    setSelectedExercicios([...selectedExercicios, newExercicio]);
+    setNewExercicio({
+      id: 0,
+      inicio: '',
+      fim: '',
+      grupoMuscular: '',
+      series: 0,
+      repeticoes: 0,
+      carga: 0,
+      finalizado: false
+    });
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -124,7 +169,7 @@ export default function EditarNovo() {
       validationErrors.nome = 'Nome do treino é obrigatório *';
     if (!formData.descricao)
       validationErrors.descricao = 'Descrição é obrigatória *';
-    if (selectedExercises.length === 0)
+    if (selectedExercicios.length === 0)
       validationErrors.exercicios = 'Exercícios é obrigatório *';
 
     if (Object.keys(validationErrors).length > 0) {
@@ -138,7 +183,15 @@ export default function EditarNovo() {
   return (
     <CustomLayout
       appBarText="Treinos"
-      items={[{ text: 'Dashboard', Icon: Dashboard, path: '/' }]}
+      items={[
+        { text: 'Dashboard', Icon: Dashboard, path: '/' },
+        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
+        {
+          text: 'Planos Alimentares',
+          Icon: FoodBank,
+          path: '/planos-alimentares'
+        }
+      ]}
     >
       <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
@@ -169,16 +222,7 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid item xs={12}>
-            <AutoComplete
-              name="exercicios"
-              label="Exercícios *"
-              options={apiExercicios}
-              optionLabel="nome"
-              multiple
-              values={selectedExercises}
-              setValue={handleChangeExercise}
-              error={errors.exercicios}
-            />
+            <Button onClick={handleAddExercicio}>+ Adicionar treino</Button>
           </Grid>
 
           <Grid item xs={12}>
@@ -191,6 +235,136 @@ export default function EditarNovo() {
           </Grid>
         </Grid>
       </form>
+
+      <CustomModal
+        open={openAddExercicioModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveExercicio}
+        title="Adicionar Novo Exercicio"
+      >
+        <form noValidate autoComplete="off">
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="nome"
+                fullWidth
+                value={newExercicio.nome}
+                onChange={(e) =>
+                  setNewExercicio({ ...newExercicio, nome: e.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Inicio"
+                type="date"
+                fullWidth
+                value={newExercicio.inicio}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    inicio: e.target.value
+                  })
+                }
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="fim"
+                type="date"
+                fullWidth
+                value={newExercicio.fim}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    fim: e.target.value
+                  })
+                }
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Grupo Muscular"
+                fullWidth
+                value={newExercicio.grupoMuscular}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    grupoMuscular: e.target.value
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Séries"
+                type="number"
+                fullWidth
+                value={newExercicio.series}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    series: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Repetições"
+                type="number"
+                fullWidth
+                value={newExercicio.repeticoes}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    repeticoes: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label="Carga"
+                type="number"
+                fullWidth
+                value={newExercicio.carga}
+                onChange={(e) =>
+                  setNewExercicio({
+                    ...newExercicio,
+                    carga: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={false}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setNewExercicio({
+                        ...newExercicio,
+                        finalizado: event.target.checked
+                      })
+                    }
+                  />
+                }
+                label="Finalizado"
+              />
+            </Grid>
+          </Grid>
+        </form>
+      </CustomModal>
     </CustomLayout>
   );
 }

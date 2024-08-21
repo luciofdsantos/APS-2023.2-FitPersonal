@@ -6,7 +6,7 @@ import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
 import { ReactNode } from 'react';
 
-export type LayoutProps = {
+interface LayoutProps {
   appBarText: string;
   items: {
     text: string;
@@ -14,7 +14,7 @@ export type LayoutProps = {
     path: string;
   }[];
   children: ReactNode;
-};
+}
 
 export default function CustomLayout({
   appBarText,
