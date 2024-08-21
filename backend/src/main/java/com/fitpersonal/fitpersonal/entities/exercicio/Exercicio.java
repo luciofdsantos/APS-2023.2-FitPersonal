@@ -1,6 +1,7 @@
 package com.fitpersonal.fitpersonal.entities.exercicio;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,10 @@ public class Exercicio {
     @JoinColumn(name = "treino_id")
     @JsonIgnore
     private Treino treino;
+
+    // Expoe o ID do treino, não remover
+    @JsonProperty("treinoId")
+    public Long getTreinoId() {
+        return treino != null ? treino.getId() : null;
+    }
 }
