@@ -11,8 +11,7 @@ public record RefeicaoResponseDTO(
         Float proteina,
         Float gordura,
         TipoRefeicao tipoRefeicao,
-        Long planoAlimentarId
-        ) {
+        Long planoAlimentarId) {
 
     public RefeicaoResponseDTO(Refeicao refeicao) {
         this(

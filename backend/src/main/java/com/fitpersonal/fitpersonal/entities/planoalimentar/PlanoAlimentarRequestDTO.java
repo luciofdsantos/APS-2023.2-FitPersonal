@@ -12,13 +12,9 @@ public record PlanoAlimentarRequestDTO(
         //Float totalConsumoCarboidrato,
         //Float totalConsumoProteina,
         //Float totalConsumoGordura,
-        @NonNull
         Float metaConsumoKcal,
-        @NonNull
         Float metaConsumoCarboidrato,
-        @NonNull
         Float metaConsumoProteina,
-        @NonNull
         Float metaConsumoGordura,
         List<RefeicaoRequestDTO> refeicoes) {
 }

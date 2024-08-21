@@ -16,14 +16,21 @@ public class Refeicao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private String alimento;
+    @Column(nullable = false)
     private Float quantidade;
+    @Column(nullable = false)
     private Float kcal;
+    @Column(nullable = false)
     private Float carboidrato;
+    @Column(nullable = false)
     private Float proteina;
+    @Column(nullable = false)
     private Float gordura;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TipoRefeicao tipoRefeicao;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

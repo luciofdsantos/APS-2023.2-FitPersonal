@@ -23,10 +23,14 @@ public class PlanoAlimentar {
     private Float totalConsumoCarboidrato;
     private Float totalConsumoProteina;
     private Float totalConsumoGordura;
-    private Float metaConsumoKcal;
-    private Float metaConsumoCarboidrato;
-    private Float metaConsumoProteina;
-    private Float metaConsumoGordura;
+    @Column
+    private Float metaConsumoKcal = 0f;
+    @Column
+    private Float metaConsumoCarboidrato = 0f;
+    @Column
+    private Float metaConsumoProteina = 0f;
+    @Column
+    private Float metaConsumoGordura = 0f;
 
     @OneToMany(mappedBy = "planoAlimentar", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refeicao> refeicoes = new ArrayList<>();
@@ -65,6 +69,13 @@ public class PlanoAlimentar {
     }
 
     public void updateTotais() {
+        if (refeicoes == null || refeicoes.isEmpty()) {
+            this.totalConsumoKcal = 0f;
+            this.totalConsumoCarboidrato = 0f;
+            this.totalConsumoProteina = 0f;
+            this.totalConsumoGordura = 0f;
+            return;
+        }
         this.totalConsumoKcal = (float) refeicoes.stream()
                 .mapToDouble(Refeicao::getKcal)
                 .sum();
