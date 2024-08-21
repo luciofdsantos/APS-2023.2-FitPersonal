@@ -6,7 +6,7 @@ export namespace TypeCard {
     title: string;
     items: {
       label: string;
-      value: string;
+      value: React.ReactNode;
     }[];
     style?: SxProps<Theme>;
     buttons?: TypeButton.Button[];

@@ -93,20 +93,75 @@ export default function PlanosAlimentares() {
                   title={`Plano Alimentar ${planoalimentar.id}`}
                   items={[
                     {
+                      label: 'Meta Consumo Carboidrato',
+                      value: planoalimentar.metaConsumoCarboidrato
+                    },
+                    {
                       label: 'Total Consumo Carboidrato',
-                      value: `${planoalimentar.totalConsumoCarboidrato}`
+                      value: planoalimentar.totalConsumoCarboidrato
+                    },
+                    {
+                      label: 'Meta Consumo Proteina',
+                      value: planoalimentar.metaConsumoProteina
                     },
                     {
                       label: 'Total Consumo Proteina',
-                      value: `${planoalimentar.totalConsumoProteina}`
+                      value: planoalimentar.totalConsumoProteina
+                    },
+                    {
+                      label: 'Meta Consumo Gordura',
+                      value: planoalimentar.metaConsumoGordura
                     },
                     {
                       label: 'Total Consumo Gordura',
-                      value: `${planoalimentar.totalConsumoGordura}`
+                      value: planoalimentar.totalConsumoGordura
+                    },
+                    {
+                      label: 'Meta Consumo Kcal',
+                      value: planoalimentar.metaConsumoKcal
+                    },
+                    {
+                      label: 'Total Consumo Kcal',
+                      value: planoalimentar.totalConsumoKcal
                     },
                     {
                       label: 'Refeições',
-                      value: `${planoalimentar.refeicoes}`
+                      value: planoalimentar.refeicoes.map((refeicao, index) => (
+                        <CustomCard
+                          key={index}
+                          title={`Refeição - ${refeicao.tipoRefeicao}`}
+                          items={[
+                            { label: 'Alimento', value: refeicao.alimento },
+                            {
+                              label: 'Quantidade',
+                              value: `${refeicao.quantidade} g`
+                            },
+                            { label: 'Kcal', value: `${refeicao.kcal} kcal` },
+                            {
+                              label: 'Carboidratos',
+                              value: `${refeicao.carboidrato} g`
+                            },
+                            {
+                              label: 'Proteínas',
+                              value: `${refeicao.proteina} g`
+                            },
+                            {
+                              label: 'Gorduras',
+                              value: `${refeicao.gordura} g`
+                            },
+                            {
+                              label: 'Tipo de Refeição',
+                              value: refeicao.tipoRefeicao
+                            }
+                          ]}
+                          style={{
+                            backgroundColor: '#2F323A',
+                            borderRadius: '8px',
+                            marginBottom: '8px',
+                            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
+                          }}
+                        />
+                      ))
                     }
                   ]}
                   style={{

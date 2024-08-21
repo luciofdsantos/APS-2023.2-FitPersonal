@@ -22,7 +22,7 @@ export default function useDeletePlanoAlimentar({
       }
       return {};
     },
-    onSuccess,
-    onError
+    onSuccess: onSuccess || (() => {}),
+    onError: onError || ((error: Error) => console.error(error.message))
   });
 }

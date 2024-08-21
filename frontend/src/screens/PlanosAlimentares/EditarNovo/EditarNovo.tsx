@@ -1,35 +1,53 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { AutoComplete, GroupButtons, CustomLayout } from '../../../components';
+import {
+  AutoCompletePlanoAlimentar,
+  CustomLayout,
+  CustomModal
+} from '../../../components';
 import { Dashboard } from '@mui/icons-material';
-import { Grid, TextField } from '@mui/material';
+import { Grid, TextField, Button } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
-import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
+// import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
 import { TypeObject } from 'src/types';
 import {
   useCreatePlanoAlimentar,
-  useUpdatePlanoAlimentar
+  useUpdatePlanoAlimentar,
+  useCreateRefeicao,
+  useRefeicao
 } from '../../../hooks';
 import { useParams } from 'react-router-dom';
+import { TypePlanosAlimentares } from 'src/types';
 
 interface FormData {
   id?: number;
   nome: string;
+  metaConsumoKcal: number;
+  totalConsumoKcal: number;
+  metaConsumoCarboidrato: number;
   totalConsumoCarboidrato: number;
+  metaConsumoProteina: number;
   totalConsumoProteina: number;
+  metaConsumoGordura: number;
   totalConsumoGordura: number;
 }
 
 interface FormErrors {
   nome?: string;
+  metaConsumoKcal?: string;
+  totalConsumoKcal?: string;
+  metaConsumoCarboidrato?: string;
   totalConsumoCarboidrato?: string;
+  metaConsumoProteina?: string;
   totalConsumoProteina?: string;
+  metaConsumoGordura?: string;
   totalConsumoGordura?: string;
   refeicoes?: string;
 }
 
 export default function EditarNovo() {
   const { id } = useParams<{ id?: string }>();
+  const { data: refeicoes, isLoading, error } = useRefeicao();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,6 +57,11 @@ export default function EditarNovo() {
     totalConsumoCarboidrato: 0,
     totalConsumoProteina: 0,
     totalConsumoGordura: 0,
+    totalConsumoKcal: 0,
+    metaConsumoCarboidrato: 0,
+    metaConsumoProteina: 0,
+    metaConsumoGordura: 0,
+    metaConsumoKcal: 0,
     refeicoes: []
   };
 
@@ -49,32 +72,60 @@ export default function EditarNovo() {
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
+    metaConsumoCarboidrato: planoAlimentarData?.metaConsumoCarboidrato || 0,
+    metaConsumoProteina: planoAlimentarData?.metaConsumoProteina || 0,
+    metaConsumoGordura: planoAlimentarData?.metaConsumoGordura || 0,
+    totalConsumoKcal: planoAlimentarData?.totalConsumoKcal || 0,
+    metaConsumoKcal: planoAlimentarData?.metaConsumoKcal || 0,
     refeicoes: planoAlimentarData?.refeicoes || []
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedRefeicoes, setSelectedRefeicoes] = useState<
-    TypeObject.SelectTest[]
+    TypePlanosAlimentares.SelectOptionType[]
   >([]);
+
+  const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
+  const [newRefeicao, setNewRefeicao] =
+    useState<TypePlanosAlimentares.SelectOptionType>({
+      alimento: '',
+      quantidade: 0,
+      kcal: 0,
+      carboidrato: 0,
+      proteina: 0,
+      gordura: 0,
+      tipoRefeicao: ''
+    });
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
-      alert('Treino criado com sucesso!');
+      alert('Plano Alimentar criado com sucesso!');
     },
     onError: (error) => {
-      console.error('Erro ao criar treino:', error.message);
-      alert('Erro ao criar treino. Tente novamente.');
+      console.error('Erro ao criar plano alimentar:', error.message);
+      alert('Erro ao criar plano alimentar. Tente novamente.');
     }
   });
 
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
     onSuccess: () => {
       alert('Plano atualizado com sucesso!');
-      navigate('/plano-alimentar');
+      navigate('/planos-alimentares');
     },
     onError: (error) => {
-      console.error('Erro ao atualizar treino:', error.message);
-      alert('Erro ao atualizar treino. Tente novamente.');
+      console.error('Erro ao atualizar plano alimentar:', error.message);
+      alert('Erro ao atualizar plano alimentar. Tente novamente.');
+    }
+  });
+
+  const { mutate: createRefeicao } = useCreateRefeicao({
+    onSuccess: () => {
+      alert('Refeição adicionada com sucesso!');
+      setOpenAddRefeicaoModal(false);
+    },
+    onError: (error) => {
+      console.error('Erro ao adicionar refeição:', error.message);
+      alert('Erro ao adicionar refeição. Tente novamente.');
     }
   });
 
@@ -89,6 +140,29 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
+      const filteredRefeicoes: TypePlanosAlimentares.SelectOptionType[] =
+        selectedRefeicoes.map(
+          ({
+            alimento,
+            quantidade,
+            kcal,
+            carboidrato,
+            proteina,
+            gordura,
+            tipoRefeicao
+          }) => ({
+            alimento,
+            quantidade,
+            kcal,
+            carboidrato,
+            proteina,
+            gordura,
+            tipoRefeicao
+          })
+        );
+
+      const planoAlimentarData = { ...formData, refeicoes: filteredRefeicoes };
+
       if (id) {
         return updatePlanoAlimentar({
           id: Number(id),
@@ -100,7 +174,7 @@ export default function EditarNovo() {
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/plano-alimentar');
+      navigate('/planos-alimentares');
     },
     onError: (error: Error) => {
       console.error(error.message);
@@ -116,7 +190,9 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeRefeicao = (newValues: TypeObject.SelectTest[]) => {
+  const handleChangeRefeicao = (
+    newValues: TypePlanosAlimentares.SelectOptionType[]
+  ) => {
     setSelectedRefeicoes(newValues);
 
     if (errors.refeicoes) {
@@ -128,6 +204,18 @@ export default function EditarNovo() {
     e.preventDefault();
 
     const validationErrors: FormErrors = {};
+    if (!formData.metaConsumoCarboidrato)
+      validationErrors.metaConsumoCarboidrato =
+        'Meta de consumo de carboidrato é obrigatório *';
+    if (!formData.metaConsumoGordura)
+      validationErrors.metaConsumoGordura =
+        'Meta de consumo de gordura é obrigatória *';
+    if (!formData.metaConsumoProteina)
+      validationErrors.metaConsumoProteina =
+        'Meta de consumo de proteina é obrigatória *';
+    if (!formData.metaConsumoKcal)
+      validationErrors.metaConsumoKcal =
+        'Meta de consumo de Kcal é obrigatória *';
     if (selectedRefeicoes.length === 0)
       validationErrors.refeicoes = 'Refeições é obrigatório *';
 
@@ -139,40 +227,116 @@ export default function EditarNovo() {
     mutation.mutate();
   };
 
+  const handleAddRefeicao = () => {
+    setOpenAddRefeicaoModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenAddRefeicaoModal(false);
+  };
+
+  const handleSaveRefeicao = () => {
+    createRefeicao(newRefeicao);
+    setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
+    setNewRefeicao({
+      alimento: '',
+      quantidade: 0,
+      kcal: 0,
+      carboidrato: 0,
+      proteina: 0,
+      gordura: 0,
+      tipoRefeicao: ''
+    });
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <CustomLayout
       appBarText="Plano Alimentar"
       items={[{ text: 'Dashboard', Icon: Dashboard, path: '/' }]}
     >
-      <form onSubmit={handleSubmit} noValidate>
+      <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
-              name="nome"
-              label="Nome do plano *"
-              variant="outlined"
+              name="metaConsumoKcal"
+              label="Meta de Consumo (Kcal)"
+              type="number"
               fullWidth
-              value={formData.nome}
+              value={formData.metaConsumoKcal}
               onChange={handleChange}
-              error={!!errors.nome}
-              helperText={errors.nome}
+              error={Boolean(errors.metaConsumoKcal)}
+              helperText={errors.metaConsumoKcal}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="metaConsumoCarboidrato"
+              label="Meta de Consumo de Carboidrato (g)"
+              type="number"
+              fullWidth
+              value={formData.metaConsumoCarboidrato}
+              onChange={handleChange}
+              error={Boolean(errors.metaConsumoCarboidrato)}
+              helperText={errors.metaConsumoCarboidrato}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="metaConsumoProteina"
+              label="Meta de Consumo de Proteína (g)"
+              type="number"
+              fullWidth
+              value={formData.metaConsumoProteina}
+              onChange={handleChange}
+              error={Boolean(errors.metaConsumoProteina)}
+              helperText={errors.metaConsumoProteina}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="metaConsumoGordura"
+              label="Meta de Consumo de Gordura (g)"
+              type="number"
+              fullWidth
+              value={formData.metaConsumoGordura}
+              onChange={handleChange}
+              error={Boolean(errors.metaConsumoGordura)}
+              helperText={errors.metaConsumoGordura}
             />
           </Grid>
 
           <Grid item xs={12}>
-            <AutoComplete
-              name="refeicoes"
-              label="Refeições *"
-              options={apiRefeicoes}
-              optionLabel="alimento"
-              values={selectedRefeicoes}
-              setValue={handleChangeRefeicao}
+            <AutoCompletePlanoAlimentar
+              selectedValues={selectedRefeicoes}
+              onChange={handleChangeRefeicao}
               error={errors.refeicoes}
-              // disabled={isLoading}
+              options={refeicoes || []}
             />
+            {errors.refeicoes && (
+              <div style={{ color: 'red' }}>{errors.refeicoes}</div>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary">
+              Salvar
+            </Button>
           </Grid>
 
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <GroupButtons
               buttons={[
                 { text: 'Salvar', type: 'submit' },
@@ -182,9 +346,113 @@ export default function EditarNovo() {
                 }
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </form>
+      <CustomModal
+        open={openAddRefeicaoModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveRefeicao}
+        title="Adicionar Nova Refeição"
+      >
+        <form noValidate autoComplete="off">
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Alimento"
+                fullWidth
+                value={newRefeicao.alimento}
+                onChange={(e) =>
+                  setNewRefeicao({ ...newRefeicao, alimento: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Quantidade"
+                type="number"
+                fullWidth
+                value={newRefeicao.quantidade}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    quantidade: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Kcal"
+                type="number"
+                fullWidth
+                value={newRefeicao.kcal}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    kcal: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Carboidrato"
+                type="number"
+                fullWidth
+                value={newRefeicao.carboidrato}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    carboidrato: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Proteína"
+                type="number"
+                fullWidth
+                value={newRefeicao.proteina}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    proteina: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Gordura"
+                type="number"
+                fullWidth
+                value={newRefeicao.gordura}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    gordura: parseFloat(e.target.value)
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Tipo de Refeição"
+                fullWidth
+                value={newRefeicao.tipoRefeicao}
+                onChange={(e) =>
+                  setNewRefeicao({
+                    ...newRefeicao,
+                    tipoRefeicao: e.target.value
+                  })
+                }
+              />
+            </Grid>
+          </Grid>
+        </form>
+      </CustomModal>
     </CustomLayout>
   );
 }

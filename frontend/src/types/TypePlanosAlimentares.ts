@@ -1,6 +1,6 @@
 export namespace TypePlanosAlimentares {
   export type Refeicao = {
-    id: number;
+    id?: number;
     alimento: string;
     quantidade: number;
     kcal: number;
@@ -12,10 +12,14 @@ export namespace TypePlanosAlimentares {
 
   export type PlanoAlimentar = {
     id: number;
-    nome: string;
+    nome?: string;
+    metaConsumoKcal: number;
     totalConsumoKcal: number;
+    metaConsumoCarboidrato: number;
     totalConsumoCarboidrato: number;
+    metaConsumoProteina: number;
     totalConsumoProteina: number;
+    metaConsumoGordura: number;
     totalConsumoGordura: number;
     refeicoes: Refeicao[];
   };

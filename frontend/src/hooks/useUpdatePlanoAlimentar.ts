@@ -4,8 +4,13 @@ const endpoint = 'http://92.113.32.219:8080/api/planoalimentar';
 
 interface FormData {
   nome?: string;
+  metaConsumoKcal: number;
+  totalConsumoKcal: number;
+  metaConsumoCarboidrato: number;
   totalConsumoCarboidrato: number;
+  metaConsumoProteina: number;
   totalConsumoProteina: number;
+  metaConsumoGordura: number;
   totalConsumoGordura: number;
 }
 

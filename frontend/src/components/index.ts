@@ -8,6 +8,8 @@ import CustomDrawer from './CustomDrawer';
 import CustomLayout from './CustomLayout';
 import GroupButtons from './GroupButtons';
 import ListItems from './ListItems';
+import AutoCompletePlanoAlimentar from './AutoCompletePlanoAlimentar';
+import CustomModal from './CustomModal';
 
 export {
   AutoComplete,
@@ -19,5 +21,7 @@ export {
   CustomDrawer,
   CustomLayout,
   GroupButtons,
-  ListItems
+  ListItems,
+  AutoCompletePlanoAlimentar,
+  CustomModal
 };

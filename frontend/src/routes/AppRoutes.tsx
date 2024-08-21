@@ -13,7 +13,10 @@ export default function AppRoutes() {
         <Route path="/treinos" element={<Treinos />} />
         <Route path="/planos-alimentares" element={<PlanosAlimentares />} />
         <Route path="/novo-treino/novo" element={<EditarNovo />} />
-        <Route path="/novo-plano-alimentar/novo" element={<EditarNovo />} />
+        <Route
+          path="/novo-plano-alimentar/novo"
+          element={<EditarNovoPlano />}
+        />
         <Route path="/editar-treino/:id" element={<EditarNovo />} />
         <Route
           path="/editar-plano-alimentar/:id"
