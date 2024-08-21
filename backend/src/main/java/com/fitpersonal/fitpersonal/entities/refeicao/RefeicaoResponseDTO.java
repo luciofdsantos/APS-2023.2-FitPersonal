@@ -10,8 +10,8 @@ public record RefeicaoResponseDTO(
         Float carboidrato,
         Float proteina,
         Float gordura,
-        TipoRefeicao tipoRefeicao
-        //Long planoAlimentarId
+        TipoRefeicao tipoRefeicao,
+        Long planoAlimentarId
         ) {
 
     public RefeicaoResponseDTO(Refeicao refeicao) {
@@ -23,8 +23,8 @@ public record RefeicaoResponseDTO(
                 refeicao.getCarboidrato(),
                 refeicao.getProteina(),
                 refeicao.getGordura(),
-                refeicao.getTipoRefeicao()
-                //refeicao.getPlanoAlimentar().getId()
+                refeicao.getTipoRefeicao(),
+                refeicao.getPlanoAlimentar().getId()
         );
     }
 }
