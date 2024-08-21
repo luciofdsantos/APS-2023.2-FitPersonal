@@ -12,7 +12,7 @@ Este é o backend do projeto FitPersonal, uma aplicação para monitoramento de 
 
 - Maven:  Maven é necessário para gerenciar as dependências e a construção do projeto. Verifique se está instalado com o comando:
   ```bash
-    java -version
+    mvn -version
   ```
 
 ## Descrição Como rodar o projeto
@@ -28,7 +28,7 @@ Este é o backend do projeto FitPersonal, uma aplicação para monitoramento de 
       cd fitpersonal_backend    
    ```
 3. Compile e rode a aplicação:
-  ```bash
+   ```bash
       mvn spring-boot:run    
    ```
 4. A aplicação estará rodando em http://localhost:8080.
@@ -37,12 +37,17 @@ Este é o backend do projeto FitPersonal, uma aplicação para monitoramento de 
 
 1. Abra o IntelliJ IDEA.
 
+
 2. Selecione "Open" e navegue até o diretório do projeto clonado.
+
 
 3. O IntelliJ IDEA deve reconhecer automaticamente o projeto como um projeto Maven e baixar as dependências necessárias. Se não, você pode forçar a sincronização do Maven clicando no ícone do Maven na barra lateral direita e selecionando "Reload All Maven Projects".
 
+
 4. No painel de projeto, localize a classe principal do Spring Boot (aquela com a anotação @SpringBootApplication).
 
+
 5. Clique com o botão direito na classe principal e selecione "Run 'FitpersonalApplication.main()'".
+
 
 6. A aplicação estará rodando em http://localhost:8080.
