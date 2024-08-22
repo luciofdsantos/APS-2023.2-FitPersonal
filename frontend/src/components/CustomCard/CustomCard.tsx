@@ -36,20 +36,14 @@ export default function CustomCard({
     <Card
       sx={{
         ...style,
-        borderRadius: '16px',
-        boxShadow: 3,
-        overflow: 'hidden',
-        minWidth: 300,
-        maxWidth: 400,
-        margin: 2
+        borderRadius: '16px'
       }}
     >
       <CardContent
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 2,
-          padding: 3
+          gap: 2
         }}
       >
         <Typography

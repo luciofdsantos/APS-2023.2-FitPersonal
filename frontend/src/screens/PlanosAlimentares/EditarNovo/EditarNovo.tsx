@@ -326,6 +326,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Quantidade"
@@ -340,6 +341,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Kcal"
@@ -354,6 +356,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Carboidrato"
@@ -368,6 +371,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Proteína"
@@ -382,6 +386,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Gordura"
@@ -396,6 +401,7 @@ export default function EditarNovo() {
                 }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 label="Tipo de Refeição"

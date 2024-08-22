@@ -80,7 +80,7 @@ export default function PlanosAlimentares() {
   };
 
   const handleEdit = (planoalimentar: PlanoAlimentar) => {
-    navigate(`/editar-plano-alimentar/${planoalimentar.id}`, {
+    navigate(`/planos-alimentares/${planoalimentar.id}`, {
       state: { planoalimentar }
     });
   };
@@ -118,7 +118,7 @@ export default function PlanosAlimentares() {
           </Grid>
         ) : isSuccess && planoalimentar && planoalimentar.length > 0 ? (
           planoalimentar.map((planoalimentar: PlanoAlimentar) => (
-            <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
+            <Grid item xs={12} key={planoalimentar.id}>
               <CustomCard
                 title={`Plano Alimentar ${planoalimentar.id}`}
                 items={[
@@ -202,7 +202,7 @@ export default function PlanosAlimentares() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    href: `/editar-plano-alimentar/${planoalimentar.id}`,
+                    href: `/planos-alimentares/${planoalimentar.id}`,
                     onClick: () => handleEdit(planoalimentar),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
