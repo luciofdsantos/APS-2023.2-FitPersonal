@@ -5,12 +5,7 @@ import {
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
-import {
-  Dashboard,
-  FitnessCenter,
-  Edit as EditIcon,
-  Delete as DeleteIcon
-} from '@mui/icons-material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { CircularProgress, Box, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
@@ -86,13 +81,7 @@ export default function PlanosAlimentares() {
   };
 
   return (
-    <CustomLayout
-      appBarText="Planos Alimentares"
-      items={[
-        { text: 'Dashboard', Icon: Dashboard, path: '/' },
-        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' }
-      ]}
-    >
+    <CustomLayout appBarText="Planos Alimentares">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons

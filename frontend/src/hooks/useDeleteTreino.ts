@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://92.113.32.219:8080/api/treinos';
+const endpoint = 'http://localhost:8080/api/treinos';
 
 interface UseDeleteTreinoProps {
   onSuccess: () => void;

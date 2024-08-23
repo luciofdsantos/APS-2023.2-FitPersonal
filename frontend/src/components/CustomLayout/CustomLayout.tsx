@@ -8,19 +8,10 @@ import { ReactNode } from 'react';
 
 interface LayoutProps {
   appBarText: string;
-  items: {
-    text: string;
-    Icon: React.ElementType;
-    path: string;
-  }[];
   children: ReactNode;
 }
 
-export default function CustomLayout({
-  appBarText,
-  items,
-  children
-}: LayoutProps) {
+export default function CustomLayout({ appBarText, children }: LayoutProps) {
   const drawerWidth = 240;
 
   const [open, setOpen] = useState<boolean>(true);
@@ -50,7 +41,6 @@ export default function CustomLayout({
         <CustomDrawer
           open={open}
           toggleDrawer={toggleDrawer}
-          items={items}
           drawerWidth={drawerWidth}
         />
 

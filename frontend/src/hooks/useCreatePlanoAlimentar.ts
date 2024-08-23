@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-const planoAlimentarEndpoint = 'http://92.113.32.219:8080/api/planoalimentar';
-const refeicoesEndpoint = 'http://92.113.32.219:8080/api/refeicoes';
+const planoAlimentarEndpoint = 'http://localhost:8080/api/planoalimentar';
+const refeicoesEndpoint = 'http://localhost:8080/api/refeicoes';
 
 interface FormData {
   nome?: string;

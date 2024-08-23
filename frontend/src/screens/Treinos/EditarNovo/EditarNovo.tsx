@@ -1,6 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
-import { Dashboard, FitnessCenter, FoodBank } from '@mui/icons-material';
 import {
   FormControlLabel,
   Checkbox,
@@ -181,18 +180,7 @@ export default function EditarNovo() {
   };
 
   return (
-    <CustomLayout
-      appBarText="Treinos"
-      items={[
-        { text: 'Dashboard', Icon: Dashboard, path: '/' },
-        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
-        {
-          text: 'Planos Alimentares',
-          Icon: FoodBank,
-          path: '/planos-alimentares'
-        }
-      ]}
-    >
+    <CustomLayout appBarText="Treinos">
       <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -222,7 +210,7 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid item xs={12}>
-            <Button onClick={handleAddExercicio}>+ Adicionar treino</Button>
+            <Button onClick={handleAddExercicio}>+ Adicionar exercício</Button>
           </Grid>
 
           <Grid item xs={12}>

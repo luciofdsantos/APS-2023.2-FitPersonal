@@ -6,12 +6,7 @@ import {
   ConfirmationDialog
 } from '../../components';
 import { Grid, CircularProgress, Box } from '@mui/material';
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Dashboard,
-  FoodBank
-} from '@mui/icons-material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 
@@ -68,23 +63,13 @@ export default function Treinos() {
   };
 
   const handleEdit = (treino: Treino) => {
-    navigate(`/editar-treino/${treino.id}`, {
+    navigate(`/treinos/${treino.id}`, {
       state: { treino }
     });
   };
 
   return (
-    <CustomLayout
-      appBarText="Treinos"
-      items={[
-        { text: 'Dashboard', Icon: Dashboard, path: '/' },
-        {
-          text: 'Planos Alimentares',
-          Icon: FoodBank,
-          path: '/planos-alimentares'
-        }
-      ]}
-    >
+    <CustomLayout appBarText="Treinos">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
@@ -123,7 +108,7 @@ export default function Treinos() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    href: `/editar-treino/${treino.id}`,
+                    href: `/treinos/${treino.id}`,
                     onClick: () => handleEdit(treino),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',
