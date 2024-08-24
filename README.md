@@ -22,10 +22,10 @@ O principal objetivo do **Portal Ciência da Computação** é fortalecer a comu
 
 # Documentação do Projeto
 
-1. [Visão do Negócio]()
-2. [Casos de Uso]()
+1. [Visão do Negócio](https://docs.google.com/document/d/1iVywL7h4M__PRT1fmzx0v4acLL4ZpK0_SHPXj_qQNcU/edit)
+2. [Casos de Uso](https://docs.google.com/document/d/1pCCuJjENDDREi6hLHhHCgFdvPVWVs2SHeNaRHDPIrXQ/edit#heading=h.llr4hu3hyed0)
 3. [Diagrama de Classe]()
-4. [Modelo de Domínio]()
-5. [Diagrama de Sequência de Sistema]()
+4. [Modelo de Domínio](https://app.diagrams.net/#G1HeUAcIgh5V9qxsfrwHzBKXr6ATJuHaDF#%7B%22pageId%22%3A%22hHhpomXcHoK5sr4QZyey%22%7D)
+5. [Diagrama de Sequência de Sistema](https://app.diagrams.net/#G1wk_JZytv7qVZjUtf6t8aXzU_wE2PJJ_v#%7B%22pageId%22%3A%22opEtpKFSlEG7xH13b8S1%22%7D)
 6. [Projeto de Arquitetura]()
 7. [Feedback sobre o Desenvolvimento]()
