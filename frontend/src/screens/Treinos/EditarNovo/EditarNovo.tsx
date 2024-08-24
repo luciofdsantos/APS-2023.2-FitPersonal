@@ -5,7 +5,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
 import { useParams } from 'react-router-dom';
-import { useCreateExercicio } from '../../../hooks';
 import ExercicioForm from './ExercicioForm';
 import ExercicioCard from './ExercicioCard';
 
@@ -22,7 +21,6 @@ interface FormErrors {
 }
 
 interface Exercicio {
-  id: number;
   nome: string;
   inicio: string;
   fim: string;
@@ -66,7 +64,6 @@ export default function EditarNovo() {
 
   const [openAddExercicioModal, setOpenAddExercicioModal] = useState(false);
   const [newExercicio, setNewExercicio] = useState<Exercicio>({
-    id: 0,
     nome: '',
     inicio: today,
     fim: tomorrowDate,
@@ -76,22 +73,6 @@ export default function EditarNovo() {
     carga: 0,
     finalizado: false,
     treinoId: 0
-  });
-
-  const { mutate: createExercicio } = useCreateExercicio({
-    onSuccess: (data) => {
-      setSelectedExercicios([
-        ...selectedExercicios,
-        { ...data, treinoId: treinoData?.id }
-      ]);
-
-      alert('Exercício adicionado com sucesso!');
-      setOpenAddExercicioModal(false);
-    },
-    onError: (error) => {
-      console.error('Erro ao adicionar exercício:', error.message);
-      alert('Erro ao adicionar exercício. Tente novamente.');
-    }
   });
 
   const { mutate: createTreino } = useCreateTreino({
@@ -131,10 +112,12 @@ export default function EditarNovo() {
       }
 
       if (id) {
-        treinoData.exercicios = { ...selectedExercicios };
+        treinoData.exercicios = selectedExercicios;
 
         return updateTreino({ id: Number(id), treino: treinoData });
       } else {
+        treinoData.exercicios = selectedExercicios;
+
         return createTreino(treinoData);
       }
     },
@@ -165,9 +148,10 @@ export default function EditarNovo() {
   };
 
   const handleSaveExercicio = () => {
-    createExercicio(newExercicio);
+    setSelectedExercicios([...selectedExercicios, newExercicio]);
+    alert('Exercício adicionado com sucesso!');
+    setOpenAddExercicioModal(false);
     setNewExercicio({
-      id: 0,
       nome: '',
       inicio: '',
       fim: '',
@@ -237,9 +221,13 @@ export default function EditarNovo() {
             ))}
           </Grid>
 
-          <Grid item xs={12}>
-            <Button onClick={handleAddExercicio}>+ Adicionar exercício</Button>
-          </Grid>
+          {!id && (
+            <Grid item xs={12}>
+              <Button onClick={handleAddExercicio}>
+                + Adicionar exercício
+              </Button>
+            </Grid>
+          )}
 
           <Grid item xs={12}>
             <GroupButtons

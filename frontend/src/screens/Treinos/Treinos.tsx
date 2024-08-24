@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 
 interface Exercicio {
-  id: number;
   nome: string;
   inicio: string;
   fim: string;

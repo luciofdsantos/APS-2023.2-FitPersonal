@@ -3,7 +3,6 @@ import { Grid, TextField } from '@mui/material';
 import { DateInput, NumberInput } from '../../../components';
 
 interface Exercicio {
-  id: number;
   nome: string;
   inicio: string;
   fim: string;

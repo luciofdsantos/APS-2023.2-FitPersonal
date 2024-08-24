@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 const endpoint = 'http://localhost:8080/api/exercicios';
 
 interface Exercicio {
-  id: number;
   nome: string;
   inicio: string;
   fim: string;
@@ -17,18 +16,6 @@ interface Exercicio {
 interface UseCreateExercicioProps {
   onSuccess: (data: Exercicio) => void;
   onError: (error: Error) => void;
-}
-
-interface Exercicio {
-  nome: string;
-  inicio: string;
-  fim: string;
-  grupoMuscular: string;
-  series: number;
-  repeticoes: number;
-  carga: number;
-  finalizado: boolean;
-  treinoId: number;
 }
 
 export default function useCreateExercicio({
