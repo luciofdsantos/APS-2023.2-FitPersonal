@@ -33,10 +33,15 @@ public class ExercicioController {
         }
     }
 
-    @PostMapping
-    public Exercicio saveExercercicio(@PathVariable Exercicio exercicio){
-        return exercicioService.saveExercicio(exercicio);
-    }
+//    @PostMapping
+//    public Exercicio saveExercercicio(@PathVariable Exercicio exercicio){
+//        return exercicioService.saveExercicio(exercicio);
+//    }
+@PostMapping
+public ResponseEntity<Exercicio> saveExercicio(@RequestBody Exercicio exercicio) {
+    Exercicio savedExercicio = exercicioService.saveExercicio(exercicio);
+    return ResponseEntity.ok(savedExercicio);
+}
 
     @DeleteMapping("/{id}")
     @Transactional
