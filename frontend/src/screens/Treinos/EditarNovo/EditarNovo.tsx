@@ -1,21 +1,13 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
-import {
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
-  TextField
-} from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 import { useCreateExercicio } from '../../../hooks';
-
-interface ObjectGeneric {
-  [key: string]: string | number | boolean;
-}
+import ExercicioForm from './ExercicioForm';
+import ExercicioCard from './ExercicioCard';
 
 interface FormData {
   id?: number;
@@ -27,6 +19,19 @@ interface FormErrors {
   nome?: string;
   descricao?: string;
   exercicios?: string;
+}
+
+interface Exercicio {
+  id: number;
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+  treinoId: number;
 }
 
 export default function EditarNovo() {
@@ -42,7 +47,7 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { exercicios: ObjectGeneric[] }
+    FormData & { exercicios: Exercicio[] }
   >({
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
@@ -50,20 +55,43 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedExercicios, setSelectedExercicios] = useState<ObjectGeneric[]>(
-    []
+  const [selectedExercicios, setSelectedExercicios] = useState<Exercicio[]>(
+    treinoData?.exercicios || []
   );
 
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowDate = tomorrow.toISOString().split('T')[0];
+
   const [openAddExercicioModal, setOpenAddExercicioModal] = useState(false);
-  const [newExercicio, setNewExercicio] = useState<ObjectGeneric>({
+  const [newExercicio, setNewExercicio] = useState<Exercicio>({
+    id: 0,
     nome: '',
-    inicio: '',
-    fim: '',
+    inicio: today,
+    fim: tomorrowDate,
     grupoMuscular: '',
     series: 0,
     repeticoes: 0,
     carga: 0,
-    finalizado: false
+    finalizado: false,
+    treinoId: 0
+  });
+
+  const { mutate: createExercicio } = useCreateExercicio({
+    onSuccess: (data) => {
+      setSelectedExercicios([
+        ...selectedExercicios,
+        { ...data, treinoId: treinoData?.id }
+      ]);
+
+      alert('Exercício adicionado com sucesso!');
+      setOpenAddExercicioModal(false);
+    },
+    onError: (error) => {
+      console.error('Erro ao adicionar exercício:', error.message);
+      alert('Erro ao adicionar exercício. Tente novamente.');
+    }
   });
 
   const { mutate: createTreino } = useCreateTreino({
@@ -87,17 +115,6 @@ export default function EditarNovo() {
     }
   });
 
-  const { mutate: createExercicio } = useCreateExercicio({
-    onSuccess: () => {
-      alert('Exercício adicionado com sucesso!');
-      setOpenAddExercicioModal(false);
-    },
-    onError: (error) => {
-      console.error('Erro ao adicionar exercício:', error.message);
-      alert('Erro ao adicionar exercício. Tente novamente.');
-    }
-  });
-
   const mutation = useMutation({
     mutationFn: async () => {
       const validationErrors: FormErrors = {};
@@ -114,6 +131,8 @@ export default function EditarNovo() {
       }
 
       if (id) {
+        treinoData.exercicios = { ...selectedExercicios };
+
         return updateTreino({ id: Number(id), treino: treinoData });
       } else {
         return createTreino(treinoData);
@@ -147,16 +166,17 @@ export default function EditarNovo() {
 
   const handleSaveExercicio = () => {
     createExercicio(newExercicio);
-    setSelectedExercicios([...selectedExercicios, newExercicio]);
     setNewExercicio({
       id: 0,
+      nome: '',
       inicio: '',
       fim: '',
       grupoMuscular: '',
       series: 0,
       repeticoes: 0,
       carga: 0,
-      finalizado: false
+      finalizado: false,
+      treinoId: 0
     });
   };
 
@@ -209,6 +229,14 @@ export default function EditarNovo() {
             />
           </Grid>
 
+          <Grid container spacing={2}>
+            {selectedExercicios.map((exercicio: Exercicio) => (
+              <Grid item xs={4} key={exercicio.nome}>
+                <ExercicioCard exercicio={exercicio} />
+              </Grid>
+            ))}
+          </Grid>
+
           <Grid item xs={12}>
             <Button onClick={handleAddExercicio}>+ Adicionar exercício</Button>
           </Grid>
@@ -230,128 +258,10 @@ export default function EditarNovo() {
         onSave={handleSaveExercicio}
         title="Adicionar Novo Exercicio"
       >
-        <form noValidate autoComplete="off">
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="nome"
-                fullWidth
-                value={newExercicio.nome}
-                onChange={(e) =>
-                  setNewExercicio({ ...newExercicio, nome: e.target.value })
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Inicio"
-                type="date"
-                fullWidth
-                value={newExercicio.inicio}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    inicio: e.target.value
-                  })
-                }
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="fim"
-                type="date"
-                fullWidth
-                value={newExercicio.fim}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    fim: e.target.value
-                  })
-                }
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Grupo Muscular"
-                fullWidth
-                value={newExercicio.grupoMuscular}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    grupoMuscular: e.target.value
-                  })
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Séries"
-                type="number"
-                fullWidth
-                value={newExercicio.series}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    series: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Repetições"
-                type="number"
-                fullWidth
-                value={newExercicio.repeticoes}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    repeticoes: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Carga"
-                type="number"
-                fullWidth
-                value={newExercicio.carga}
-                onChange={(e) =>
-                  setNewExercicio({
-                    ...newExercicio,
-                    carga: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={false}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setNewExercicio({
-                        ...newExercicio,
-                        finalizado: event.target.checked
-                      })
-                    }
-                  />
-                }
-                label="Finalizado"
-              />
-            </Grid>
-          </Grid>
-        </form>
+        <ExercicioForm
+          newExercicio={newExercicio}
+          setNewExercicio={setNewExercicio}
+        />
       </CustomModal>
     </CustomLayout>
   );

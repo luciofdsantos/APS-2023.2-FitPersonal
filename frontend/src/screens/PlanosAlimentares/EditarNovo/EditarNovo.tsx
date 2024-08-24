@@ -1,6 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomLayout, CustomModal, GroupButtons } from '../../../components';
-import { Dashboard, FitnessCenter, FoodBank } from '@mui/icons-material';
 import { Grid, TextField, Button } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -220,18 +219,7 @@ export default function EditarNovo() {
   }
 
   return (
-    <CustomLayout
-      appBarText="Plano Alimentar"
-      items={[
-        { text: 'Dashboard', Icon: Dashboard, path: '/' },
-        { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
-        {
-          text: 'Planos Alimentares',
-          Icon: FoodBank,
-          path: '/planos-alimentares'
-        }
-      ]}
-    >
+    <CustomLayout appBarText="Plano Alimentar">
       <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>

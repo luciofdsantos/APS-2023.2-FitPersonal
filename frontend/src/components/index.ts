@@ -6,9 +6,11 @@ import CustomButton from './CustomButton';
 import CustomCard from './CustomCard';
 import CustomDrawer from './CustomDrawer';
 import CustomLayout from './CustomLayout';
+import CustomModal from './CustomModal';
+import DateInput from './DateInput';
 import GroupButtons from './GroupButtons';
 import ListItems from './ListItems';
-import CustomModal from './CustomModal';
+import NumberInput from './NumberInput';
 
 export {
   AutoComplete,
@@ -19,7 +21,9 @@ export {
   CustomCard,
   CustomDrawer,
   CustomLayout,
+  CustomModal,
+  DateInput,
   GroupButtons,
   ListItems,
-  CustomModal
+  NumberInput
 };

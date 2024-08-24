@@ -1,14 +1,34 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://92.113.32.219:8080/api/exercicios';
+const endpoint = 'http://localhost:8080/api/exercicios';
+
+interface Exercicio {
+  id: number;
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+}
 
 interface UseCreateExercicioProps {
-  onSuccess: () => void;
+  onSuccess: (data: Exercicio) => void;
   onError: (error: Error) => void;
 }
 
-interface ObjectGeneric {
-  [key: string]: string | number | boolean;
+interface Exercicio {
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+  treinoId: number;
 }
 
 export default function useCreateExercicio({
@@ -16,7 +36,7 @@ export default function useCreateExercicio({
   onError
 }: UseCreateExercicioProps) {
   return useMutation({
-    mutationFn: async (Exercicio: ObjectGeneric) => {
+    mutationFn: async (Exercicio: Exercicio) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
