@@ -111,13 +111,11 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      if (id) {
-        treinoData.exercicios = selectedExercicios;
+      treinoData.exercicios = selectedExercicios;
 
+      if (id) {
         return updateTreino({ id: Number(id), treino: treinoData });
       } else {
-        treinoData.exercicios = selectedExercicios;
-
         return createTreino(treinoData);
       }
     },

@@ -19,9 +19,14 @@ interface UseUpdatePlanoAlimentarProps {
   onError: (error: Error) => void;
 }
 
-interface SelectTest {
-  id: string;
-  [key: string]: string | number;
+interface Refeicao {
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: string;
 }
 
 export default function useUpdatePlanoAlimentar({
@@ -34,7 +39,7 @@ export default function useUpdatePlanoAlimentar({
       planoalimentar
     }: {
       id: number;
-      planoalimentar: FormData & { refeicoes: SelectTest[] };
+      planoalimentar: FormData & { refeicoes: Refeicao[] };
     }) => {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',
