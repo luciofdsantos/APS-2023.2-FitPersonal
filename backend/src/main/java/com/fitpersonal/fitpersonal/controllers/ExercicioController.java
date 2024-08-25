@@ -50,6 +50,16 @@ public ResponseEntity<Exercicio> saveExercicio(@RequestBody Exercicio exercicio)
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Exercicio> updateExercicio(@PathVariable Long id, @RequestBody Exercicio exercicio){
+        Exercicio updatedExercicio = exercicioService.updateExercicioById(id, exercicio);
+        if(updatedExercicio != null) {
+            return ResponseEntity.ok(updatedExercicio);
+        } else {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
     @GetMapping("/predefinidos")
     public List<Exercicio> getPredefinedExercicios() {
         return exercicioService.getPredefinedExercicios();

@@ -30,6 +30,25 @@ public class ExercicioService {
         exercicioRepository.deleteById(id);
     }
 
+    public Exercicio updateExercicioById(Long id, Exercicio exercicioAtualizado){
+        Exercicio ex = exercicioRepository.findById(id).orElse(null);
+        if(ex != null){
+            ex.setNome(exercicioAtualizado.getNome());
+            ex.setCarga(exercicioAtualizado.getCarga());
+            ex.setInicio(exercicioAtualizado.getInicio());
+            ex.setFim(exercicioAtualizado.getFim());
+            ex.setGrupoMuscular(exercicioAtualizado.getGrupoMuscular());
+            ex.setSeries(exercicioAtualizado.getSeries());
+            ex.setRepeticoes(exercicioAtualizado.getRepeticoes());
+            ex.setFinalizado(exercicioAtualizado.getFinalizado());
+            //ex.setTreino(exercicioAtualizado.getTreino());
+            exercicioRepository.save(ex);
+            return ex;
+        }else {
+            return null;
+        }
+    }
+
     public List<Exercicio> getPredefinedExercicios() {
 
         Exercicio exercicio1 = new Exercicio(null, "Supino Reto", null, null, "Peito", 4, 12, 50, false, null);
