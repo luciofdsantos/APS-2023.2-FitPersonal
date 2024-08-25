@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   GroupButtons,
   CustomCard,
@@ -8,7 +8,7 @@ import {
 import { useAlert } from '../../components/CustomAlert';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { CircularProgress, Box, Grid } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 
 interface Refeicao {
@@ -39,6 +39,7 @@ interface PlanoAlimentar {
 export default function PlanosAlimentares() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedPlanoAlimentarId, setSelectedPlanoAlimentarId] = useState<
@@ -82,9 +83,16 @@ export default function PlanosAlimentares() {
 
   const handleEdit = (planoalimentar: PlanoAlimentar) => {
     navigate(`/planos-alimentares/${planoalimentar.id}`, {
-      state: { planoalimentar, refetchPlanoAlimentar }
+      state: { planoalimentar }
     });
   };
+
+  useEffect(() => {
+    if (location.state?.isSuccess == 'isSuccessPlanoAlimentar') {
+      refetchPlanoAlimentar();
+      location.state.isSuccess = '';
+    }
+  });
 
   return (
     <CustomLayout appBarText="Planos Alimentares">

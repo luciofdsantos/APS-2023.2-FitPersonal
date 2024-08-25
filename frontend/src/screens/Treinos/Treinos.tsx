@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   GroupButtons,
   CustomCard,
@@ -8,7 +8,7 @@ import {
 import { useAlert } from '../../components/CustomAlert';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 
 interface Exercicio {
@@ -32,6 +32,7 @@ interface Treino {
 export default function Treinos() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
@@ -42,6 +43,7 @@ export default function Treinos() {
     isSuccess,
     isFetching
   } = useTreinos();
+
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
       setOpenDeleteDialog(false);
@@ -72,9 +74,16 @@ export default function Treinos() {
 
   const handleEdit = (treino: Treino) => {
     navigate(`/treinos/${treino.id}`, {
-      state: { treino, refetchTreino }
+      state: { treino }
     });
   };
+
+  useEffect(() => {
+    if (location.state?.isSuccess == 'isSuccessTreino') {
+      refetchTreino();
+      location.state.isSuccess = '';
+    }
+  });
 
   return (
     <CustomLayout appBarText="Treinos">

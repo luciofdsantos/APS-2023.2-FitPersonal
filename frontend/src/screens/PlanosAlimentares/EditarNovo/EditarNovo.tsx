@@ -12,7 +12,6 @@ import RefeicaoCard from './RefeicaoCard';
 import { useAlert } from '../../../components/CustomAlert';
 
 interface FormData {
-  id?: number;
   nome: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
@@ -38,13 +37,21 @@ interface FormErrors {
 }
 
 interface Refeicao {
+  id?: number;
   alimento: string;
   quantidade: number;
   kcal: number;
   carboidrato: number;
   proteina: number;
   gordura: number;
-  tipoRefeicao: string;
+  tipoRefeicao: TipoRefeicao;
+}
+
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
 }
 
 export default function EditarNovo() {
@@ -94,13 +101,12 @@ export default function EditarNovo() {
     carboidrato: 0,
     proteina: 0,
     gordura: 0,
-    tipoRefeicao: ''
+    tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
   });
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
       showAlert('success', 'Plano Alimentar criado com sucesso!');
-      location.state?.refetchPlanoAlimentar();
     },
     onError: (error) => {
       console.error('Erro ao criar plano alimentar:', error.message);
@@ -138,12 +144,14 @@ export default function EditarNovo() {
           planoalimentar: formData
         });
       } else {
-        return createPlanoAlimentar(planoAlimentarData);
+        return createPlanoAlimentar(formData);
       }
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/planos-alimentares');
+      navigate('/planos-alimentares', {
+        state: { isSuccess: 'isSuccessPlanoAlimentar' }
+      });
     },
     onError: (error: Error) => {
       console.error(error.message);
@@ -170,6 +178,7 @@ export default function EditarNovo() {
   const handleSaveRefeicao = () => {
     setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
     showAlert('success', 'Refeição adicionada com sucesso!');
+    setOpenAddRefeicaoModal(false);
     setNewRefeicao({
       alimento: '',
       quantidade: 0,
@@ -177,7 +186,7 @@ export default function EditarNovo() {
       carboidrato: 0,
       proteina: 0,
       gordura: 0,
-      tipoRefeicao: ''
+      tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
     });
   };
 
@@ -272,11 +281,9 @@ export default function EditarNovo() {
             ))}
           </Grid>
 
-          {!id && (
-            <Grid item xs={12}>
-              <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
-            </Grid>
-          )}
+          <Grid item xs={12}>
+            <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
+          </Grid>
 
           <Grid item xs={12}>
             <GroupButtons

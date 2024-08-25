@@ -4,7 +4,7 @@ const planoAlimentarEndpoint = 'http://localhost:8080/api/planoalimentar';
 const refeicoesEndpoint = 'http://localhost:8080/api/refeicoes';
 
 interface FormData {
-  nome?: string;
+  nome: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -20,9 +20,22 @@ interface CreatePlanoAlimentarProps {
   onError: (error: Error) => void;
 }
 
-interface SelectTest {
-  id: string;
-  [key: string]: string | number;
+interface Refeicao {
+  id?: number;
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: TipoRefeicao;
+}
+
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
 }
 
 export default function useCreatePlanoAlimentar({
@@ -32,7 +45,7 @@ export default function useCreatePlanoAlimentar({
   return useMutation({
     mutationFn: async (
       planoalimentar: FormData & {
-        refeicoes: SelectTest[];
+        refeicoes: Refeicao[];
       }
     ) => {
       const planoAlimentarResponse = await fetch(planoAlimentarEndpoint, {

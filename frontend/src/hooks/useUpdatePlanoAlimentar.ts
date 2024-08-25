@@ -20,6 +20,7 @@ interface UseUpdatePlanoAlimentarProps {
 }
 
 interface Refeicao {
+  id?: number;
   alimento: string;
   quantidade: number;
   kcal: number;

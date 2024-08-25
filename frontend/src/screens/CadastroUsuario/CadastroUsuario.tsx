@@ -6,12 +6,15 @@ import {
   Button,
   Container,
   CssBaseline,
+  Link,
+  Grid,
   Paper,
   TextField,
   Typography
 } from '@mui/material';
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -42,6 +45,8 @@ export default function CadastroUsuario() {
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (email.trim() && senha.trim()) {
       setBotaoDesabilitado(false);
@@ -71,7 +76,7 @@ export default function CadastroUsuario() {
     if (email === 'alguem@email.com' && senha === '123senha') {
       setError(false);
       setHelperText('Login OK! Aguarde...');
-      // history.push('/dashboard');
+      navigate('/dashboard');
     } else {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
@@ -133,6 +138,15 @@ export default function CadastroUsuario() {
           </StyledButton>
         </StyledForm>
       </StyledPaper>
+
+      <Grid container>
+        <Grid item xs />
+        <Grid item>
+          <Link href="/cadastro" variant="body2">
+            {'Ainda não tem uma conta?'}
+          </Link>
+        </Grid>
+      </Grid>
 
       <Box mt={8}>
         <Copyright />

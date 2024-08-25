@@ -47,7 +47,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const items = [
-  { text: 'Dashboard', Icon: Dashboard, path: '/' },
+  { text: 'Dashboard', Icon: Dashboard, path: '/dashboard' },
   { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
   { text: 'Planos Alimentares', Icon: FoodBank, path: '/planos-alimentares' }
 ];

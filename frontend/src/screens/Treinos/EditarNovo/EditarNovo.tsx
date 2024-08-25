@@ -82,7 +82,6 @@ export default function EditarNovo() {
   const { mutate: createTreino } = useCreateTreino({
     onSuccess: () => {
       showAlert('success', 'Treino criado com sucesso!');
-      location.state?.refetchTreino();
     },
     onError: (error) => {
       console.error('Erro ao criar treino:', error.message);
@@ -126,7 +125,9 @@ export default function EditarNovo() {
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/treinos');
+      navigate('/treinos', {
+        state: { isSuccess: 'isSuccessTreino' }
+      });
     },
     onError: (error: Error) => {
       console.error(error.message);

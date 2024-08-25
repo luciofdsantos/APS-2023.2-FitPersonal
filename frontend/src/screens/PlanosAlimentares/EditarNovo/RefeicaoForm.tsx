@@ -1,13 +1,22 @@
-import { Grid, TextField } from '@mui/material';
+import {
+  Grid,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent
+} from '@mui/material';
 
 interface Refeicao {
+  id?: number;
   alimento: string;
   quantidade: number;
   kcal: number;
   carboidrato: number;
   proteina: number;
   gordura: number;
-  tipoRefeicao: string;
+  tipoRefeicao: TipoRefeicao;
 }
 
 interface RefeicaoFormProps {
@@ -16,11 +25,29 @@ interface RefeicaoFormProps {
   disabled?: boolean;
 }
 
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
+}
+
 export default function RefeicaoForm({
   newRefeicao,
   setNewRefeicao,
   disabled = false
 }: RefeicaoFormProps) {
+  const tipoRefeicaoOptions = Object.values(TipoRefeicao);
+
+  const handleTipoRefeicaoChange = (event: SelectChangeEvent<TipoRefeicao>) => {
+    const value = event.target.value as TipoRefeicao;
+    setNewRefeicao &&
+      setNewRefeicao({
+        ...newRefeicao,
+        tipoRefeicao: value
+      });
+  };
+
   return (
     <form noValidate autoComplete="off">
       <Grid container spacing={2}>
@@ -123,19 +150,20 @@ export default function RefeicaoForm({
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            label="Tipo de Refeição"
-            fullWidth
-            value={newRefeicao.tipoRefeicao}
-            onChange={(e) =>
-              setNewRefeicao &&
-              setNewRefeicao({
-                ...newRefeicao,
-                tipoRefeicao: e.target.value
-              })
-            }
-            disabled={disabled}
-          />
+          <FormControl fullWidth disabled={disabled}>
+            <InputLabel>Tipo de Refeição</InputLabel>
+            <Select
+              value={newRefeicao.tipoRefeicao}
+              onChange={handleTipoRefeicaoChange}
+              label="Tipo de Refeição"
+            >
+              {tipoRefeicaoOptions.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option.replace(/_/g, ' ')}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
     </form>
