@@ -28,7 +28,7 @@ public class Exercicio {
     private String nome;
     private LocalDate inicio;
     private LocalDate fim;
-    @Column(nullable = false)
+    @Column(name = "grupo_muscular", nullable = false)
     private String grupoMuscular;
 
 
