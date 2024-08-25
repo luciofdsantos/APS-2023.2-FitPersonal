@@ -9,6 +9,7 @@ import {
 } from '../../../hooks';
 import RefeicaoForm from './RefeicaoForm';
 import RefeicaoCard from './RefeicaoCard';
+import { useAlert } from '../../../components/CustomAlert';
 
 interface FormData {
   id?: number;
@@ -47,6 +48,8 @@ interface Refeicao {
 }
 
 export default function EditarNovo() {
+  const { showAlert } = useAlert();
+
   const { id } = useParams<{ id?: string }>();
 
   const location = useLocation();
@@ -96,22 +99,22 @@ export default function EditarNovo() {
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
-      alert('Plano Alimentar criado com sucesso!');
+      showAlert('success', 'Plano Alimentar criado com sucesso!');
     },
     onError: (error) => {
       console.error('Erro ao criar plano alimentar:', error.message);
-      alert('Erro ao criar plano alimentar. Tente novamente.');
+      showAlert('error', 'Erro ao criar plano alimentar. Tente novamente.');
     }
   });
 
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
     onSuccess: () => {
-      alert('Plano atualizado com sucesso!');
+      showAlert('success', 'Plano atualizado com sucesso!');
       navigate('/planos-alimentares');
     },
     onError: (error) => {
+      showAlert('error', 'Erro ao atualizar plano alimentar. Tente novamente.');
       console.error('Erro ao atualizar plano alimentar:', error.message);
-      alert('Erro ao atualizar plano alimentar. Tente novamente.');
     }
   });
 

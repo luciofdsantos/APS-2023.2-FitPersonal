@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, CardContent, Typography, Grid } from '@mui/material';
 
 interface Refeicao {
@@ -15,7 +14,7 @@ interface RefeicaoCardProps {
   refeicao: Refeicao;
 }
 
-const RefeicaoCard: React.FC<RefeicaoCardProps> = ({ refeicao }) => {
+export default function RefeicaoCard({ refeicao }: RefeicaoCardProps) {
   return (
     <Card>
       <CardContent>
@@ -57,6 +56,4 @@ const RefeicaoCard: React.FC<RefeicaoCardProps> = ({ refeicao }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default RefeicaoCard;
+}

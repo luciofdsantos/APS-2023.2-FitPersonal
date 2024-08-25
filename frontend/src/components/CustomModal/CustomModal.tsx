@@ -5,7 +5,6 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
-import React from 'react';
 
 interface CustomModalProps {
   open: boolean;
@@ -15,13 +14,13 @@ interface CustomModalProps {
   onSave?: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
+export default function CustomModal({
   open,
   onClose,
   title,
   children,
   onSave
-}) => {
+}: CustomModalProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{title}</DialogTitle>
@@ -38,6 +37,4 @@ const CustomModal: React.FC<CustomModalProps> = ({
       </DialogActions>
     </Dialog>
   );
-};
-
-export default CustomModal;
+}

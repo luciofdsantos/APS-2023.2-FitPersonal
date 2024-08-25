@@ -1,5 +1,4 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
+import { TextField } from '@mui/material';
 
 interface NumberInputProps {
   label: string;
@@ -8,20 +7,20 @@ interface NumberInputProps {
   disabled?: boolean;
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({
+export default function NumberInput({
   label,
   value,
   onChange,
   disabled = false
-}) => (
-  <TextField
-    label={label}
-    type="number"
-    fullWidth
-    value={value}
-    onChange={onChange}
-    disabled={disabled}
-  />
-);
-
-export default NumberInput;
+}: NumberInputProps) {
+  return (
+    <TextField
+      label={label}
+      type="number"
+      fullWidth
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+    />
+  );
+}

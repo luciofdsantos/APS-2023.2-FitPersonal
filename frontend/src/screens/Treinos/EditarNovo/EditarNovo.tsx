@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
+import { useAlert } from '../../../components/CustomAlert';
 import { Button, Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,6 +13,7 @@ interface FormData {
   id?: number;
   nome: string;
   descricao: string;
+  exercicios: Exercicio[];
 }
 
 interface FormErrors {
@@ -33,6 +35,8 @@ interface Exercicio {
 }
 
 export default function EditarNovo() {
+  const { showAlert } = useAlert();
+
   const { id } = useParams<{ id?: string }>();
 
   const location = useLocation();
@@ -77,22 +81,22 @@ export default function EditarNovo() {
 
   const { mutate: createTreino } = useCreateTreino({
     onSuccess: () => {
-      alert('Treino criado com sucesso!');
+      showAlert('success', 'Treino criado com sucesso!');
     },
     onError: (error) => {
       console.error('Erro ao criar treino:', error.message);
-      alert('Erro ao criar treino. Tente novamente.');
+      showAlert('error', 'Erro ao criar treino. Tente novamente.');
     }
   });
 
   const { mutate: updateTreino } = useUpdateTreino({
     onSuccess: () => {
-      alert('Treino atualizado com sucesso!');
+      showAlert('success', 'Treino atualizado com sucesso!');
       navigate('/treinos');
     },
     onError: (error) => {
       console.error('Erro ao atualizar treino:', error.message);
-      alert('Erro ao atualizar treino. Tente novamente.');
+      showAlert('error', 'Erro ao atualizar treino. Tente novamente.');
     }
   });
 
@@ -111,12 +115,12 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      treinoData.exercicios = selectedExercicios;
+      formData.exercicios = selectedExercicios;
 
       if (id) {
-        return updateTreino({ id: Number(id), treino: treinoData });
+        return updateTreino({ id: Number(id), treino: formData });
       } else {
-        return createTreino(treinoData);
+        return createTreino(formData);
       }
     },
     onSuccess: () => {
@@ -147,12 +151,12 @@ export default function EditarNovo() {
 
   const handleSaveExercicio = () => {
     setSelectedExercicios([...selectedExercicios, newExercicio]);
-    alert('Exercício adicionado com sucesso!');
     setOpenAddExercicioModal(false);
+    showAlert('success', 'Exercício adicionado com sucesso!');
     setNewExercicio({
       nome: '',
-      inicio: '',
-      fim: '',
+      inicio: today,
+      fim: tomorrowDate,
       grupoMuscular: '',
       series: 0,
       repeticoes: 0,
@@ -212,20 +216,16 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid container spacing={2}>
-            {selectedExercicios.map((exercicio: Exercicio) => (
-              <Grid item xs={4} key={exercicio.nome}>
+            {selectedExercicios.map((exercicio: Exercicio, index) => (
+              <Grid item xs={4} key={index}>
                 <ExercicioCard exercicio={exercicio} />
               </Grid>
             ))}
           </Grid>
 
-          {!id && (
-            <Grid item xs={12}>
-              <Button onClick={handleAddExercicio}>
-                + Adicionar exercício
-              </Button>
-            </Grid>
-          )}
+          <Grid item xs={12}>
+            <Button onClick={handleAddExercicio}>+ Adicionar exercício</Button>
+          </Grid>
 
           <Grid item xs={12}>
             <GroupButtons

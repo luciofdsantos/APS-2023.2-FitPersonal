@@ -18,11 +18,6 @@ interface CustomDrawerProps {
   open: boolean;
   drawerWidth: number;
   toggleDrawer: () => void;
-  items: {
-    text: string;
-    Icon: React.ElementType;
-    path: string;
-  }[];
 }
 
 const Drawer = styled(MuiDrawer, {

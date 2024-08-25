@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
 
 interface Exercicio {
@@ -16,7 +15,7 @@ interface ExercicioCardProps {
   exercicio: Exercicio;
 }
 
-const ExercicioCard: React.FC<ExercicioCardProps> = ({ exercicio }) => {
+export default function ExercicioCard({ exercicio }: ExercicioCardProps) {
   return (
     <Card>
       <CardContent>
@@ -66,6 +65,4 @@ const ExercicioCard: React.FC<ExercicioCardProps> = ({ exercicio }) => {
       </CardContent>
     </Card>
   );
-};
-
-export default ExercicioCard;
+}

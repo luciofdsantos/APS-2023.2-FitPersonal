@@ -1,4 +1,3 @@
-import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
 interface SelectTest {
@@ -21,7 +20,7 @@ interface AutoCompleteProps {
   selectedValues?: SelectTest[];
 }
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
+export default function AutoComplete({
   options,
   label,
   optionLabel,
@@ -32,7 +31,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   fullWidth = true,
   variant = 'outlined',
   error = ''
-}) => {
+}: AutoCompleteProps) {
   const handleChange = (
     event: React.SyntheticEvent,
     newValue: SelectTest[] | SelectTest | null
@@ -87,6 +86,4 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       disabled={disabled}
     />
   );
-};
-
-export default AutoComplete;
+}

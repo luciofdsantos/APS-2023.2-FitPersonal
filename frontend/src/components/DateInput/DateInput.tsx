@@ -1,4 +1,3 @@
-import React from 'react';
 import { TextField } from '@mui/material';
 
 interface DateInputProps {
@@ -10,14 +9,14 @@ interface DateInputProps {
   disableFuture?: boolean;
 }
 
-const DateInput: React.FC<DateInputProps> = ({
+export default function DateInput({
   label,
   value,
   onChange,
   disabled = false,
   disablePast = false,
   disableFuture = false
-}) => {
+}: DateInputProps) {
   const today = new Date().toISOString().split('T')[0];
 
   const tomorrow = new Date();
@@ -39,6 +38,4 @@ const DateInput: React.FC<DateInputProps> = ({
       }}
     />
   );
-};
-
-export default DateInput;
+}

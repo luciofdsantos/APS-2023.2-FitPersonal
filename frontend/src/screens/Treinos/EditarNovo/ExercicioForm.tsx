@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid, TextField } from '@mui/material';
 import { DateInput, NumberInput } from '../../../components';
 
@@ -20,11 +19,11 @@ interface ExercicioFormProps {
   disabled?: boolean;
 }
 
-const ExercicioForm: React.FC<ExercicioFormProps> = ({
+export default function ExercicioForm({
   newExercicio,
   setNewExercicio,
   disabled = false
-}) => {
+}: ExercicioFormProps) {
   return (
     <form noValidate autoComplete="off">
       <Grid container spacing={2}>
@@ -130,6 +129,4 @@ const ExercicioForm: React.FC<ExercicioFormProps> = ({
       </Grid>
     </form>
   );
-};
-
-export default ExercicioForm;
+}

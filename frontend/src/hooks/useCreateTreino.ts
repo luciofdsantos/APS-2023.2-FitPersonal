@@ -12,9 +12,16 @@ interface CreateTreinoProps {
   onError: (error: Error) => void;
 }
 
-interface SelectTest {
-  id: string;
-  [key: string]: string | number;
+interface Exercicio {
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+  treinoId: number;
 }
 
 export default function useCreateTreino({
@@ -22,7 +29,7 @@ export default function useCreateTreino({
   onError
 }: CreateTreinoProps) {
   return useMutation({
-    mutationFn: async (treino: FormData & { exercicios: SelectTest[] }) => {
+    mutationFn: async (treino: FormData & { exercicios: Exercicio[] }) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {

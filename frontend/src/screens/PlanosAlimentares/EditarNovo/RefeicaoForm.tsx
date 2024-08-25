@@ -1,4 +1,3 @@
-import React from 'react';
 import { Grid, TextField } from '@mui/material';
 
 interface Refeicao {
@@ -17,11 +16,11 @@ interface RefeicaoFormProps {
   disabled?: boolean;
 }
 
-const RefeicaoForm: React.FC<RefeicaoFormProps> = ({
+export default function RefeicaoForm({
   newRefeicao,
   setNewRefeicao,
   disabled = false
-}) => {
+}: RefeicaoFormProps) {
   return (
     <form noValidate autoComplete="off">
       <Grid container spacing={2}>
@@ -141,6 +140,4 @@ const RefeicaoForm: React.FC<RefeicaoFormProps> = ({
       </Grid>
     </form>
   );
-};
-
-export default RefeicaoForm;
+}

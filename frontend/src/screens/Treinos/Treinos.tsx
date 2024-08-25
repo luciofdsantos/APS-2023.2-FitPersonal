@@ -5,6 +5,7 @@ import {
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
+import { useAlert } from '../../components/CustomAlert';
 import { Grid, CircularProgress, Box } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -29,15 +30,18 @@ interface Treino {
 }
 
 export default function Treinos() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
 
-  const { data: treinos, isSuccess, isFetching } = useTreinos();
+  const { data: treinos, refetch, isSuccess, isFetching } = useTreinos();
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
       setOpenDeleteDialog(false);
+      refetch();
+      showAlert('success', 'Treino excluido com sucesso!');
       setSelectedTreinoId(null);
     },
     onError: (error) => {
