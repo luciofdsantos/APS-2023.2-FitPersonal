@@ -5,7 +5,7 @@ import {
   Toolbar,
   Typography
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import backgroundImage from '../../assets/images/bar.png';
 
 interface AppBarProps {

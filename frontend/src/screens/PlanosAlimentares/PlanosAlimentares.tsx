@@ -5,6 +5,7 @@ import {
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
+import { useAlert } from '../../components/CustomAlert';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { CircularProgress, Box, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -36,6 +37,7 @@ interface PlanoAlimentar {
 }
 
 export default function PlanosAlimentares() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -45,12 +47,16 @@ export default function PlanosAlimentares() {
 
   const {
     data: planoalimentar,
+    refetch: refetchPlanoAlimentar,
     isSuccess,
     isFetching
   } = usePlanosAlimentares();
+
   const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
     onSuccess: () => {
       setOpenDeleteDialog(false);
+      refetchPlanoAlimentar();
+      showAlert('success', 'Plano alimentar excluido com sucesso!');
       setSelectedPlanoAlimentarId(null);
     },
     onError: (error) => {
@@ -76,7 +82,7 @@ export default function PlanosAlimentares() {
 
   const handleEdit = (planoalimentar: PlanoAlimentar) => {
     navigate(`/planos-alimentares/${planoalimentar.id}`, {
-      state: { planoalimentar }
+      state: { planoalimentar, refetchPlanoAlimentar }
     });
   };
 

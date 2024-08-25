@@ -1,15 +1,16 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Dashboard from '../screens/Dashboard';
+// import Dashboard from '../screens/Dashboard';
 import Treinos from '../screens/Treinos';
 import PlanosAlimentares from '../screens/PlanosAlimentares';
 import EditarNovo from '../screens/Treinos/EditarNovo';
 import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
+import CadastroUsuario from '../screens/CadastroUsuario';
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<CadastroUsuario />} />
         <Route path="/treinos" element={<Treinos />} />
         <Route path="/treinos/novo" element={<EditarNovo />} />
         <Route path="/treinos/:id" element={<EditarNovo />} />

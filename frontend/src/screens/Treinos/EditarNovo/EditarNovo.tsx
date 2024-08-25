@@ -82,6 +82,7 @@ export default function EditarNovo() {
   const { mutate: createTreino } = useCreateTreino({
     onSuccess: () => {
       showAlert('success', 'Treino criado com sucesso!');
+      location.state?.refetchTreino();
     },
     onError: (error) => {
       console.error('Erro ao criar treino:', error.message);

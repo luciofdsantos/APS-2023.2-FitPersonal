@@ -36,11 +36,16 @@ export default function Treinos() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
 
-  const { data: treinos, refetch, isSuccess, isFetching } = useTreinos();
+  const {
+    data: treinos,
+    refetch: refetchTreino,
+    isSuccess,
+    isFetching
+  } = useTreinos();
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
       setOpenDeleteDialog(false);
-      refetch();
+      refetchTreino();
       showAlert('success', 'Treino excluido com sucesso!');
       setSelectedTreinoId(null);
     },
@@ -67,7 +72,7 @@ export default function Treinos() {
 
   const handleEdit = (treino: Treino) => {
     navigate(`/treinos/${treino.id}`, {
-      state: { treino }
+      state: { treino, refetchTreino }
     });
   };
 

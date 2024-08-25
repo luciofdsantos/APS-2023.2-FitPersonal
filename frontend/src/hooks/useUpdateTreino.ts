@@ -8,6 +8,7 @@ interface FormData {
 }
 
 interface Exercicio {
+  id?: number;
   nome: string;
   inicio: string;
   fim: string;
@@ -36,12 +37,20 @@ export default function useUpdateTreino({
       id: number;
       treino: FormData & { exercicios: Exercicio[] };
     }) => {
+      const treinoAtualizado = {
+        ...treino,
+        exercicios: treino.exercicios.map(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ({ id: _, ...exercicio }) => exercicio
+        )
+      };
+
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(treino)
+        body: JSON.stringify(treinoAtualizado)
       });
       if (!response.ok) {
         const errorMessage = await response.text();

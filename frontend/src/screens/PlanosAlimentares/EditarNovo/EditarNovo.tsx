@@ -100,6 +100,7 @@ export default function EditarNovo() {
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
       showAlert('success', 'Plano Alimentar criado com sucesso!');
+      location.state?.refetchPlanoAlimentar();
     },
     onError: (error) => {
       console.error('Erro ao criar plano alimentar:', error.message);
@@ -168,8 +169,7 @@ export default function EditarNovo() {
 
   const handleSaveRefeicao = () => {
     setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
-    alert('Refeição adicionada com sucesso!');
-    setOpenAddRefeicaoModal(false);
+    showAlert('success', 'Refeição adicionada com sucesso!');
     setNewRefeicao({
       alimento: '',
       quantidade: 0,

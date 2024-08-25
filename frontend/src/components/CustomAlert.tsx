@@ -53,7 +53,7 @@ export default function AlertProvider({ children }: AlertProviderProps) {
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           open={open}
-          autoHideDuration={2000}
+          autoHideDuration={3000}
           onClose={handleClose}
           sx={{ mt: 5 }}
         >
