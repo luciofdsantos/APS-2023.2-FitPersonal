@@ -1,7 +1,9 @@
 package com.fitpersonal.fitpersonal.controllers;
 
 import com.fitpersonal.fitpersonal.entities.dtos.TreinoComExerciciosDTO;
+import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
+import com.fitpersonal.fitpersonal.repositories.ExercicioRepository;
 import com.fitpersonal.fitpersonal.services.TreinoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,8 @@ public class TreinoController {
 
     @Autowired
     private TreinoService treinoService;
+    @Autowired
+    private ExercicioRepository exercicioRepository;
 
     // Criar um Treino
     @PostMapping("/addTreino")
@@ -63,20 +67,78 @@ public class TreinoController {
     }
 
     // (Futuramente) Atualizar um Treino por ID
-     @PutMapping("/{id}")
-     public ResponseEntity<Treino> atualizaTreino(@PathVariable Long id, @RequestBody Treino treino) {
-         Optional<Treino> treinoExistente = treinoService.findTreinoById(id);
+//     @PutMapping("/{id}")
+//     public ResponseEntity<Treino> atualizaTreino(@PathVariable Long id, @RequestBody Treino treino) {
+//         Optional<Treino> treinoExistente = treinoService.findTreinoById(id);
+//
+//         if (treinoExistente.isPresent()) {
+//             Treino treinoAtualizado = treinoExistente.get();
+//             treinoAtualizado.setNome(treino.getNome());
+//             treinoAtualizado.setDescricao(treino.getDescricao());
+//             // Atualize outros campos conforme necessário
+//
+//             treinoService.updateTreinoById(treinoAtualizado, id);
+//             return ResponseEntity.ok(treinoAtualizado);
+//         } else {
+//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//         }
+//     }
 
-         if (treinoExistente.isPresent()) {
-             Treino treinoAtualizado = treinoExistente.get();
-             treinoAtualizado.setNome(treino.getNome());
-             treinoAtualizado.setDescricao(treino.getDescricao());
-             // Atualize outros campos conforme necessário
+    @PutMapping("/{id}")
+    public ResponseEntity<Treino> atualizaTreino(@PathVariable Long id, @RequestBody Treino treino) {
+        Optional<Treino> treinoExistente = treinoService.findTreinoById(id);
 
-             treinoService.updateTreinoById(treinoAtualizado, id);
-             return ResponseEntity.ok(treinoAtualizado);
-         } else {
-             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-         }
-     }
+        if (treinoExistente.isPresent()) {
+            Treino treinoAtualizado = treinoExistente.get();
+
+            // Atualiza os dados do treino
+            treinoAtualizado.setNome(treino.getNome());
+            treinoAtualizado.setDescricao(treino.getDescricao());
+
+            // Atualiza os exercícios
+            List<Exercicio> novosExercicios = treino.getExercicios(); // Exercícios enviados na requisição
+            List<Exercicio> exerciciosExistentes = treinoAtualizado.getExercicios(); // Exercícios já existentes no BD
+
+            // 1. Atualizar ou adicionar novos exercícios
+            for (Exercicio exercicio : novosExercicios) {
+                if (exercicio.getId() != null) {
+                    // Se o exercício tem ID, busca para atualizar
+                    Optional<Exercicio> exercicioExistente = exercicioRepository.findById(exercicio.getId());
+                    exercicioExistente.ifPresent(exercicioAtualizado -> {
+                        exercicioAtualizado.setNome(exercicio.getNome());
+                        exercicioAtualizado.setGrupoMuscular(exercicio.getGrupoMuscular());
+                        exercicioAtualizado.setSeries(exercicio.getSeries());
+                        exercicioAtualizado.setRepeticoes(exercicio.getRepeticoes());
+                        exercicioAtualizado.setCarga(exercicio.getCarga());
+                        exercicioAtualizado.setInicio(exercicio.getInicio());
+                        exercicioAtualizado.setFim(exercicio.getFim());
+                        exercicioAtualizado.setFinalizado(exercicio.getFinalizado());
+                        exercicioRepository.save(exercicioAtualizado);
+                    });
+                } else {
+                    // Se não tem ID, é um novo exercício
+                    exercicio.setTreino(treinoAtualizado);
+                    exercicioRepository.save(exercicio);
+                }
+            }
+
+            // 2. Remover exercícios que não estão mais no treino
+            for (Exercicio exercicioExistente : exerciciosExistentes) {
+                if (novosExercicios.stream().noneMatch(e -> e.getId() != null && e.getId().equals(exercicioExistente.getId()))) {
+                    exercicioRepository.delete(exercicioExistente); // Remover do banco de dados
+                }
+            }
+
+            // Atualizar lista de exercícios no treino
+            treinoAtualizado.getExercicios().clear();
+            treinoAtualizado.getExercicios().addAll(novosExercicios);
+
+            // Salva o treino atualizado
+            treinoService.updateTreinoById(treinoAtualizado, id);
+
+            return ResponseEntity.ok(treinoAtualizado);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
