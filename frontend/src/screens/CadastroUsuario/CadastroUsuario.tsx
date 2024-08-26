@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
-import Copyright from '../../components/Copyright';
 import {
   Avatar,
   Box,
   Button,
   Container,
   CssBaseline,
-  Link,
   Grid,
   Paper,
+  Link,
   TextField,
-  Typography
+  Typography,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import Copyright from '../../components/Copyright';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -38,9 +42,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function CadastroUsuario() {
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [lembrarUsuario, setLembrarUsuario] = useState(false);
+  const [tipoUsuario, setTipoUsuario] = useState('');
+  const [registroProfissional, setRegistroProfissional] = useState('');
   const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
@@ -48,39 +54,26 @@ export default function CadastroUsuario() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (email.trim() && senha.trim()) {
+    if (
+      nome.trim() &&
+      email.trim() &&
+      senha.trim() &&
+      tipoUsuario &&
+      ((tipoUsuario !== 'personal' && tipoUsuario !== 'nutricionista') ||
+        registroProfissional.trim())
+    ) {
       setBotaoDesabilitado(false);
     } else {
       setBotaoDesabilitado(true);
     }
-  }, [email, senha]);
+  }, [nome, email, senha, tipoUsuario, registroProfissional]);
 
-  useEffect(() => {
-    document.title = 'Exemplo React - Área Reservada';
-    if (localStorage.getItem('usuario')) {
-      setLembrarUsuario(true);
-      // setEmail(localStorage.getItem('usuario'));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (lembrarUsuario) {
-      localStorage.setItem('usuario', email);
-    } else {
-      localStorage.removeItem('usuario');
-    }
-  }, [lembrarUsuario, email]);
-
-  const validaLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const validaCadastro = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (email === 'alguem@email.com' && senha === '123senha') {
-      setError(false);
-      setHelperText('Login OK! Aguarde...');
-      navigate('/dashboard');
-    } else {
-      setError(true);
-      setHelperText('O usuário ou a senha informados são inválidos!');
-    }
+
+    setError(false);
+    setHelperText('Conta criada com sucesso!');
+    navigate('/');
   };
 
   return (
@@ -92,10 +85,26 @@ export default function CadastroUsuario() {
         </StyledAvatar>
 
         <Typography component="h1" variant="h5">
-          Área Reservada
+          Cadastro de Usuário
         </Typography>
 
-        <StyledForm noValidate onSubmit={validaLogin}>
+        <StyledForm noValidate onSubmit={validaCadastro}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="nome"
+            label="Nome Completo"
+            name="nome"
+            autoComplete="name"
+            autoFocus
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            error={error}
+            helperText={helperText}
+          />
+
           <TextField
             variant="outlined"
             margin="normal"
@@ -105,10 +114,10 @@ export default function CadastroUsuario() {
             label="Endereço de Email"
             name="email"
             autoComplete="email"
-            autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={error}
+            helperText={helperText}
           />
 
           <TextField
@@ -119,13 +128,46 @@ export default function CadastroUsuario() {
             name="password"
             label="Senha"
             type="password"
-            id="password"
-            autoComplete="current-password"
+            id="senha"
+            autoComplete="new-password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             error={error}
             helperText={helperText}
           />
+
+          <FormControl fullWidth variant="outlined" margin="normal" required>
+            <InputLabel id="tipo-usuario-label">Tipo de Usuário</InputLabel>
+            <Select
+              labelId="tipo-usuario-label"
+              id="tipo-usuario"
+              value={tipoUsuario}
+              onChange={(e) => setTipoUsuario(e.target.value as string)}
+              label="Tipo de Usuário"
+              error={error}
+            >
+              <MenuItem value="comum">Usuário Comum</MenuItem>
+              <MenuItem value="personal">Personal</MenuItem>
+              <MenuItem value="nutricionista">Nutricionista</MenuItem>
+            </Select>
+          </FormControl>
+
+          {(tipoUsuario === 'personal' || tipoUsuario === 'nutricionista') && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="registro-profissional"
+              label="Registro Profissional"
+              name="registro-profissional"
+              autoComplete="registro-profissional"
+              value={registroProfissional}
+              onChange={(e) => setRegistroProfissional(e.target.value)}
+              error={error}
+              helperText={helperText}
+            />
+          )}
 
           <StyledButton
             type="submit"
@@ -134,7 +176,7 @@ export default function CadastroUsuario() {
             color="primary"
             disabled={botaoDesabilitado}
           >
-            <LockOutlinedIcon /> Acessar
+            Cadastrar
           </StyledButton>
         </StyledForm>
       </StyledPaper>
@@ -142,8 +184,8 @@ export default function CadastroUsuario() {
       <Grid container>
         <Grid item xs />
         <Grid item>
-          <Link href="/cadastro" variant="body2">
-            {'Ainda não tem uma conta?'}
+          <Link href="/" variant="body2">
+            {'Já tem uma conta? Faça login'}
           </Link>
         </Grid>
       </Grid>

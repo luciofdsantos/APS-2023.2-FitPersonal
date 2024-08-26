@@ -4,13 +4,14 @@ import Treinos from '../screens/Treinos';
 import PlanosAlimentares from '../screens/PlanosAlimentares';
 import EditarNovo from '../screens/Treinos/EditarNovo';
 import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
+import LoginUsuario from '../screens/LoginUsuario';
 import CadastroUsuario from '../screens/CadastroUsuario';
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<CadastroUsuario />} />
+        <Route path="/" element={<LoginUsuario />} />
         <Route path="/cadastro" element={<CadastroUsuario />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/treinos" element={<Treinos />} />
