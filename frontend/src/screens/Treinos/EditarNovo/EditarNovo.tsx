@@ -126,7 +126,7 @@ export default function EditarNovo() {
     onSuccess: () => {
       setErrors({});
       navigate('/treinos', {
-        state: { isSuccess: 'isSuccessTreino' }
+        state: { isSuccessTreino: true }
       });
     },
     onError: (error: Error) => {

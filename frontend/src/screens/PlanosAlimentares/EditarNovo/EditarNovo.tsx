@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
 import { CustomLayout, CustomModal, GroupButtons } from '../../../components';
 import { Grid, TextField, Button } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -162,7 +162,7 @@ export default function EditarNovo() {
     onSuccess: () => {
       setErrors({});
       navigate('/planos-alimentares', {
-        state: { isSuccess: 'isSuccessPlanoAlimentar' }
+        state: { isSuccessPlanoAlimentar: 'true' }
       });
     },
     onError: (error: Error) => {
@@ -187,7 +187,7 @@ export default function EditarNovo() {
     setOpenAddRefeicaoModal(false);
   };
 
-  const handleSaveRefeicao = () => {
+  const handleSaveRefeicao = useCallback(() => {
     if (id) {
       mutateCreateRefeicao({ ...newRefeicao, planoAlimentarId: Number(id) });
     }
@@ -203,7 +203,13 @@ export default function EditarNovo() {
       gordura: 0,
       tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
     });
-  };
+  }, [
+    id,
+    mutateCreateRefeicao,
+    setSelectedRefeicoes,
+    newRefeicao,
+    selectedRefeicoes
+  ]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

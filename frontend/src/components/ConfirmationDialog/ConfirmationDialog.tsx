@@ -28,9 +28,7 @@ export default function ConfirmationDialog({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <p>{message}</p>
-      </DialogContent>
+      <DialogContent>{message}</DialogContent>
       <DialogActions>
         <GroupButtons
           buttons={[

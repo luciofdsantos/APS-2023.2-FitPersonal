@@ -3,7 +3,7 @@ import GroupButtons from '../GroupButtons';
 import { SxProps, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface Button {
+interface ButtonProps {
   text?: string;
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -23,7 +23,7 @@ interface CustomCardProps {
     value: React.ReactNode;
   }[];
   style?: SxProps<Theme>;
-  buttons?: Button[];
+  buttons?: ButtonProps[];
 }
 
 export default function CustomCard({

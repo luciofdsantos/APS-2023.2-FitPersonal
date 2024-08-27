@@ -88,11 +88,11 @@ export default function PlanosAlimentares() {
   };
 
   useEffect(() => {
-    if (location.state?.isSuccess == 'isSuccessPlanoAlimentar') {
+    if (location.state?.isSuccessPlanoAlimentar) {
       refetchPlanoAlimentar();
-      location.state.isSuccess = '';
+      location.state.isSuccessPlanoAlimentar = false;
     }
-  }, [location.state, refetchPlanoAlimentar, location.state?.isSuccess]);
+  }, [location.state, refetchPlanoAlimentar]);
 
   return (
     <CustomLayout appBarText="Planos Alimentares">

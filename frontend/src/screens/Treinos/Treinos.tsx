@@ -79,9 +79,9 @@ export default function Treinos() {
   };
 
   useEffect(() => {
-    if (location.state?.isSuccess == 'isSuccessTreino') {
+    if (location.state?.isSuccessTreino) {
       refetchTreino();
-      location.state.isSuccess = '';
+      location.state.isSuccessTreino = false;
     }
   }, [location.state, refetchTreino]);
 

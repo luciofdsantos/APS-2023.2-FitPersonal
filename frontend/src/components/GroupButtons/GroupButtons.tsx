@@ -2,7 +2,7 @@ import { Button, Box } from '@mui/material';
 import { SxProps, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface Button {
+interface ButtonProps {
   text?: string;
   href?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -16,7 +16,7 @@ interface Button {
 }
 
 interface GroupButtonsProps {
-  buttons: Button[];
+  buttons: ButtonProps[];
   style?: SxProps<Theme>;
   boxShadow?: boolean;
 }
