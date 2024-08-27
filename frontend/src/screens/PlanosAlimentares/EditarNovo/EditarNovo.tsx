@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import {
   useCreatePlanoAlimentar,
+  useCreateRefeicao,
   useUpdatePlanoAlimentar
 } from '../../../hooks';
 import RefeicaoForm from './RefeicaoForm';
@@ -12,7 +13,6 @@ import RefeicaoCard from './RefeicaoCard';
 import { useAlert } from '../../../components/CustomAlert';
 
 interface FormData {
-  nome: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -24,7 +24,6 @@ interface FormData {
 }
 
 interface FormErrors {
-  nome?: string;
   metaConsumoKcal?: string;
   totalConsumoKcal?: string;
   metaConsumoCarboidrato?: string;
@@ -63,7 +62,6 @@ export default function EditarNovo() {
   const navigate = useNavigate();
 
   const planoAlimentarData = location.state?.planoalimentar || {
-    nome: '',
     totalConsumoCarboidrato: 0,
     totalConsumoProteina: 0,
     totalConsumoGordura: 0,
@@ -78,7 +76,6 @@ export default function EditarNovo() {
   const [formData, setFormData] = useState<
     FormData & { refeicoes: Refeicao[] }
   >({
-    nome: planoAlimentarData?.nome || '',
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
@@ -91,7 +88,9 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedRefeicoes, setSelectedRefeicoes] = useState<Refeicao[]>([]);
+  const [selectedRefeicoes, setSelectedRefeicoes] = useState<Refeicao[]>(
+    formData?.refeicoes || []
+  );
 
   const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
   const [newRefeicao, setNewRefeicao] = useState<Refeicao>({
@@ -111,6 +110,16 @@ export default function EditarNovo() {
     onError: (error) => {
       console.error('Erro ao criar plano alimentar:', error.message);
       showAlert('error', 'Erro ao criar plano alimentar. Tente novamente.');
+    }
+  });
+
+  const { mutate: mutateCreateRefeicao } = useCreateRefeicao({
+    onSuccess: () => {
+      showAlert('success', 'Refeição criada com sucesso!');
+    },
+    onError: (error) => {
+      console.error('Erro ao criar refeição:', error.message);
+      showAlert('error', 'Erro ao criar refeição. Tente novamente.');
     }
   });
 
@@ -136,14 +145,17 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      formData.refeicoes = selectedRefeicoes;
-
       if (id) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { refeicoes, ...resto } = formData;
+
         return updatePlanoAlimentar({
           id: Number(id),
-          planoalimentar: formData
+          planoalimentar: resto
         });
       } else {
+        formData.refeicoes = selectedRefeicoes;
+
         return createPlanoAlimentar(formData);
       }
     },
@@ -176,8 +188,11 @@ export default function EditarNovo() {
   };
 
   const handleSaveRefeicao = () => {
+    if (id) {
+      mutateCreateRefeicao({ ...newRefeicao, planoAlimentarId: Number(id) });
+    }
+
     setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
-    showAlert('success', 'Refeição adicionada com sucesso!');
     setOpenAddRefeicaoModal(false);
     setNewRefeicao({
       alimento: '',
@@ -274,8 +289,8 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid container spacing={2}>
-            {selectedRefeicoes.map((refeicao: Refeicao) => (
-              <Grid item xs={4} key={refeicao.alimento}>
+            {selectedRefeicoes.map((refeicao: Refeicao, index: number) => (
+              <Grid item xs={4} key={index}>
                 <RefeicaoCard refeicao={refeicao} />
               </Grid>
             ))}

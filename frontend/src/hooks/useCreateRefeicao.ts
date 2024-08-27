@@ -7,9 +7,22 @@ interface UseCreateRefeicaoProps {
   onError: (error: Error) => void;
 }
 
-interface SelectTest {
-  id: string;
-  [key: string]: string | number;
+interface Refeicao {
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: TipoRefeicao;
+  planoAlimentarId?: number;
+}
+
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
 }
 
 export default function useCreateRefeicao({
@@ -17,7 +30,7 @@ export default function useCreateRefeicao({
   onError
 }: UseCreateRefeicaoProps) {
   return useMutation({
-    mutationFn: async (refeicao: SelectTest) => {
+    mutationFn: async (refeicao: Refeicao) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {

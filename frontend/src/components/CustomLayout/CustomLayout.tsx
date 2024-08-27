@@ -7,7 +7,7 @@ import CustomDrawer from '../CustomDrawer';
 import { ReactNode } from 'react';
 
 interface LayoutProps {
-  appBarText: string;
+  appBarText?: string;
   children: ReactNode;
 }
 
@@ -31,18 +31,22 @@ export default function CustomLayout({ appBarText, children }: LayoutProps) {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
 
-        <CustomAppBar
-          open={open}
-          appBarText={appBarText.toUpperCase()}
-          toggleDrawer={toggleDrawer}
-          drawerWidth={drawerWidth}
-        />
+        {appBarText && (
+          <div>
+            <CustomAppBar
+              open={open}
+              appBarText={appBarText.toUpperCase()}
+              toggleDrawer={toggleDrawer}
+              drawerWidth={drawerWidth}
+            />
 
-        <CustomDrawer
-          open={open}
-          toggleDrawer={toggleDrawer}
-          drawerWidth={drawerWidth}
-        />
+            <CustomDrawer
+              open={open}
+              toggleDrawer={toggleDrawer}
+              drawerWidth={drawerWidth}
+            />
+          </div>
+        )}
 
         <Box
           component="main"

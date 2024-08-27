@@ -83,7 +83,7 @@ export default function Treinos() {
       refetchTreino();
       location.state.isSuccess = '';
     }
-  });
+  }, [location.state, refetchTreino]);
 
   return (
     <CustomLayout appBarText="Treinos">
@@ -107,8 +107,8 @@ export default function Treinos() {
             </Box>
           </Grid>
         ) : isSuccess && treinos && treinos.length > 0 ? (
-          treinos.map((treino: Treino) => (
-            <Grid item xs={12} md={8} lg={4} key={treino.id}>
+          treinos.map((treino: Treino, index: number) => (
+            <Grid item xs={12} md={8} lg={4} key={index}>
               <CustomCard
                 title={treino.nome}
                 items={[

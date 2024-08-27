@@ -9,6 +9,7 @@ import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
 import useCreateRefeicao from './useCreateRefeicao';
 import useCreateExercicio from './useCreateExercicio';
 import useRefeicoes from './useRefeicoes';
+import useCreateUsuario from './useCreateUsuario';
 
 export {
   useTreinos,
@@ -21,5 +22,6 @@ export {
   useUpdatePlanoAlimentar,
   useCreateRefeicao,
   useCreateExercicio,
-  useRefeicoes
+  useRefeicoes,
+  useCreateUsuario
 };

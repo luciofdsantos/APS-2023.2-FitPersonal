@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import {
   Avatar,
   Box,
   Button,
-  Container,
   CssBaseline,
   Grid,
+  Container,
   Paper,
   Link,
   TextField,
@@ -15,10 +15,12 @@ import {
   InputLabel,
   FormControl
 } from '@mui/material';
+import { useAlert } from '../../components/CustomAlert';
 import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Copyright from '../../components/Copyright';
+import useCreateUsuario from '../../hooks/useCreateUsuario';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   marginTop: theme.spacing(8),
@@ -41,39 +43,87 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2)
 }));
 
-export default function CadastroUsuario() {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [tipoUsuario, setTipoUsuario] = useState('');
-  const [registroProfissional, setRegistroProfissional] = useState('');
-  const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
-  const [helperText, setHelperText] = useState('');
-  const [error, setError] = useState(false);
+interface Usuario {
+  email: string;
+  nome: string;
+  senha: string;
+  sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
+  tipo_usuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
+  registro_profissional: string | null;
+}
 
+export default function CadastroUsuario() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
 
+  const [nome, setNome] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [senha, setSenha] = useState<string>('');
+  const [tipoSexo, setTipoSexo] = useState<'FEMININO' | 'MASCULINO' | 'OUTRO'>(
+    'OUTRO'
+  );
+  const [tipoUsuario, setTipoUsuario] = useState<
+    'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL'
+  >('ALUNO');
+  const [registroProfissional, setRegistroProfissional] = useState<string>('');
+  const [botaoDesabilitado, setBotaoDesabilitado] = useState<boolean>(true);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { mutate: createUsuario } = useCreateUsuario({
+    onSuccess: () => {
+      showAlert('success', 'Conta criada com sucesso!');
+      navigate('/');
+    },
+    onError: (error) => {
+      showAlert('error', `Erro ao criar conta: ${error.message}`);
+      console.error('Erro ao criar conta:', error.message);
+    }
+  });
+
   useEffect(() => {
-    if (
+    const isFormValid =
       nome.trim() &&
       email.trim() &&
       senha.trim() &&
       tipoUsuario &&
-      ((tipoUsuario !== 'personal' && tipoUsuario !== 'nutricionista') ||
-        registroProfissional.trim())
+      (tipoUsuario === 'ALUNO' || registroProfissional.trim());
+
+    setBotaoDesabilitado(!isFormValid);
+  }, [nome, email, senha, tipoSexo, tipoUsuario, registroProfissional]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const validationErrors: Record<string, string> = {};
+    if (!nome.trim()) validationErrors.nome = 'Nome é obrigatório';
+    if (!email.trim()) validationErrors.email = 'Email é obrigatório';
+    if (!senha.trim()) validationErrors.senha = 'Senha é obrigatória';
+    if (!tipoSexo) validationErrors.sexo = 'Sexo é obrigatório';
+    if (!tipoUsuario)
+      validationErrors.tipoUsuario = 'Tipo de usuário é obrigatório';
+    if (
+      (tipoUsuario === 'NUTRICIONISTA' || tipoUsuario === 'PERSONAL') &&
+      !registroProfissional.trim()
     ) {
-      setBotaoDesabilitado(false);
-    } else {
-      setBotaoDesabilitado(true);
+      validationErrors.registroProfissional =
+        'Registro profissional é obrigatório';
     }
-  }, [nome, email, senha, tipoUsuario, registroProfissional]);
 
-  const validaCadastro = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
-    setError(false);
-    setHelperText('Conta criada com sucesso!');
-    navigate('/');
+    const usuario: Usuario = {
+      email,
+      nome,
+      senha,
+      sexo: tipoSexo,
+      tipo_usuario: tipoUsuario,
+      registro_profissional: registroProfissional || null
+    };
+
+    createUsuario(usuario);
   };
 
   return (
@@ -83,12 +133,11 @@ export default function CadastroUsuario() {
         <StyledAvatar>
           <LockOutlinedIcon />
         </StyledAvatar>
-
         <Typography component="h1" variant="h5">
           Cadastro de Usuário
         </Typography>
 
-        <StyledForm noValidate onSubmit={validaCadastro}>
+        <StyledForm noValidate autoComplete="off" onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -101,8 +150,8 @@ export default function CadastroUsuario() {
             autoFocus
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            error={error}
-            helperText={helperText}
+            error={!!errors.nome}
+            helperText={errors.nome}
           />
 
           <TextField
@@ -116,8 +165,8 @@ export default function CadastroUsuario() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            error={error}
-            helperText={helperText}
+            error={!!errors.email}
+            helperText={errors.email}
           />
 
           <TextField
@@ -125,16 +174,39 @@ export default function CadastroUsuario() {
             margin="normal"
             required
             fullWidth
-            name="password"
+            name="senha"
             label="Senha"
             type="password"
             id="senha"
             autoComplete="new-password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            error={error}
-            helperText={helperText}
+            error={!!errors.senha}
+            helperText={errors.senha}
           />
+
+          <FormControl fullWidth variant="outlined" margin="normal" required>
+            <InputLabel id="sexo-label">Sexo</InputLabel>
+            <Select
+              labelId="sexo-label"
+              id="sexo"
+              value={tipoSexo}
+              onChange={(e) =>
+                setTipoSexo(
+                  e.target.value as 'FEMININO' | 'MASCULINO' | 'OUTRO'
+                )
+              }
+              label="Sexo"
+              error={!!errors.sexo}
+            >
+              <MenuItem value="FEMININO">Feminino</MenuItem>
+              <MenuItem value="MASCULINO">Masculino</MenuItem>
+              <MenuItem value="OUTRO">Prefiro não dizer</MenuItem>
+            </Select>
+            {errors.sexo && (
+              <Typography color="error">{errors.sexo}</Typography>
+            )}
+          </FormControl>
 
           <FormControl fullWidth variant="outlined" margin="normal" required>
             <InputLabel id="tipo-usuario-label">Tipo de Usuário</InputLabel>
@@ -142,21 +214,27 @@ export default function CadastroUsuario() {
               labelId="tipo-usuario-label"
               id="tipo-usuario"
               value={tipoUsuario}
-              onChange={(e) => setTipoUsuario(e.target.value as string)}
+              onChange={(e) =>
+                setTipoUsuario(
+                  e.target.value as 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL'
+                )
+              }
               label="Tipo de Usuário"
-              error={error}
+              error={!!errors.tipoUsuario}
             >
-              <MenuItem value="comum">Usuário Comum</MenuItem>
-              <MenuItem value="personal">Personal</MenuItem>
-              <MenuItem value="nutricionista">Nutricionista</MenuItem>
+              <MenuItem value="ALUNO">Aluno</MenuItem>
+              <MenuItem value="NUTRICIONISTA">Nutricionista</MenuItem>
+              <MenuItem value="PERSONAL">Personal</MenuItem>
             </Select>
+            {errors.tipoUsuario && (
+              <Typography color="error">{errors.tipoUsuario}</Typography>
+            )}
           </FormControl>
 
-          {(tipoUsuario === 'personal' || tipoUsuario === 'nutricionista') && (
+          {(tipoUsuario === 'NUTRICIONISTA' || tipoUsuario === 'PERSONAL') && (
             <TextField
               variant="outlined"
               margin="normal"
-              required
               fullWidth
               id="registro-profissional"
               label="Registro Profissional"
@@ -164,8 +242,8 @@ export default function CadastroUsuario() {
               autoComplete="registro-profissional"
               value={registroProfissional}
               onChange={(e) => setRegistroProfissional(e.target.value)}
-              error={error}
-              helperText={helperText}
+              error={!!errors.registroProfissional}
+              helperText={errors.registroProfissional}
             />
           )}
 
@@ -176,7 +254,7 @@ export default function CadastroUsuario() {
             color="primary"
             disabled={botaoDesabilitado}
           >
-            Cadastrar
+            <LockOutlinedIcon /> Criar conta
           </StyledButton>
         </StyledForm>
       </StyledPaper>

@@ -218,7 +218,7 @@ export default function EditarNovo() {
           </Grid>
 
           <Grid container spacing={2}>
-            {selectedExercicios.map((exercicio: Exercicio, index) => (
+            {selectedExercicios.map((exercicio: Exercicio, index: number) => (
               <Grid item xs={4} key={index}>
                 <ExercicioCard exercicio={exercicio} />
               </Grid>

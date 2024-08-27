@@ -4,7 +4,6 @@ const planoAlimentarEndpoint = 'http://localhost:8080/api/planoalimentar';
 const refeicoesEndpoint = 'http://localhost:8080/api/refeicoes';
 
 interface FormData {
-  nome: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;

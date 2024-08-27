@@ -157,8 +157,8 @@ export default function RefeicaoForm({
               onChange={handleTipoRefeicaoChange}
               label="Tipo de Refeição"
             >
-              {tipoRefeicaoOptions.map((option) => (
-                <MenuItem key={option} value={option}>
+              {tipoRefeicaoOptions.map((option, index) => (
+                <MenuItem key={index} value={option}>
                   {option.replace(/_/g, ' ')}
                 </MenuItem>
               ))}
