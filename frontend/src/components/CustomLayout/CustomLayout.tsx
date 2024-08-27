@@ -4,13 +4,14 @@ import { Box, Container, CssBaseline, Toolbar } from '@mui/material';
 import Copyright from '../Copyright';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
-import { TypeLayout } from 'src/types';
+import { ReactNode } from 'react';
 
-export default function CustomLayout({
-  appBarText,
-  items,
-  children
-}: TypeLayout.LayoutProps) {
+interface LayoutProps {
+  appBarText?: string;
+  children: ReactNode;
+}
+
+export default function CustomLayout({ appBarText, children }: LayoutProps) {
   const drawerWidth = 240;
 
   const [open, setOpen] = useState<boolean>(true);
@@ -30,19 +31,22 @@ export default function CustomLayout({
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
 
-        <CustomAppBar
-          open={open}
-          appBarText={appBarText.toUpperCase()}
-          toggleDrawer={toggleDrawer}
-          drawerWidth={drawerWidth}
-        />
+        {appBarText && (
+          <div>
+            <CustomAppBar
+              open={open}
+              appBarText={appBarText.toUpperCase()}
+              toggleDrawer={toggleDrawer}
+              drawerWidth={drawerWidth}
+            />
 
-        <CustomDrawer
-          open={open}
-          toggleDrawer={toggleDrawer}
-          items={items}
-          drawerWidth={drawerWidth}
-        />
+            <CustomDrawer
+              open={open}
+              toggleDrawer={toggleDrawer}
+              drawerWidth={drawerWidth}
+            />
+          </div>
+        )}
 
         <Box
           component="main"

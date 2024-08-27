@@ -1,22 +1,45 @@
-import { useState } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { useState, useEffect } from 'react';
 import {
   GroupButtons,
   CustomCard,
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
-import Dashboard from '@mui/icons-material/Dashboard';
-import Grid from '@mui/material/Grid';
-import { CircularProgress, Box } from '@mui/material';
-import { TypePlanosAlimentares } from 'src/types';
-import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../../components/CustomAlert';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { CircularProgress, Box, Grid } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 
-const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+interface Refeicao {
+  id?: number;
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: string;
+}
+
+interface PlanoAlimentar {
+  id: number;
+  nome?: string;
+  metaConsumoKcal: number;
+  totalConsumoKcal: number;
+  metaConsumoCarboidrato: number;
+  totalConsumoCarboidrato: number;
+  metaConsumoProteina: number;
+  totalConsumoProteina: number;
+  metaConsumoGordura: number;
+  totalConsumoGordura: number;
+  refeicoes: Refeicao[];
+}
 
 export default function PlanosAlimentares() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedPlanoAlimentarId, setSelectedPlanoAlimentarId] = useState<
@@ -25,12 +48,16 @@ export default function PlanosAlimentares() {
 
   const {
     data: planoalimentar,
+    refetch: refetchPlanoAlimentar,
     isSuccess,
     isFetching
   } = usePlanosAlimentares();
+
   const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
     onSuccess: () => {
       setOpenDeleteDialog(false);
+      refetchPlanoAlimentar();
+      showAlert('success', 'Plano alimentar excluido com sucesso!');
       setSelectedPlanoAlimentarId(null);
     },
     onError: (error) => {
@@ -54,21 +81,28 @@ export default function PlanosAlimentares() {
     }
   };
 
-  const handleEdit = (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => {
-    navigate(`/editar-plano-alimentar/${planoalimentar.id}`, {
+  const handleEdit = (planoalimentar: PlanoAlimentar) => {
+    navigate(`/planos-alimentares/${planoalimentar.id}`, {
       state: { planoalimentar }
     });
   };
 
+  useEffect(() => {
+    if (location.state?.isSuccessPlanoAlimentar) {
+      refetchPlanoAlimentar();
+      location.state.isSuccessPlanoAlimentar = false;
+    }
+  }, [location.state, refetchPlanoAlimentar]);
+
   return (
-    <CustomLayout appBarText="Planos Alimentares" items={items}>
+    <CustomLayout appBarText="Planos Alimentares">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
               {
                 text: 'Novo Plano Alimentar',
-                href: '/novo-plano-alimentar/novo'
+                href: '/planos-alimentares/novo'
               }
             ]}
           />
@@ -87,8 +121,8 @@ export default function PlanosAlimentares() {
           </Grid>
         ) : isSuccess && planoalimentar && planoalimentar.length > 0 ? (
           planoalimentar.map(
-            (planoalimentar: TypePlanosAlimentares.PlanoAlimentar) => (
-              <Grid item xs={12} md={8} lg={4} key={planoalimentar.id}>
+            (planoalimentar: PlanoAlimentar, index: number) => (
+              <Grid item xs={12} key={index}>
                 <CustomCard
                   title={`Plano Alimentar ${planoalimentar.id}`}
                   items={[
@@ -172,7 +206,7 @@ export default function PlanosAlimentares() {
                   buttons={[
                     {
                       startIcon: <EditIcon />,
-                      href: `/editar-plano-alimentar/${planoalimentar.id}`,
+                      href: `/planos-alimentares/${planoalimentar.id}`,
                       onClick: () => handleEdit(planoalimentar),
                       backgroundColor: 'transparent',
                       iconColor: '#6842FF',

@@ -1,30 +1,54 @@
-import { useState } from 'react';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
 import {
   GroupButtons,
   CustomCard,
   CustomLayout,
   ConfirmationDialog
 } from '../../components';
-import Dashboard from '@mui/icons-material/Dashboard';
-import Grid from '@mui/material/Grid';
-import { CircularProgress, Box } from '@mui/material';
-import { TypeTreinos } from 'src/types';
-import { useNavigate } from 'react-router-dom';
+import { useAlert } from '../../components/CustomAlert';
+import { Grid, CircularProgress, Box } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 
-const items = [{ text: 'Dashboard', Icon: Dashboard, path: '/' }];
+interface Exercicio {
+  nome: string;
+  inicio: string;
+  fim: string;
+  grupoMuscular: string;
+  series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+}
+
+interface Treino {
+  id: number;
+  nome: string;
+  descricao: string;
+  exercicios: Exercicio[];
+}
 
 export default function Treinos() {
+  const { showAlert } = useAlert();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
 
-  const { data: treinos, isSuccess, isFetching } = useTreinos();
+  const {
+    data: treinos,
+    refetch: refetchTreino,
+    isSuccess,
+    isFetching
+  } = useTreinos();
+
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
       setOpenDeleteDialog(false);
+      refetchTreino();
+      showAlert('success', 'Treino excluido com sucesso!');
       setSelectedTreinoId(null);
     },
     onError: (error) => {
@@ -48,18 +72,25 @@ export default function Treinos() {
     }
   };
 
-  const handleEdit = (treino: TypeTreinos.Treino) => {
-    navigate(`/editar-treino/${treino.id}`, {
+  const handleEdit = (treino: Treino) => {
+    navigate(`/treinos/${treino.id}`, {
       state: { treino }
     });
   };
 
+  useEffect(() => {
+    if (location.state?.isSuccessTreino) {
+      refetchTreino();
+      location.state.isSuccessTreino = false;
+    }
+  }, [location.state, refetchTreino]);
+
   return (
-    <CustomLayout appBarText="Treinos" items={items}>
+    <CustomLayout appBarText="Treinos">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Novo Treino', href: '/novo-treino/novo' }]}
+            buttons={[{ text: 'Novo Treino', href: '/treinos/novo' }]}
           />
         </Grid>
 
@@ -76,8 +107,8 @@ export default function Treinos() {
             </Box>
           </Grid>
         ) : isSuccess && treinos && treinos.length > 0 ? (
-          treinos.map((treino: TypeTreinos.Treino) => (
-            <Grid item xs={12} md={8} lg={4} key={treino.id}>
+          treinos.map((treino: Treino, index: number) => (
+            <Grid item xs={12} md={8} lg={4} key={index}>
               <CustomCard
                 title={treino.nome}
                 items={[
@@ -94,7 +125,7 @@ export default function Treinos() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    href: `/editar-treino/${treino.id}`,
+                    href: `/treinos/${treino.id}`,
                     onClick: () => handleEdit(treino),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',

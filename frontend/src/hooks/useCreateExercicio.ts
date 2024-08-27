@@ -1,16 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://localhost:8080/api/treinos/addTreino';
-
-interface FormData {
-  nome: string;
-  descricao: string;
-}
-
-interface CreateTreinoProps {
-  onSuccess: () => void;
-  onError: (error: Error) => void;
-}
+const endpoint = 'http://localhost:8080/api/exercicios';
 
 interface Exercicio {
   nome: string;
@@ -21,25 +11,29 @@ interface Exercicio {
   repeticoes: number;
   carga: number;
   finalizado: boolean;
-  treinoId: number;
 }
 
-export default function useCreateTreino({
+interface UseCreateExercicioProps {
+  onSuccess: (data: Exercicio) => void;
+  onError: (error: Error) => void;
+}
+
+export default function useCreateExercicio({
   onSuccess,
   onError
-}: CreateTreinoProps) {
+}: UseCreateExercicioProps) {
   return useMutation({
-    mutationFn: async (treino: FormData & { exercicios: Exercicio[] }) => {
+    mutationFn: async (Exercicio: Exercicio) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(treino)
+        body: JSON.stringify(Exercicio)
       });
       if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(`Erro ao criar treino: ${errorMessage}`);
+        throw new Error(`Erro ao adicionar exercício: ${errorMessage}`);
       }
       return response.json();
     },

@@ -1,22 +1,23 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://92.113.32.219:8080/api/treinos';
+const endpoint = 'http://localhost:8080/api/treinos';
 
 interface FormData {
   nome: string;
   descricao: string;
 }
 
-interface SelectOptionType {
-  id?: string | number;
+interface Exercicio {
+  id?: number;
   nome: string;
-  carga: number;
-  fim: string;
-  finalizado: boolean;
-  grupoMuscular: string;
   inicio: string;
-  repeticoes: number;
+  fim: string;
+  grupoMuscular: string;
   series: number;
+  repeticoes: number;
+  carga: number;
+  finalizado: boolean;
+  treinoId: number;
 }
 
 interface UseUpdateTreinoProps {
@@ -34,14 +35,22 @@ export default function useUpdateTreino({
       treino
     }: {
       id: number;
-      treino: FormData & { exercicios: SelectOptionType[] };
+      treino: FormData & { exercicios: Exercicio[] };
     }) => {
+      const treinoAtualizado = {
+        ...treino,
+        exercicios: treino.exercicios.map(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ({ id: _, ...exercicio }) => exercicio
+        )
+      };
+
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(treino)
+        body: JSON.stringify(treinoAtualizado)
       });
       if (!response.ok) {
         const errorMessage = await response.text();

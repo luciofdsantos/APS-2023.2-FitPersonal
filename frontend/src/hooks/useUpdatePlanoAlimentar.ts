@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://92.113.32.219:8080/api/planoalimentar';
+const endpoint = 'http://localhost:8080/api/planoalimentar';
 
 interface FormData {
-  nome?: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -13,17 +12,6 @@ interface FormData {
   metaConsumoGordura: number;
   totalConsumoGordura: number;
 }
-
-export type SelectOptionType = {
-  id?: string | number;
-  alimento: string;
-  quantidade: number;
-  kcal: number;
-  carboidrato: number;
-  proteina: number;
-  gordura: number;
-  tipoRefeicao: string;
-};
 
 interface UseUpdatePlanoAlimentarProps {
   onSuccess: () => void;
@@ -40,7 +28,7 @@ export default function useUpdatePlanoAlimentar({
       planoalimentar
     }: {
       id: number;
-      planoalimentar: FormData & { refeicoes: SelectOptionType[] };
+      planoalimentar: FormData;
     }) => {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',

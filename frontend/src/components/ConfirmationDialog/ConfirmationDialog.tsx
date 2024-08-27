@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -17,7 +16,7 @@ interface ConfirmationDialogProps {
   cancelText?: string;
 }
 
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+export default function ConfirmationDialog({
   open,
   onClose,
   onConfirm,
@@ -25,23 +24,19 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   message,
   confirmText = 'Confirmar',
   cancelText = 'Cancelar'
-}) => {
+}: ConfirmationDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <p>{message}</p>
-      </DialogContent>
+      <DialogContent>{message}</DialogContent>
       <DialogActions>
         <GroupButtons
           buttons={[
-            { text: cancelText, onClick: onClose },
-            { text: confirmText, onClick: onConfirm }
+            { text: confirmText, onClick: onConfirm },
+            { text: cancelText, onClick: onClose }
           ]}
         />
       </DialogActions>
     </Dialog>
   );
-};
-
-export default ConfirmationDialog;
+}

@@ -16,32 +16,27 @@ public class ExercicioController {
     @Autowired
     private ExercicioService exercicioService;
 
-
     @GetMapping
-    public List<Exercicio> getAllExercicios(){
+    public List<Exercicio> getAllExercicios() {
         return exercicioService.getAllExercicios();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Exercicio> findById(@PathVariable Long id){
+    public ResponseEntity<Exercicio> findById(@PathVariable Long id) {
         Optional<Exercicio> exercicio = exercicioService.findbyId(id);
 
-        if(exercicio.isPresent()){
+        if (exercicio.isPresent()) {
             return ResponseEntity.ok(exercicio.get());
-        }else{
+        } else {
             return ResponseEntity.status(404).body(null);
         }
     }
 
-//    @PostMapping
-//    public Exercicio saveExercercicio(@PathVariable Exercicio exercicio){
-//        return exercicioService.saveExercicio(exercicio);
-//    }
-@PostMapping
-public ResponseEntity<Exercicio> saveExercicio(@RequestBody Exercicio exercicio) {
-    Exercicio savedExercicio = exercicioService.saveExercicio(exercicio);
-    return ResponseEntity.ok(savedExercicio);
-}
+    @PostMapping
+    public ResponseEntity<Exercicio> saveExercicio(@RequestBody Exercicio exercicio) {
+        Exercicio savedExercicio = exercicioService.saveExercicio(exercicio);
+        return ResponseEntity.ok(savedExercicio);
+    }
 
     @DeleteMapping("/{id}")
     @Transactional
@@ -51,9 +46,9 @@ public ResponseEntity<Exercicio> saveExercicio(@RequestBody Exercicio exercicio)
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Exercicio> updateExercicio(@PathVariable Long id, @RequestBody Exercicio exercicio){
+    public ResponseEntity<Exercicio> updateExercicio(@PathVariable Long id, @RequestBody Exercicio exercicio) {
         Exercicio updatedExercicio = exercicioService.updateExercicioById(id, exercicio);
-        if(updatedExercicio != null) {
+        if (updatedExercicio != null) {
             return ResponseEntity.ok(updatedExercicio);
         } else {
             return ResponseEntity.status(404).build();

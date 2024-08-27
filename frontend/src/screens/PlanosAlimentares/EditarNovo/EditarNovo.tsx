@@ -1,27 +1,18 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import {
-  AutoCompletePlanoAlimentar,
-  CustomLayout,
-  CustomModal
-} from '../../../components';
-import { Dashboard } from '@mui/icons-material';
+import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import { CustomLayout, CustomModal, GroupButtons } from '../../../components';
 import { Grid, TextField, Button } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
-// import apiRefeicoes from '../../../mocks/apiRefeicoes.json';
-import { TypeObject } from 'src/types';
 import {
   useCreatePlanoAlimentar,
-  useUpdatePlanoAlimentar,
   useCreateRefeicao,
-  useRefeicao
+  useUpdatePlanoAlimentar
 } from '../../../hooks';
-import { useParams } from 'react-router-dom';
-import { TypePlanosAlimentares } from 'src/types';
+import RefeicaoForm from './RefeicaoForm';
+import RefeicaoCard from './RefeicaoCard';
+import { useAlert } from '../../../components/CustomAlert';
 
 interface FormData {
-  id?: number;
-  nome: string;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -33,7 +24,6 @@ interface FormData {
 }
 
 interface FormErrors {
-  nome?: string;
   metaConsumoKcal?: string;
   totalConsumoKcal?: string;
   metaConsumoCarboidrato?: string;
@@ -45,15 +35,33 @@ interface FormErrors {
   refeicoes?: string;
 }
 
+interface Refeicao {
+  id?: number;
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: TipoRefeicao;
+}
+
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
+}
+
 export default function EditarNovo() {
+  const { showAlert } = useAlert();
+
   const { id } = useParams<{ id?: string }>();
-  const { data: refeicoes, isLoading, error } = useRefeicao();
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const planoAlimentarData = location.state?.planoalimentar || {
-    nome: '',
     totalConsumoCarboidrato: 0,
     totalConsumoProteina: 0,
     totalConsumoGordura: 0,
@@ -66,9 +74,8 @@ export default function EditarNovo() {
   };
 
   const [formData, setFormData] = useState<
-    FormData & { refeicoes: TypeObject.SelectTest[] }
+    FormData & { refeicoes: Refeicao[] }
   >({
-    nome: planoAlimentarData?.nome || '',
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
@@ -81,51 +88,49 @@ export default function EditarNovo() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [selectedRefeicoes, setSelectedRefeicoes] = useState<
-    TypePlanosAlimentares.SelectOptionType[]
-  >([]);
+  const [selectedRefeicoes, setSelectedRefeicoes] = useState<Refeicao[]>(
+    formData?.refeicoes || []
+  );
 
   const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
-  const [newRefeicao, setNewRefeicao] =
-    useState<TypePlanosAlimentares.SelectOptionType>({
-      alimento: '',
-      quantidade: 0,
-      kcal: 0,
-      carboidrato: 0,
-      proteina: 0,
-      gordura: 0,
-      tipoRefeicao: ''
-    });
+  const [newRefeicao, setNewRefeicao] = useState<Refeicao>({
+    alimento: '',
+    quantidade: 0,
+    kcal: 0,
+    carboidrato: 0,
+    proteina: 0,
+    gordura: 0,
+    tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
+  });
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
-      alert('Plano Alimentar criado com sucesso!');
+      showAlert('success', 'Plano Alimentar criado com sucesso!');
     },
     onError: (error) => {
       console.error('Erro ao criar plano alimentar:', error.message);
-      alert('Erro ao criar plano alimentar. Tente novamente.');
+      showAlert('error', 'Erro ao criar plano alimentar. Tente novamente.');
+    }
+  });
+
+  const { mutate: mutateCreateRefeicao } = useCreateRefeicao({
+    onSuccess: () => {
+      showAlert('success', 'Refeição criada com sucesso!');
+    },
+    onError: (error) => {
+      console.error('Erro ao criar refeição:', error.message);
+      showAlert('error', 'Erro ao criar refeição. Tente novamente.');
     }
   });
 
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
     onSuccess: () => {
-      alert('Plano atualizado com sucesso!');
+      showAlert('success', 'Plano atualizado com sucesso!');
       navigate('/planos-alimentares');
     },
     onError: (error) => {
+      showAlert('error', 'Erro ao atualizar plano alimentar. Tente novamente.');
       console.error('Erro ao atualizar plano alimentar:', error.message);
-      alert('Erro ao atualizar plano alimentar. Tente novamente.');
-    }
-  });
-
-  const { mutate: createRefeicao } = useCreateRefeicao({
-    onSuccess: () => {
-      alert('Refeição adicionada com sucesso!');
-      setOpenAddRefeicaoModal(false);
-    },
-    onError: (error) => {
-      console.error('Erro ao adicionar refeição:', error.message);
-      alert('Erro ao adicionar refeição. Tente novamente.');
     }
   });
 
@@ -140,41 +145,25 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      const filteredRefeicoes: TypePlanosAlimentares.Refeicao[] =
-        selectedRefeicoes.map(
-          ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          }) => ({
-            alimento,
-            quantidade,
-            kcal,
-            carboidrato,
-            proteina,
-            gordura,
-            tipoRefeicao
-          })
-        );
-
-      const planoAlimentarData = { ...formData, refeicoes: filteredRefeicoes };
-
       if (id) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { refeicoes, ...resto } = formData;
+
         return updatePlanoAlimentar({
           id: Number(id),
-          planoalimentar: planoAlimentarData
+          planoalimentar: resto
         });
       } else {
-        return createPlanoAlimentar(planoAlimentarData);
+        formData.refeicoes = selectedRefeicoes;
+
+        return createPlanoAlimentar(formData);
       }
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/planos-alimentares');
+      navigate('/planos-alimentares', {
+        state: { isSuccessPlanoAlimentar: 'true' }
+      });
     },
     onError: (error: Error) => {
       console.error(error.message);
@@ -190,15 +179,37 @@ export default function EditarNovo() {
     }
   };
 
-  const handleChangeRefeicao = (
-    newValues: TypePlanosAlimentares.SelectOptionType[]
-  ) => {
-    setSelectedRefeicoes(newValues);
-
-    if (errors.refeicoes) {
-      setErrors((prevErrors) => ({ ...prevErrors, refeicoes: undefined }));
-    }
+  const handleAddRefeicao = () => {
+    setOpenAddRefeicaoModal(true);
   };
+
+  const handleCloseModal = () => {
+    setOpenAddRefeicaoModal(false);
+  };
+
+  const handleSaveRefeicao = useCallback(() => {
+    if (id) {
+      mutateCreateRefeicao({ ...newRefeicao, planoAlimentarId: Number(id) });
+    }
+
+    setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
+    setOpenAddRefeicaoModal(false);
+    setNewRefeicao({
+      alimento: '',
+      quantidade: 0,
+      kcal: 0,
+      carboidrato: 0,
+      proteina: 0,
+      gordura: 0,
+      tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
+    });
+  }, [
+    id,
+    mutateCreateRefeicao,
+    setSelectedRefeicoes,
+    newRefeicao,
+    selectedRefeicoes
+  ]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -227,41 +238,8 @@ export default function EditarNovo() {
     mutation.mutate();
   };
 
-  const handleAddRefeicao = () => {
-    setOpenAddRefeicaoModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenAddRefeicaoModal(false);
-  };
-
-  const handleSaveRefeicao = () => {
-    createRefeicao(newRefeicao);
-    setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
-    setNewRefeicao({
-      alimento: '',
-      quantidade: 0,
-      kcal: 0,
-      carboidrato: 0,
-      proteina: 0,
-      gordura: 0,
-      tipoRefeicao: ''
-    });
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
   return (
-    <CustomLayout
-      appBarText="Plano Alimentar"
-      items={[{ text: 'Dashboard', Icon: Dashboard, path: '/' }]}
-    >
+    <CustomLayout appBarText="Plano Alimentar">
       <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -316,27 +294,19 @@ export default function EditarNovo() {
             />
           </Grid>
 
-          <Grid item xs={12}>
-            <AutoCompletePlanoAlimentar
-              selectedValues={selectedRefeicoes}
-              onChange={handleChangeRefeicao}
-              error={errors.refeicoes}
-              options={refeicoes || []}
-            />
-            {errors.refeicoes && (
-              <div style={{ color: 'red' }}>{errors.refeicoes}</div>
-            )}
+          <Grid container spacing={2}>
+            {selectedRefeicoes.map((refeicao: Refeicao, index: number) => (
+              <Grid item xs={4} key={index}>
+                <RefeicaoCard refeicao={refeicao} />
+              </Grid>
+            ))}
           </Grid>
+
           <Grid item xs={12}>
             <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
           </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
-              Salvar
-            </Button>
-          </Grid>
 
-          {/* <Grid item xs={12}>
+          <Grid item xs={12}>
             <GroupButtons
               buttons={[
                 { text: 'Salvar', type: 'submit' },
@@ -346,112 +316,20 @@ export default function EditarNovo() {
                 }
               ]}
             />
-          </Grid> */}
+          </Grid>
         </Grid>
       </form>
+
       <CustomModal
         open={openAddRefeicaoModal}
         onClose={handleCloseModal}
         onSave={handleSaveRefeicao}
         title="Adicionar Nova Refeição"
       >
-        <form noValidate autoComplete="off">
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Alimento"
-                fullWidth
-                value={newRefeicao.alimento}
-                onChange={(e) =>
-                  setNewRefeicao({ ...newRefeicao, alimento: e.target.value })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Quantidade"
-                type="number"
-                fullWidth
-                value={newRefeicao.quantidade}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    quantidade: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Kcal"
-                type="number"
-                fullWidth
-                value={newRefeicao.kcal}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    kcal: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Carboidrato"
-                type="number"
-                fullWidth
-                value={newRefeicao.carboidrato}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    carboidrato: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Proteína"
-                type="number"
-                fullWidth
-                value={newRefeicao.proteina}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    proteina: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Gordura"
-                type="number"
-                fullWidth
-                value={newRefeicao.gordura}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    gordura: parseFloat(e.target.value)
-                  })
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Tipo de Refeição"
-                fullWidth
-                value={newRefeicao.tipoRefeicao}
-                onChange={(e) =>
-                  setNewRefeicao({
-                    ...newRefeicao,
-                    tipoRefeicao: e.target.value
-                  })
-                }
-              />
-            </Grid>
-          </Grid>
-        </form>
+        <RefeicaoForm
+          newRefeicao={newRefeicao}
+          setNewRefeicao={setNewRefeicao}
+        />
       </CustomModal>
     </CustomLayout>
   );

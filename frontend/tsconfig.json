@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "target": "esnext",
     "module": "esnext",
     "resolveJsonModule": true,
@@ -11,7 +11,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "paths": {
+      "components/*": ["src/components/*"]
+    }
   },
   "include": ["src", "./**/*.ts", "./**/*.tsx"],
   "exclude": ["node_modules", "build"]

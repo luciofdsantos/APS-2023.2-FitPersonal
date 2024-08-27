@@ -7,11 +7,22 @@ import {
   Toolbar
 } from '@mui/material';
 import ListItems from '../ListItems';
-import { TypeDrawer } from 'src/types';
+import { Dashboard, FitnessCenter, FoodBank } from '@mui/icons-material';
+
+interface DrawerProps {
+  open?: boolean;
+  drawerWidth: number;
+}
+
+interface CustomDrawerProps {
+  open: boolean;
+  drawerWidth: number;
+  toggleDrawer: () => void;
+}
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
-})<TypeDrawer.DrawerProps>(({ theme, open, drawerWidth }) => ({
+})<DrawerProps>(({ theme, open, drawerWidth }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -35,12 +46,17 @@ const Drawer = styled(MuiDrawer, {
   }
 }));
 
+const items = [
+  { text: 'Dashboard', Icon: Dashboard, path: '/dashboard' },
+  { text: 'Treinos', Icon: FitnessCenter, path: '/treinos' },
+  { text: 'Planos Alimentares', Icon: FoodBank, path: '/planos-alimentares' }
+];
+
 export default function CustomDrawer({
   open,
   drawerWidth,
-  toggleDrawer,
-  items
-}: TypeDrawer.CustomDrawerProps) {
+  toggleDrawer
+}: CustomDrawerProps) {
   return (
     <Drawer variant="permanent" drawerWidth={drawerWidth} open={open}>
       <Toolbar

@@ -1,21 +1,30 @@
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Box, TextField, Grid } from '@mui/material';
-import React from 'react';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button
+} from '@mui/material';
 
 interface CustomModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  onSave?: () => void; // Função opcional para salvar os dados
+  onSave?: () => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, children, onSave }) => {
+export default function CustomModal({
+  open,
+  onClose,
+  title,
+  children,
+  onSave
+}: CustomModalProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        {children}
-      </DialogContent>
+      <DialogContent>{children}</DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancelar
@@ -28,7 +37,4 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, title, childre
       </DialogActions>
     </Dialog>
   );
-};
-
-export default CustomModal;
-
+}

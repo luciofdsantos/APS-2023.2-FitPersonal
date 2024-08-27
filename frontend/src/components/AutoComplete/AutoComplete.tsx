@@ -1,23 +1,26 @@
-import React from 'react';
 import { Checkbox, TextField, Autocomplete } from '@mui/material';
 
-import { TypeObject } from 'src/types';
+interface SelectTest {
+  id: string;
+  [key: string]: string | number;
+}
 
 interface AutoCompleteProps {
   name: string;
   label: string;
-  options: TypeObject.SelectTest[];
-  optionLabel: keyof TypeObject.SelectTest;
-  values: TypeObject.SelectTest[];
-  setValue: (data: TypeObject.SelectTest[]) => void;
+  options: SelectTest[];
+  optionLabel: keyof SelectTest;
+  values: SelectTest[];
+  setValue: (data: SelectTest[]) => void;
   multiple?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
   variant?: 'outlined' | 'filled' | 'standard';
   error?: string;
+  selectedValues?: SelectTest[];
 }
 
-const AutoComplete: React.FC<AutoCompleteProps> = ({
+export default function AutoComplete({
   options,
   label,
   optionLabel,
@@ -28,10 +31,10 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   fullWidth = true,
   variant = 'outlined',
   error = ''
-}) => {
+}: AutoCompleteProps) {
   const handleChange = (
     event: React.SyntheticEvent,
-    newValue: TypeObject.SelectTest[] | TypeObject.SelectTest | null
+    newValue: SelectTest[] | SelectTest | null
   ) => {
     if (newValue === null) {
       setValue([]);
@@ -42,7 +45,7 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
   };
 
-  const filterOptions = (options: TypeObject.SelectTest[]) => {
+  const filterOptions = (options: SelectTest[]) => {
     if (multiple) {
       return options.filter(
         (option) => !values.some((value) => value.id === option.id)
@@ -83,6 +86,4 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
       disabled={disabled}
     />
   );
-};
-
-export default AutoComplete;
+}
