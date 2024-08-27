@@ -53,6 +53,8 @@ interface Usuario {
   registroProfissional: string | null;
 }
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function CadastroUsuario() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -116,7 +118,11 @@ export default function CadastroUsuario() {
     if (!nome.trim()) validationErrors.nome = 'Nome é obrigatório';
     if (!sobrenome.trim())
       validationErrors.sobrenome = 'Sobrenome é obrigatório';
-    if (!email.trim()) validationErrors.email = 'Email é obrigatório';
+    if (!email.trim()) {
+      validationErrors.email = 'Email é obrigatório';
+    } else if (!emailRegex.test(email)) {
+      validationErrors.email = 'Email inválido';
+    }
     if (!senha.trim()) validationErrors.senha = 'Senha é obrigatória';
     if (!tipoSexo) validationErrors.sexo = 'Sexo é obrigatório';
     if (!tipoUsuario)
@@ -145,6 +151,16 @@ export default function CadastroUsuario() {
     };
 
     createUsuario(usuario);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (errors.email) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: ''
+      }));
+    }
   };
 
   return (
@@ -201,7 +217,7 @@ export default function CadastroUsuario() {
             name="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             error={!!errors.email}
             helperText={errors.email}
           />
