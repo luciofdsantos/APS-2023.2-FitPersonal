@@ -7,8 +7,8 @@ interface Usuario {
   nome: string;
   senha: string;
   sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
-  tipo_usuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
-  registro_profissional: string | null;
+  tipoUsuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
+  registroProfissional: string | null;
 }
 
 interface UseCreateUsuarioProps {
@@ -21,13 +21,13 @@ export default function useCreateUsuario({
   onError
 }: UseCreateUsuarioProps) {
   return useMutation({
-    mutationFn: async (Usuario: Usuario) => {
+    mutationFn: async (usuario: Usuario) => {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(Usuario)
+        body: JSON.stringify(usuario)
       });
       if (!response.ok) {
         const errorMessage = await response.text();

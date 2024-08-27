@@ -46,10 +46,11 @@ const StyledButton = styled(Button)(({ theme }) => ({
 interface Usuario {
   email: string;
   nome: string;
+  sobrenome: string;
   senha: string;
   sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
-  tipo_usuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
-  registro_profissional: string | null;
+  tipoUsuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
+  registroProfissional: string | null;
 }
 
 export default function CadastroUsuario() {
@@ -57,6 +58,7 @@ export default function CadastroUsuario() {
   const navigate = useNavigate();
 
   const [nome, setNome] = useState<string>('');
+  const [sobrenome, setSobrenome] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [senha, setSenha] = useState<string>('');
   const [tipoSexo, setTipoSexo] = useState<'FEMININO' | 'MASCULINO' | 'OUTRO'>(
@@ -75,27 +77,45 @@ export default function CadastroUsuario() {
       navigate('/');
     },
     onError: (error) => {
-      showAlert('error', `Erro ao criar conta: ${error.message}`);
-      console.error('Erro ao criar conta:', error.message);
+      if (error.message.includes('Email já está em uso')) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: 'Email já está em uso'
+        }));
+      } else {
+        showAlert('error', `Erro ao criar conta: ${error.message}`);
+        console.error('Erro ao criar conta:', error.message);
+      }
     }
   });
 
   useEffect(() => {
     const isFormValid =
       nome.trim() &&
+      sobrenome.trim() &&
       email.trim() &&
       senha.trim() &&
       tipoUsuario &&
       (tipoUsuario === 'ALUNO' || registroProfissional.trim());
 
     setBotaoDesabilitado(!isFormValid);
-  }, [nome, email, senha, tipoSexo, tipoUsuario, registroProfissional]);
+  }, [
+    nome,
+    sobrenome,
+    email,
+    senha,
+    tipoSexo,
+    tipoUsuario,
+    registroProfissional
+  ]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors: Record<string, string> = {};
     if (!nome.trim()) validationErrors.nome = 'Nome é obrigatório';
+    if (!sobrenome.trim())
+      validationErrors.sobrenome = 'Sobrenome é obrigatório';
     if (!email.trim()) validationErrors.email = 'Email é obrigatório';
     if (!senha.trim()) validationErrors.senha = 'Senha é obrigatória';
     if (!tipoSexo) validationErrors.sexo = 'Sexo é obrigatório';
@@ -117,10 +137,11 @@ export default function CadastroUsuario() {
     const usuario: Usuario = {
       email,
       nome,
+      sobrenome,
       senha,
       sexo: tipoSexo,
-      tipo_usuario: tipoUsuario,
-      registro_profissional: registroProfissional || null
+      tipoUsuario: tipoUsuario,
+      registroProfissional: registroProfissional || null
     };
 
     createUsuario(usuario);
@@ -144,14 +165,30 @@ export default function CadastroUsuario() {
             required
             fullWidth
             id="nome"
-            label="Nome Completo"
+            label="Nome"
             name="nome"
-            autoComplete="name"
+            autoComplete="nome"
             autoFocus
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             error={!!errors.nome}
             helperText={errors.nome}
+          />
+
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="sobrenome"
+            label="Sobrenome"
+            name="sobrenome"
+            autoComplete="sobrenome"
+            autoFocus
+            value={sobrenome}
+            onChange={(e) => setSobrenome(e.target.value)}
+            error={!!errors.sobrenome}
+            helperText={errors.sobrenome}
           />
 
           <TextField
