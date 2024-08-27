@@ -23,8 +23,20 @@ public class UsuarioService {
 
     public Usuario createUsuario(UsuarioRequestDTO usuarioRequestDTO){
         Usuario usuario;
-        TipoUsuario tipoUsuario = TipoUsuario.valueOf(usuarioRequestDTO.getTipoUsuario().toUpperCase());
-        Sexo sexo = Sexo.valueOf(usuarioRequestDTO.getSexo().toUpperCase());
+        TipoUsuario tipoUsuario;
+        Sexo sexo;
+
+        if (usuarioRequestDTO.getTipoUsuario() != null) {
+            tipoUsuario = TipoUsuario.valueOf(usuarioRequestDTO.getTipoUsuario().toUpperCase());
+        } else {
+            throw new IllegalArgumentException("Tipo de usuário não pode ser nulo.");
+        }
+
+        if (usuarioRequestDTO.getSexo() != null) {
+            sexo = Sexo.valueOf(usuarioRequestDTO.getSexo().toUpperCase());
+        } else {
+            throw new IllegalArgumentException("Sexo não pode ser nulo.");
+        }
 
         switch (usuarioRequestDTO.getTipoUsuario().toUpperCase()){
             case "ALUNO":
