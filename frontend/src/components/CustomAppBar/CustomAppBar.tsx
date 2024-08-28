@@ -6,10 +6,10 @@ import {
   Typography
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import backgroundImage from '../../assets/images/bar.png';
 
 interface AppBarProps {
   open?: boolean;
+  appBarText: string;
   drawerWidth: number;
 }
 
@@ -20,12 +20,17 @@ interface CustomAppBarProps {
   drawerWidth: number;
 }
 
+const background = (type: string) => {
+  if (type === 'ROTINA DE TREINOS') return 'url("/treinos.png")';
+  return 'url("/legumes.png")';
+};
+
 const StyledAppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
+})<AppBarProps>(({ theme, open, drawerWidth, appBarText }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',
-  backgroundImage: `url(${backgroundImage})`,
+  backgroundImage: background(appBarText),
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   height: 200,
@@ -52,7 +57,12 @@ export default function CustomAppBar({
   drawerWidth
 }: CustomAppBarProps) {
   return (
-    <StyledAppBar position="absolute" open={open} drawerWidth={drawerWidth}>
+    <StyledAppBar
+      position="absolute"
+      open={open}
+      drawerWidth={drawerWidth}
+      appBarText={appBarText}
+    >
       <Toolbar
         sx={{
           height: '100%',
@@ -74,14 +84,15 @@ export default function CustomAppBar({
         </IconButton>
         <Typography
           component="h1"
-          variant="h6"
+          variant="h3"
           color="inherit"
           noWrap
           sx={{
             textAlign: 'center',
             flexGrow: 1,
             width: 'calc(100% - 72px)',
-            position: 'relative'
+            position: 'relative',
+            fontWeight: 'bold'
           }}
         >
           {appBarText}

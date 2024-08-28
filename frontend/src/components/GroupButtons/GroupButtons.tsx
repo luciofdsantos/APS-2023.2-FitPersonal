@@ -42,7 +42,8 @@ export default function GroupButtons({
           justifyContent: 'flex-end',
           alignItems: 'flex-end',
           pt: 2,
-          pb: 2
+          pb: 2,
+          gap: '1rem'
         }}
       >
         {buttons.map((button, index) => (
@@ -54,7 +55,6 @@ export default function GroupButtons({
             onClick={button.onClick}
             startIcon={button.startIcon}
             sx={{
-              ml: index > 0 ? 3 : 0,
               backgroundColor: button.backgroundColor || '#6842FF',
               color: button.iconColor || '#FFFFFF',
               boxShadow: boxShadow ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none',

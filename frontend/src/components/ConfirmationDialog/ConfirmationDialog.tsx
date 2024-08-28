@@ -27,7 +27,7 @@ export default function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>{title.toUpperCase()}</DialogTitle>
       <DialogContent>{message}</DialogContent>
       <DialogActions>
         <GroupButtons

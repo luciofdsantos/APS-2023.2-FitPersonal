@@ -90,7 +90,7 @@ export default function Treinos() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Novo Treino', href: '/treinos/novo' }]}
+            buttons={[{ text: 'Novo treino', href: '/treinos/novo' }]}
           />
         </Grid>
 
@@ -118,7 +118,6 @@ export default function Treinos() {
                   }
                 ]}
                 style={{
-                  backgroundColor: '#1F2229',
                   borderRadius: '16px',
                   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
                 }}

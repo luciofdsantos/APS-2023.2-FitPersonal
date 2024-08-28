@@ -36,7 +36,7 @@ export default function CustomCard({
     <Card
       sx={{
         ...style,
-        borderRadius: '16px'
+        borderRadius: '8px'
       }}
     >
       <CardContent
@@ -53,7 +53,8 @@ export default function CustomCard({
           sx={{
             color: '#6842FF',
             fontSize: '24px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            marginBottom: 0
           }}
         >
           {title}

@@ -20,7 +20,7 @@ export default function ExercicioCard({ exercicio }: ExercicioCardProps) {
     <Card>
       <CardContent>
         <Typography variant="h6" component="div">
-          {exercicio.nome}
+          {exercicio.nome.toUpperCase()}
         </Typography>
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12}>

@@ -1,32 +1,16 @@
 import { useState, useEffect } from 'react';
 import Copyright from '../../components/Copyright';
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  CssBaseline,
-  Link,
-  Grid,
-  Paper,
-  TextField,
-  Typography
-} from '@mui/material';
-import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  marginTop: theme.spacing(8),
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-}));
-
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  margin: theme.spacing(1),
-  backgroundColor: theme.palette.secondary.main
-}));
+import {
+  Content,
+  Aside,
+  Main,
+  MainContent,
+  ContentContainer,
+  HeaderContainer
+} from './style';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
@@ -34,7 +18,8 @@ const StyledForm = styled('form')(({ theme }) => ({
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  margin: theme.spacing(3, 0, 2)
+  margin: theme.spacing(3, 0, 2),
+  padding: theme.spacing(2, 0)
 }));
 
 export default function LoginUsuario() {
@@ -84,73 +69,77 @@ export default function LoginUsuario() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <StyledPaper>
-        <StyledAvatar>
-          <LockOutlinedIcon />
-        </StyledAvatar>
-
-        <Typography component="h1" variant="h5">
-          Área Reservada
-        </Typography>
-
-        <StyledForm noValidate onSubmit={validaLogin}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Endereço de Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={error}
-          />
-
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            error={error}
-            helperText={helperText}
-          />
-
-          <StyledButton
-            type="submit"
-            fullWidth
-            variant="contained"
+    <Main container>
+      <Aside item xs={5} sx={{ backgroundImage: `url('/entrar.png')` }} />
+      <Content item xs={12} md={7}>
+        <HeaderContainer>
+          <Typography variant="body2">Não possui uma conta?</Typography>
+          <Button
             color="primary"
-            disabled={botaoDesabilitado}
+            variant="text"
+            onClick={() => navigate('/cadastro')}
           >
-            <LockOutlinedIcon /> Acessar
-          </StyledButton>
-        </StyledForm>
-      </StyledPaper>
+            Cadastrar
+          </Button>
+        </HeaderContainer>
+        <MainContent>
+          <ContentContainer>
+            <Typography
+              component="h1"
+              variant="h4"
+              fontWeight="bold"
+              marginBottom={2}
+            >
+              ENTRAR
+            </Typography>
+            <StyledForm noValidate onSubmit={validaLogin}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Endereço de Email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={error}
+              />
 
-      <Grid container>
-        <Grid item xs />
-        <Grid item>
-          <Link href="/cadastro" variant="body2">
-            {'Ainda não tem uma conta?'}
-          </Link>
-        </Grid>
-      </Grid>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                error={error}
+                helperText={helperText}
+              />
 
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+              <StyledButton
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                disabled={botaoDesabilitado}
+              >
+                Entrar
+              </StyledButton>
+            </StyledForm>
+            <Box display="flex" justifyContent="center" width="100%">
+              <Copyright />
+            </Box>
+          </ContentContainer>
+        </MainContent>
+      </Content>
+    </Main>
   );
 }

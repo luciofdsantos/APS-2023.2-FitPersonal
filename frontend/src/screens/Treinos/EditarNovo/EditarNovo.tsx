@@ -190,8 +190,8 @@ export default function EditarNovo() {
   return (
     <CustomLayout appBarText="Treinos">
       <form onSubmit={handleSubmit} noValidate>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Grid container>
+          <Grid item xs={12} style={{ marginBottom: '1rem' }}>
             <TextField
               name="nome"
               label="Nome do treino *"
@@ -204,7 +204,7 @@ export default function EditarNovo() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ marginBottom: '1rem' }}>
             <TextField
               name="descricao"
               label="Descrição *"
@@ -225,15 +225,20 @@ export default function EditarNovo() {
             ))}
           </Grid>
 
-          <Grid item xs={12}>
-            <Button onClick={handleAddExercicio}>+ Adicionar exercício</Button>
+          <Grid item xs={12} sx={{ marginTop: '1rem' }}>
+            <Button onClick={handleAddExercicio} variant="contained">
+              + Adicionar exercício
+            </Button>
           </Grid>
 
           <Grid item xs={12}>
             <GroupButtons
               buttons={[
-                { text: 'Salvar', type: 'submit' },
-                { text: 'Cancelar', onClick: () => navigate('/treinos') }
+                {
+                  text: 'Cancelar',
+                  onClick: () => navigate('/treinos')
+                },
+                { text: 'Salvar', type: 'submit' }
               ]}
             />
           </Grid>
