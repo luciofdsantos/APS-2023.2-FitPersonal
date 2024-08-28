@@ -1,27 +1,29 @@
-import useTreinos from './useTreinos';
-import useDeleteTreino from './useDeleteTreino';
-import useCreateTreino from './useCreateTreino';
-import useUpdateTreino from './useUpdateTreino';
-import usePlanosAlimentares from './usePlanoAlimentar';
-import useDeletePlanoAlimentar from './useDeletePlanoAlimentar';
-import useCreatePlanoAlimentar from './useCreatePlanoAlimentar';
-import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
-import useCreateRefeicao from './useCreateRefeicao';
 import useCreateExercicio from './useCreateExercicio';
-import useRefeicoes from './useRefeicoes';
+import useCreatePlanoAlimentar from './useCreatePlanoAlimentar';
+import useCreateRefeicao from './useCreateRefeicao';
+import useCreateTreino from './useCreateTreino';
 import useCreateUsuario from './useCreateUsuario';
+import useDeletePlanoAlimentar from './useDeletePlanoAlimentar';
+import useDeleteTreino from './useDeleteTreino';
+import useLogin from './useLogin';
+import usePlanosAlimentares from './usePlanoAlimentar';
+import useRefeicoes from './useRefeicoes';
+import useTreinos from './useTreinos';
+import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
+import useUpdateTreino from './useUpdateTreino';
 
 export {
-  useTreinos,
-  useDeleteTreino,
-  useCreateTreino,
-  useUpdateTreino,
-  usePlanosAlimentares,
-  useDeletePlanoAlimentar,
-  useCreatePlanoAlimentar,
-  useUpdatePlanoAlimentar,
-  useCreateRefeicao,
   useCreateExercicio,
+  useCreatePlanoAlimentar,
+  useCreateRefeicao,
+  useCreateTreino,
+  useCreateUsuario,
+  useDeletePlanoAlimentar,
+  useDeleteTreino,
+  useLogin,
+  usePlanosAlimentares,
   useRefeicoes,
-  useCreateUsuario
+  useTreinos,
+  useUpdatePlanoAlimentar,
+  useUpdateTreino
 };

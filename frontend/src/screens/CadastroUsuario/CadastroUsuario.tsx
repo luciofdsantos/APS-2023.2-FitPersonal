@@ -13,7 +13,7 @@ import { useAlert } from '../../components/CustomAlert';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Copyright from '../../components/Copyright';
-import useCreateUsuario from '../../hooks/useCreateUsuario';
+import { useCreateUsuario } from '../../hooks';
 import {
   Content,
   Aside,
