@@ -23,14 +23,14 @@ export default function CustomModal({
 }: CustomModalProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle>{title.toUpperCase()}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} color="primary" sx={{ color: '#fff' }}>
           Cancelar
         </Button>
         {onSave && (
-          <Button onClick={onSave} color="primary">
+          <Button onClick={onSave} variant="contained">
             Salvar
           </Button>
         )}

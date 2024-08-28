@@ -24,6 +24,10 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
 })<DrawerProps>(({ theme, open, drawerWidth }) => ({
   '& .MuiDrawer-paper': {
+    backgroundImage: 'none',
+    backgroundColor: '#1F2229 !important',
+    boxShadow: 'none !important',
+    border: 'none',
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
@@ -63,10 +67,10 @@ export default function CustomDrawer({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end',
-          px: [1]
+          justifyContent: 'space-between'
         }}
       >
+        <img src="/logo.svg" alt="Logo Fitpersonal" />
         <IconButton onClick={toggleDrawer}>
           <ChevronLeftIcon />
         </IconButton>
