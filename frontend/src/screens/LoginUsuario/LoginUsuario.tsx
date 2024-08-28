@@ -43,16 +43,18 @@ export default function LoginUsuario() {
     }
   }, [email, senha]);
 
-  const { mutate: validaUsuario } = useLogin();
+  const { mutate: validaUsuario, isSuccess } = useLogin();
 
   const validaLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       await validaUsuario({ email, senha });
-      setError(false);
-      setHelperText('Login OK! Aguarde...');
-      navigate('/dashboard');
+      if (isSuccess) {
+        setError(false);
+        setHelperText('Login OK! Aguarde...');
+        navigate('/dashboard');
+      }
     } catch (error) {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
