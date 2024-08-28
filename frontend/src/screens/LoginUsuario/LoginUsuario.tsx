@@ -11,6 +11,8 @@ import {
   ContentContainer,
   HeaderContainer
 } from './style';
+import { useAlert } from '../../components/CustomAlert';
+import { useLogin } from '../../hooks';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
@@ -23,9 +25,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function LoginUsuario() {
+  const { showAlert } = useAlert();
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [lembrarUsuario, setLembrarUsuario] = useState(false);
   const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
@@ -40,31 +43,20 @@ export default function LoginUsuario() {
     }
   }, [email, senha]);
 
-  useEffect(() => {
-    document.title = 'Exemplo React - Área Reservada';
-    if (localStorage.getItem('usuario')) {
-      setLembrarUsuario(true);
-      // setEmail(localStorage.getItem('usuario'));
-    }
-  }, []);
+  const { mutate: validaUsuario } = useLogin();
 
-  useEffect(() => {
-    if (lembrarUsuario) {
-      localStorage.setItem('usuario', email);
-    } else {
-      localStorage.removeItem('usuario');
-    }
-  }, [lembrarUsuario, email]);
-
-  const validaLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const validaLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (email === 'alguem@email.com' && senha === '123senha') {
+
+    try {
+      await validaUsuario({ email, senha });
       setError(false);
       setHelperText('Login OK! Aguarde...');
       navigate('/dashboard');
-    } else {
+    } catch (error) {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
+      showAlert('error', 'Erro ao fazer login');
     }
   };
 
