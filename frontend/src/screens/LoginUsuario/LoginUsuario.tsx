@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Copyright from '../../components/Copyright';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -43,23 +43,23 @@ export default function LoginUsuario() {
     }
   }, [email, senha]);
 
-  const { mutate: validaUsuario, isSuccess } = useLogin();
-
-  const validaLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    try {
-      await validaUsuario({ email, senha });
-      if (isSuccess) {
-        setError(false);
-        setHelperText('Login OK! Aguarde...');
-        navigate('/dashboard');
-      }
-    } catch (error) {
+  const { mutate: validaUsuario, isPending } = useLogin({
+    onSuccess: () => {
+      setError(false);
+      navigate('/dashboard');
+    },
+    onError: (error: Error) => {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
       showAlert('error', 'Erro ao fazer login');
     }
+  });
+
+  const validaLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    await validaUsuario({ email, senha });
+
   };
 
   return (
@@ -100,6 +100,7 @@ export default function LoginUsuario() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 error={error}
+                disabled={isPending}
               />
 
               <TextField
@@ -116,6 +117,7 @@ export default function LoginUsuario() {
                 onChange={(e) => setSenha(e.target.value)}
                 error={error}
                 helperText={helperText}
+                disabled={isPending}
               />
 
               <StyledButton
@@ -123,9 +125,9 @@ export default function LoginUsuario() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                disabled={botaoDesabilitado}
+                disabled={botaoDesabilitado || isPending}
               >
-                Entrar
+                {isPending ? <CircularProgress size={24} /> : 'Entrar'}
               </StyledButton>
             </StyledForm>
             <Box display="flex" justifyContent="center" width="100%">

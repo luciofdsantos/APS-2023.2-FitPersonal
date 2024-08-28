@@ -7,7 +7,15 @@ interface Usuario {
   senha: string;
 }
 
-export default function useLogin() {
+interface UseLoginProps {
+  onSuccess: () => void;
+  onError: (error: Error) => void;
+}
+
+export default function useLogin({
+  onSuccess,
+  onError
+}: UseLoginProps) {
   return useMutation({
     mutationFn: async (Usuario: Usuario) => {
       const response = await fetch(endpoint, {
@@ -22,6 +30,8 @@ export default function useLogin() {
         throw new Error(`Erro ao fazer login: ${errorMessage}`);
       }
       return response.json();
-    }
+    },
+    onSuccess,
+    onError
   });
 }
