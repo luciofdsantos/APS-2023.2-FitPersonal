@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Copyright from '../../components/Copyright';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -11,6 +11,8 @@ import {
   ContentContainer,
   HeaderContainer
 } from './style';
+import { useAlert } from '../../components/CustomAlert';
+import { useLogin } from '../../hooks';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
@@ -23,9 +25,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function LoginUsuario() {
+  const { showAlert } = useAlert();
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [lembrarUsuario, setLembrarUsuario] = useState(false);
   const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
@@ -40,32 +43,23 @@ export default function LoginUsuario() {
     }
   }, [email, senha]);
 
-  useEffect(() => {
-    document.title = 'Exemplo React - Área Reservada';
-    if (localStorage.getItem('usuario')) {
-      setLembrarUsuario(true);
-      // setEmail(localStorage.getItem('usuario'));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (lembrarUsuario) {
-      localStorage.setItem('usuario', email);
-    } else {
-      localStorage.removeItem('usuario');
-    }
-  }, [lembrarUsuario, email]);
-
-  const validaLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (email === 'alguem@email.com' && senha === '123senha') {
+  const { mutate: validaUsuario, isPending } = useLogin({
+    onSuccess: () => {
       setError(false);
-      setHelperText('Login OK! Aguarde...');
       navigate('/dashboard');
-    } else {
+    },
+    onError: (error: Error) => {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
+      showAlert('error', 'Erro ao fazer login');
     }
+  });
+
+  const validaLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    await validaUsuario({ email, senha });
+
   };
 
   return (
@@ -106,6 +100,7 @@ export default function LoginUsuario() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 error={error}
+                disabled={isPending}
               />
 
               <TextField
@@ -122,6 +117,7 @@ export default function LoginUsuario() {
                 onChange={(e) => setSenha(e.target.value)}
                 error={error}
                 helperText={helperText}
+                disabled={isPending}
               />
 
               <StyledButton
@@ -129,9 +125,9 @@ export default function LoginUsuario() {
                 fullWidth
                 variant="contained"
                 color="primary"
-                disabled={botaoDesabilitado}
+                disabled={botaoDesabilitado || isPending}
               >
-                Entrar
+                {isPending ? <CircularProgress size={24} /> : 'Entrar'}
               </StyledButton>
             </StyledForm>
             <Box display="flex" justifyContent="center" width="100%">
