@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.refeicao;
 
+import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoRequestDTO;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
 import jakarta.persistence.*;

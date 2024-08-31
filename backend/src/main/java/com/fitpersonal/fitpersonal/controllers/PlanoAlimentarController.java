@@ -1,8 +1,8 @@
 package com.fitpersonal.fitpersonal.controllers;
 
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
-import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentarRequestDTO;
-import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentarResponseDTO;
+import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarRequestDTO;
+import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarResponseDTO;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 import com.fitpersonal.fitpersonal.repositories.PlanoAlimentarRepository;
 import com.fitpersonal.fitpersonal.repositories.RefeicaoRepository;

@@ -1,7 +1,6 @@
-package com.fitpersonal.fitpersonal.entities.refeicao;
+package com.fitpersonal.fitpersonal.entities.dtos;
 
 import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
-import lombok.NonNull;
 
 public record  RefeicaoRequestDTO (
         String alimento,

@@ -1,5 +1,6 @@
-package com.fitpersonal.fitpersonal.entities.refeicao;
+package com.fitpersonal.fitpersonal.entities.dtos;
 
+import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
 
 public record RefeicaoResponseDTO(

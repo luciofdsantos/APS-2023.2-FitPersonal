@@ -1,8 +1,4 @@
-package com.fitpersonal.fitpersonal.entities.planoalimentar;
-
-import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
-import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoRequestDTO;
-import lombok.NonNull;
+package com.fitpersonal.fitpersonal.entities.dtos;
 
 import java.util.List;
 

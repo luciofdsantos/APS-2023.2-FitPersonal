@@ -1,6 +1,6 @@
-package com.fitpersonal.fitpersonal.entities.planoalimentar;
+package com.fitpersonal.fitpersonal.entities.dtos;
 
-import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoResponseDTO;
+import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 
 import java.util.List;
 import java.util.stream.Collectors;

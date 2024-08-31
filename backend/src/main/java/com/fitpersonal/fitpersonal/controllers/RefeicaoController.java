@@ -1,9 +1,8 @@
 package com.fitpersonal.fitpersonal.controllers;
 
-import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
-import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoRequestDTO;
-import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoResponseDTO;
+import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoRequestDTO;
+import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoResponseDTO;
 import com.fitpersonal.fitpersonal.repositories.PlanoAlimentarRepository;
 import com.fitpersonal.fitpersonal.repositories.RefeicaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

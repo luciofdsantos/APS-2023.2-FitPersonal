@@ -1,7 +1,8 @@
 package com.fitpersonal.fitpersonal.entities.planoalimentar;
 
+import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarRequestDTO;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
-import com.fitpersonal.fitpersonal.entities.refeicao.RefeicaoRequestDTO;
+import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
