@@ -1,7 +1,13 @@
-import { Card, CardContent, Typography, Box } from '@mui/material';
-import GroupButtons from '../GroupButtons';
-import { SxProps, Theme } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  SxProps,
+  Theme
+} from '@mui/material';
 import { ReactNode } from 'react';
+import GroupButtons from '../GroupButtons';
 
 interface ButtonProps {
   text?: string;

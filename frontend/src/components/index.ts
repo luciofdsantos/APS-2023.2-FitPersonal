@@ -2,7 +2,6 @@ import AutoComplete from './AutoComplete';
 import ConfirmationDialog from './ConfirmationDialog';
 import Copyright from './Copyright';
 import CustomAppBar from './CustomAppBar';
-import CustomButton from './CustomButton';
 import CustomCard from './CustomCard';
 import CustomDrawer from './CustomDrawer';
 import CustomLayout from './CustomLayout';
@@ -17,7 +16,6 @@ export {
   ConfirmationDialog,
   Copyright,
   CustomAppBar,
-  CustomButton,
   CustomCard,
   CustomDrawer,
   CustomLayout,

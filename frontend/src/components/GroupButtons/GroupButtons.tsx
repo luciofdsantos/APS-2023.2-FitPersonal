@@ -1,5 +1,4 @@
-import { Button, Box } from '@mui/material';
-import { SxProps, Theme } from '@mui/material';
+import { Button, Box, SxProps, Theme } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface ButtonProps {

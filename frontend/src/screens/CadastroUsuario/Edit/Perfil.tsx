@@ -1,10 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomLayout, GroupButtons } from '../../../components';
 import { Grid, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../../../components/CustomAlert';
+import { useNavigate } from 'react-router-dom';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { useUpdatePerfil } from '../../../hooks';
 
-interface ProfileData {
+interface Perfil {
+  id: number;
   nome: string;
   email: string;
   senha?: string;
@@ -14,7 +16,7 @@ interface ProfileData {
   objetivosSaude?: string;
 }
 
-interface ProfileErrors {
+interface PerfilErrors {
   nome?: string;
   email?: string;
   senha?: string;
@@ -28,19 +30,20 @@ export default function Perfil() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<ProfileData>({
+  const [formData, setFormData] = useState<Perfil>({
+    id: 0,
     nome: '',
     email: '',
     senha: '',
-    peso: undefined,
-    altura: undefined,
+    peso: 0,
+    altura: 0,
     dataNascimento: '',
     objetivosSaude: ''
   });
 
-  const [errors, setErrors] = useState<ProfileErrors>({});
+  const [errors, setErrors] = useState<PerfilErrors>({});
 
-  const { mutate: updateUserProfile } = useUpdatePerfil({
+  const { mutate: updatePerfil } = useUpdatePerfil({
     onSuccess: () => {
       showAlert('success', 'Perfil editado com Sucesso!');
       navigate('/dashboard');
@@ -63,7 +66,7 @@ export default function Perfil() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const validationErrors: ProfileErrors = {};
+    const validationErrors: PerfilErrors = {};
 
     if (!formData.nome) validationErrors.nome = 'Nome é obrigatório *';
     if (!formData.email) validationErrors.email = 'Email é obrigatório *';
@@ -83,7 +86,7 @@ export default function Perfil() {
       return;
     }
 
-    updateUserProfile(formData);
+    updatePerfil(formData);
   };
 
   return (

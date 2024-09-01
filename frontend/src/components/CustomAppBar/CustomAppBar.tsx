@@ -21,8 +21,9 @@ interface CustomAppBarProps {
 }
 
 const background = (type: string) => {
-  if (type === 'ROTINA DE TREINOS') return 'url("/treinos.png")';
-  return 'url("/legumes.png")';
+  if (type === 'TREINOS') return 'url("../../../treinos.png")';
+  if (type === 'ALUNOS') return 'url("../../../entrar.png")';
+  return 'url("../../../legumes.png")';
 };
 
 const StyledAppBar = styled(MuiAppBar, {

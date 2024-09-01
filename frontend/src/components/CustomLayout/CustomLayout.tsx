@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { Box, Container, Toolbar } from '@mui/material';
+import { ReactNode, useState } from 'react';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
-import { ReactNode } from 'react';
 
 interface LayoutProps {
   appBarText?: string;

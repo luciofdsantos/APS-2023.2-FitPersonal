@@ -6,6 +6,7 @@ import EditarNovo from '../screens/Treinos/EditarNovo';
 import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
 import LoginUsuario from '../screens/LoginUsuario';
 import CadastroUsuario from '../screens/CadastroUsuario';
+import Alunos from '../screens/Alunos';
 
 export default function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ export default function AppRoutes() {
         <Route path="/planos-alimentares" element={<PlanosAlimentares />} />
         <Route path="/planos-alimentares/novo" element={<EditarNovoPlano />} />
         <Route path="/planos-alimentares/:id" element={<EditarNovoPlano />} />
+        <Route path="/alunos" element={<Alunos />} />
       </Routes>
     </Router>
   );

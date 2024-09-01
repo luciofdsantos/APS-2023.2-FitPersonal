@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
-import { Link, Typography } from '@mui/material';
-import { SxProps, Theme } from '@mui/material';
+import { Link, Typography, SxProps, Theme } from '@mui/material';
 
 interface Copyright {
   style?: SxProps<Theme>;

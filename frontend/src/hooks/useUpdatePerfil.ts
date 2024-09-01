@@ -2,7 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 
 const endpoint = 'http://localhost:8080/api/usuario';
 
-interface ProfileData {
+interface Perfil {
+  id: number;
   nome: string;
   email: string;
   senha?: string;
@@ -22,7 +23,7 @@ export default function useUpdatePerfil({
   onError
 }: UseUpdatePerfilProps) {
   return useMutation({
-    mutationFn: async ({ id, perfil }: { id: number; perfil: ProfileData }) => {
+    mutationFn: async ({ id, ...perfil }: Perfil) => {
       const response = await fetch(`${endpoint}/${id}`, {
         method: 'PUT',
         headers: {
