@@ -1,13 +1,13 @@
 package com.fitpersonal.fitpersonal.entities.nutricionista;
 
 
+import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("NUTRICIONISTA")
@@ -17,4 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Nutricionista extends Usuario {
     private  String registroProfissional;
+
+   /* @OneToMany(mappedBy = "nutricionista")
+    private List<Aluno> listaAlunos = new ArrayList<>();*/
 }
