@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.controllers;
 
+import com.fitpersonal.fitpersonal.entities.dtos.UsuarioPerfilDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.UsuarioRequestDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.UsuarioResponseDTO;
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
@@ -50,16 +51,21 @@ public class UsuarioController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
-        Usuario usuario = usuarioService.updateUsuario(id, usuarioRequestDTO);
-        if (usuario != null) {
-            UsuarioResponseDTO responseDTO = convertToResponseDTO(usuario);
-            return ResponseEntity.ok(responseDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
+//        Usuario usuario = usuarioService.updateUsuario(id, usuarioRequestDTO);
+//        if (usuario != null) {
+//            UsuarioResponseDTO responseDTO = convertToResponseDTO(usuario);
+//            return ResponseEntity.ok(responseDTO);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//    }
+        @PutMapping("/{id}")
+        public ResponseEntity<Usuario> editarPerfil(@PathVariable Long id, @RequestBody UsuarioPerfilDTO usuarioPerfilDTO) {
+            Usuario usuarioAtualizado = usuarioService.updateUsuarioPerfil(id, usuarioPerfilDTO);
+            return ResponseEntity.ok(usuarioAtualizado);
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {

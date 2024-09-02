@@ -1,6 +1,7 @@
 package com.fitpersonal.fitpersonal.services;
 
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
+import com.fitpersonal.fitpersonal.entities.dtos.UsuarioPerfilDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.UsuarioRequestDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.UsuarioResponseDTO;
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
@@ -76,32 +77,55 @@ public class UsuarioService {
         return usuarioRepository.findById(id);
     }
 
-    public Usuario updateUsuario(Long id, UsuarioRequestDTO usuarioRequestDTO) {
-        Optional<Usuario> optionalUsuario = findUsuarioById(id);
+//    public Usuario updateUsuario(Long id, UsuarioRequestDTO usuarioRequestDTO) {
+//        Optional<Usuario> optionalUsuario = findUsuarioById(id);
+//
+//        if (optionalUsuario.isPresent()) {
+//            Usuario usuario = optionalUsuario.get();
+//            TipoUsuario tipoUsuario = TipoUsuario.valueOf(usuarioRequestDTO.getTipoUsuario());
+//            Sexo sexo = Sexo.valueOf(usuarioRequestDTO.getSexo());
+//
+//            usuario.setNome(usuarioRequestDTO.getNome());
+//            usuario.setSobrenome(usuarioRequestDTO.getSobrenome());
+//            usuario.setEmail(usuarioRequestDTO.getEmail());
+//            usuario.setSenha(usuarioRequestDTO.getSenha()); // Considere fazer o hash da senha
+//            usuario.setTipoUsuario(tipoUsuario);
+//            usuario.setSexo(sexo);
+//
+//            if (usuario instanceof Personal) {
+//                ((Personal) usuario).setRegistroProfissional(usuarioRequestDTO.getRegistroProfissional());
+//            } else if (usuario instanceof Nutricionista) {
+//                ((Nutricionista) usuario).setRegistroProfissional(usuarioRequestDTO.getRegistroProfissional());
+//            }
+//
+//            return usuarioRepository.save(usuario);
+//        }
+//
+//        return null;
+//    }
+public Usuario updateUsuarioPerfil(Long id, UsuarioPerfilDTO usuarioPerfilDTO) {
+    try {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        if (optionalUsuario.isPresent()) {
-            Usuario usuario = optionalUsuario.get();
-            TipoUsuario tipoUsuario = TipoUsuario.valueOf(usuarioRequestDTO.getTipoUsuario());
-            Sexo sexo = Sexo.valueOf(usuarioRequestDTO.getSexo());
+        // Atualiza as informações gerais
+        usuario.setNome(usuarioPerfilDTO.getNome());
+        usuario.setEmail(usuarioPerfilDTO.getEmail());
+        usuario.setSenha(usuarioPerfilDTO.getSenha());
 
-            usuario.setNome(usuarioRequestDTO.getNome());
-            usuario.setSobrenome(usuarioRequestDTO.getSobrenome());
-            usuario.setEmail(usuarioRequestDTO.getEmail());
-            usuario.setSenha(usuarioRequestDTO.getSenha()); // Considere fazer o hash da senha
-            usuario.setTipoUsuario(tipoUsuario);
-            usuario.setSexo(sexo);
-
-            if (usuario instanceof Personal) {
-                ((Personal) usuario).setRegistroProfissional(usuarioRequestDTO.getRegistroProfissional());
-            } else if (usuario instanceof Nutricionista) {
-                ((Nutricionista) usuario).setRegistroProfissional(usuarioRequestDTO.getRegistroProfissional());
-            }
-
-            return usuarioRepository.save(usuario);
+        // Se for um Aluno, atualiza as informações específicas
+        if (usuario instanceof Aluno) {
+            Aluno aluno = (Aluno) usuario;
+            aluno.setAltura(usuarioPerfilDTO.getAltura());
+            aluno.setPeso(usuarioPerfilDTO.getPeso());
+            aluno.setDataNascimento(usuarioPerfilDTO.getDataNascimento());
         }
 
-        return null;
+        return usuarioRepository.save(usuario);
+    } catch (Exception e) {
+        throw new RuntimeException("Erro ao atualizar o perfil: " + e.getMessage());
     }
+}
 
     public boolean deleteUsuarioById(Long id) {
         if (usuarioRepository.existsById(id)) {
