@@ -20,14 +20,14 @@ public class LoginController {
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
-            // Chama o serviço de login e tenta autenticar o usuário
+
             LoginResponseDTO responseDTO = loginService.login(loginRequestDTO);
 
-            // Se o login for bem-sucedido, retorna 200 OK com o DTO do usuário
+
             return ResponseEntity.ok(responseDTO);
 
         } catch (RuntimeException e) {
-            // Retorna erro de autenticação com mensagem apropriada
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }

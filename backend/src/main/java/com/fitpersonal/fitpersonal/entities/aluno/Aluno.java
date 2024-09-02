@@ -14,5 +14,5 @@ public class Aluno extends Usuario {
     private double altura;
     private double peso;
     private LocalDate dataNascimento;
-    // Atributos específicos para Aluno, se houver
+
 }

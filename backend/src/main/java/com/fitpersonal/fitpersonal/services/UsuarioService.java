@@ -62,7 +62,7 @@ public class UsuarioService {
         usuario.setNome(usuarioRequestDTO.getNome());
         usuario.setSobrenome(usuarioRequestDTO.getSobrenome());
         usuario.setEmail(usuarioRequestDTO.getEmail());
-        usuario.setSenha(usuarioRequestDTO.getSenha()); // Considere fazer o hash da senha
+        usuario.setSenha(usuarioRequestDTO.getSenha());
         usuario.setTipoUsuario(tipoUsuario);
         usuario.setSexo(sexo);
 
@@ -108,12 +108,12 @@ public Usuario updateUsuarioPerfil(Long id, UsuarioPerfilDTO usuarioPerfilDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        // Atualiza as informações gerais
+
         usuario.setNome(usuarioPerfilDTO.getNome());
         usuario.setEmail(usuarioPerfilDTO.getEmail());
         usuario.setSenha(usuarioPerfilDTO.getSenha());
 
-        // Se for um Aluno, atualiza as informações específicas
+
         if (usuario instanceof Aluno) {
             Aluno aluno = (Aluno) usuario;
             aluno.setAltura(usuarioPerfilDTO.getAltura());

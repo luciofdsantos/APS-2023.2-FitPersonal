@@ -91,15 +91,15 @@ public class TreinoController {
         if (treinoExistente.isPresent()) {
             Treino treinoAtualizado = treinoExistente.get();
 
-            // Atualiza os dados do treino
+
             treinoAtualizado.setNome(treino.getNome());
             treinoAtualizado.setDescricao(treino.getDescricao());
 
-            // Atualiza os exercícios
+
             List<Exercicio> novosExercicios = treino.getExercicios(); // Exercícios enviados na requisição
             List<Exercicio> exerciciosExistentes = treinoAtualizado.getExercicios(); // Exercícios já existentes no BD
 
-            // 1. Atualizar ou adicionar novos exercícios
+
             for (Exercicio exercicio : novosExercicios) {
                 if (exercicio.getId() != null) {
                     // Se o exercício tem ID, busca para atualizar
@@ -122,18 +122,18 @@ public class TreinoController {
                 }
             }
 
-            // 2. Remover exercícios que não estão mais no treino
+            //
             for (Exercicio exercicioExistente : exerciciosExistentes) {
                 if (novosExercicios.stream().noneMatch(e -> e.getId() != null && e.getId().equals(exercicioExistente.getId()))) {
                     exercicioRepository.delete(exercicioExistente); // Remover do banco de dados
                 }
             }
 
-            // Atualizar lista de exercícios no treino
+
             treinoAtualizado.getExercicios().clear();
             treinoAtualizado.getExercicios().addAll(novosExercicios);
 
-            // Salva o treino atualizado
+
             treinoService.updateTreinoById(treinoAtualizado, id);
 
             return ResponseEntity.ok(treinoAtualizado);
