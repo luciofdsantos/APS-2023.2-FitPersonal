@@ -11,6 +11,7 @@ import useRefeicoes from './useRefeicoes';
 import useTreinos from './useTreinos';
 import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
 import useUpdateTreino from './useUpdateTreino';
+import useUpdatePerfil from './useUpdatePerfil';
 
 export {
   useCreateExercicio,
@@ -23,6 +24,7 @@ export {
   useLogin,
   usePlanosAlimentares,
   useRefeicoes,
+  useUpdatePerfil,
   useTreinos,
   useUpdatePlanoAlimentar,
   useUpdateTreino

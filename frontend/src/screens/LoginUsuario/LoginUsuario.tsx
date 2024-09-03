@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import Copyright from '../../components/Copyright';
-import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  CircularProgress
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -48,7 +54,7 @@ export default function LoginUsuario() {
       setError(false);
       navigate('/dashboard');
     },
-    onError: (error: Error) => {
+    onError: () => {
       setError(true);
       setHelperText('O usuário ou a senha informados são inválidos!');
       showAlert('error', 'Erro ao fazer login');
@@ -59,7 +65,6 @@ export default function LoginUsuario() {
     event.preventDefault();
 
     await validaUsuario({ email, senha });
-
   };
 
   return (

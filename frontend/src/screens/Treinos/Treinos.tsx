@@ -115,6 +115,30 @@ export default function Treinos() {
                   {
                     label: 'Descrição',
                     value: treino.descricao
+                  },
+                  {
+                    label: 'Exercícios',
+                    value: treino.exercicios.map((exercicio) => (
+                      <CustomCard
+                        key={index}
+                        title={`Exercício - ${exercicio.nome}`}
+                        items={[
+                          {
+                            label: 'Grupo Muscular',
+                            value: exercicio.grupoMuscular
+                          },
+                          { label: 'Séries', value: exercicio.series },
+                          { label: 'Repetições', value: exercicio.repeticoes },
+                          { label: 'Carga', value: exercicio.carga },
+                          {
+                            label: 'Status',
+                            value: exercicio.finalizado
+                              ? 'Finalizado'
+                              : 'Não Finalizado'
+                          }
+                        ]}
+                      />
+                    ))
                   }
                 ]}
                 style={{

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 const endpoint = 'http://localhost:8080/api/treinos';
 
-interface FormData {
+interface Treino {
   nome: string;
   descricao: string;
 }
@@ -35,7 +35,7 @@ export default function useUpdateTreino({
       treino
     }: {
       id: number;
-      treino: FormData & { exercicios: Exercicio[] };
+      treino: Treino & { exercicios: Exercicio[] };
     }) => {
       const treinoAtualizado = {
         ...treino,
