@@ -1,6 +1,7 @@
 package com.fitpersonal.fitpersonal.controllers;
 
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
+import com.fitpersonal.fitpersonal.entities.dtos.AlunoResponseDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.VinculoRequestDTO;
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
 import com.fitpersonal.fitpersonal.entities.personal.Personal;
@@ -12,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/vincular-aluno")
@@ -133,4 +137,61 @@ public class VinculoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro: " + e.getMessage());
         }
     }
+
+    @GetMapping("/listar-alunos-nutricionista/{nutricionistaId}")
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosNutricionista(@PathVariable Long nutricionistaId) {
+        try {
+            Nutricionista nutricionista = nutricionistaRepository.findById(nutricionistaId)
+                    .orElseThrow(() -> new RuntimeException("Nutricionista não encontrado"));
+
+            List<Aluno> alunos = nutricionista.getListaAlunos();
+            List<AlunoResponseDTO> alunosResponse = alunos.stream()
+                    .map(AlunoResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(alunosResponse);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/listar-alunos-personal/{personalId}")
+    public ResponseEntity<List<AlunoResponseDTO>> listarAlunosPersonal(@PathVariable Long personalId) {
+        try {
+            Personal personal = personalRepository.findById(personalId)
+                    .orElseThrow(() -> new RuntimeException("Personal não encontrado"));
+
+            List<Aluno> alunos = personal.getListaAlunos();
+            List<AlunoResponseDTO> alunosResponse = alunos.stream()
+                    .map(AlunoResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(alunosResponse);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    //Listar todos os alunos cadastrados
+    @GetMapping("/listar-todos-alunos")
+    public ResponseEntity<?> listarTodosAlunos() {
+        try {
+            List<Aluno> alunos = alunoRepository.findAll();
+            if (alunos.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum aluno cadastrado encontrado.");
+            }
+
+            List<AlunoResponseDTO> alunosResponse = alunos.stream()
+                    .map(AlunoResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(alunosResponse);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao recuperar a lista de alunos.");
+        }
+    }
+
 }
