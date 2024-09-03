@@ -1,6 +1,7 @@
 package com.fitpersonal.fitpersonal.entities.aluno;
 
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
+import com.fitpersonal.fitpersonal.entities.personal.Personal;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import jakarta.persistence.Entity;
@@ -22,9 +23,13 @@ public class Aluno extends Usuario {
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanoAlimentar> planosAlimentares = new ArrayList<>();
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "nutricionista_id")
-    private Nutricionista nutricionista;*/
+    private Nutricionista nutricionista;
+
+    @ManyToOne
+    @JoinColumn(name = "personal_id")
+    private Personal personal;
 
     public void addPlanoAlimentar(PlanoAlimentar planoAlimentar) {
         planosAlimentares.add(planoAlimentar);

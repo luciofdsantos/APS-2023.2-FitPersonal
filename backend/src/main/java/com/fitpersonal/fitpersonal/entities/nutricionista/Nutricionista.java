@@ -6,6 +6,7 @@ import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Nutricionista extends Usuario {
-    private  String registroProfissional;
+    private String registroProfissional;
 
-   /* @OneToMany(mappedBy = "nutricionista")
-    private List<Aluno> listaAlunos = new ArrayList<>();*/
+    @OneToMany(mappedBy = "nutricionista")
+    private List<Aluno> listaAlunos = new ArrayList<>();
 }
