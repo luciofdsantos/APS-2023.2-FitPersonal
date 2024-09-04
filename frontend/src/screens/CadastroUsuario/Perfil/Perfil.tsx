@@ -9,7 +9,6 @@ import {
   FormControl
 } from '@mui/material';
 import { useAlert } from '../../../components/CustomAlert';
-import { useNavigate } from 'react-router-dom';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useUpdatePerfil } from '../../../hooks';
 
@@ -48,7 +47,6 @@ const getTodayDate = () => {
 
 export default function Perfil() {
   const { showAlert } = useAlert();
-  const navigate = useNavigate();
 
   const usuarioString = localStorage.getItem('usuario');
   const [tipoSexo, setTipoSexo] = useState<'FEMININO' | 'MASCULINO' | 'OUTRO'>(
@@ -82,12 +80,12 @@ export default function Perfil() {
     altura: usuario?.altura || 0,
     dataNascimento: usuario?.dataNascimento || todayDate,
     objetivoDeSaude: usuario?.objetivoDeSaude || '',
-    sexo: usuario?.objetivoDeSaude || 'OUTRO'
+    sexo: usuario?.sexo || 'OUTRO'
   });
 
   const [errors, setErrors] = useState<PerfilErrors>({});
 
-  const { mutate: updatePerfil } = useUpdatePerfil({
+  const { mutate: updatePerfil, isPending } = useUpdatePerfil({
     onSuccess: (data) => {
       showAlert('success', 'Perfil editado com Sucesso!');
       localStorage.setItem('usuario', JSON.stringify(data));
@@ -133,7 +131,8 @@ export default function Perfil() {
     updatePerfil({
       ...formData,
       peso: Number(formData.peso),
-      altura: Number(formData.altura)
+      altura: Number(formData.altura),
+      sexo: tipoSexo || formData?.sexo
     });
   };
 
@@ -191,7 +190,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          {isProfissional ? (
+          {!isProfissional ? (
             <>
               <Grid item xs={6}>
                 <TextField
@@ -233,14 +232,14 @@ export default function Perfil() {
             </>
           ) : null}
 
-          {isProfissional ? (
+          {!isProfissional ? (
             <>
-              <Grid item xs={isProfissional ? 6 : 12}>
+              <Grid item xs={!isProfissional ? 6 : 12}>
                 <FormControl fullWidth variant="outlined" required>
                   <InputLabel id="sexo-label">Sexo</InputLabel>
                   <Select
                     labelId="sexo-label"
-                    id="sexo"
+                    name="sexo"
                     value={tipoSexo}
                     onChange={(e) =>
                       setTipoSexo(
@@ -271,18 +270,14 @@ export default function Perfil() {
                   error={Boolean(errors.objetivoDeSaude)}
                   helperText={errors.objetivoDeSaude}
                 />
-              </Grid>{' '}
+              </Grid>
             </>
           ) : null}
 
           <Grid item xs={12}>
             <GroupButtons
               buttons={[
-                { text: 'Salvar', type: 'submit' },
-                {
-                  text: 'Cancelar',
-                  onClick: () => navigate('/perfil')
-                }
+                { text: 'Salvar', disabled: isPending, type: 'submit' }
               ]}
             />
           </Grid>

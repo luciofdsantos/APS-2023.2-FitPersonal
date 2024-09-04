@@ -9,6 +9,7 @@ import Treinos from '../screens/Treinos';
 import RoutesAluno from './RoutesAluno';
 import RoutesProfissional from './RoutesProfissional';
 import EditarPerfil from '../screens/CadastroUsuario/Perfil';
+import RoutesLogin from './RoutesLogin';
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,10 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<LoginUsuario />} />
         <Route path="/cadastro" element={<CadastroUsuario />} />
+
+        <Route element={<RoutesLogin />}>
+          <Route path="/editar-perfil" element={<EditarPerfil />} />
+        </Route>
 
         <Route element={<RoutesAluno />}>
           <Route path="/treinos" element={<Treinos />} />
@@ -27,7 +32,6 @@ export default function AppRoutes() {
             element={<EditarNovoPlano />}
           />
           <Route path="/planos-alimentares/:id" element={<EditarNovoPlano />} />
-          <Route path="/editar-perfil" element={<EditarPerfil />} />
         </Route>
 
         <Route element={<RoutesProfissional />}>

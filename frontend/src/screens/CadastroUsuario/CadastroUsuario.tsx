@@ -44,8 +44,8 @@ interface Usuario {
   nome: string;
   sobrenome: string;
   senha: string;
-  altura: null;
-  peso: null;
+  altura: 0;
+  peso: 0;
   sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
   tipoUsuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
   registroProfissional: string | null;
@@ -143,8 +143,8 @@ export default function CadastroUsuario() {
       nome,
       sobrenome,
       senha,
-      altura: null,
-      peso: null,
+      altura: 0,
+      peso: 0,
       sexo: tipoSexo,
       tipoUsuario: tipoUsuario,
       registroProfissional: registroProfissional || null

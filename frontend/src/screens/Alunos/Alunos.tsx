@@ -7,57 +7,150 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper
+  Paper,
+  Skeleton
 } from '@mui/material';
 import { CustomLayout, GroupButtons } from '../../components';
+import {
+  useTodosAlunosProfissional,
+  useTodosAlunos,
+  useVincularAluno,
+  useDesvincularAluno
+} from '../../hooks';
+import { useAlert } from '../../components/CustomAlert';
 
-function createData(name: string, id: string) {
-  return { name, id };
+interface Aluno {
+  id: number;
+  nome: string;
+  sobrenome: string;
+  sexo: string;
 }
 
-const rows = [createData('Deise Santana', '1')];
-
 export default function Alunos() {
+  const { showAlert } = useAlert();
+
+  const {
+    data: alunos,
+    refetch: refetchAlunos,
+    isFetching: isFetchingTodosAlunos
+  } = useTodosAlunos();
+
+  const {
+    data: alunosVinculados,
+    refetch: refetchAlunosVinculados,
+    isFetching: isFetchingAlunosVinculados
+  } = useTodosAlunosProfissional();
+
+  const { mutate: vincularAluno, isPending: isPendingVincularAluno } =
+    useVincularAluno({
+      onSuccess: () => {
+        showAlert('success', 'Aluno vinculado com sucesso!');
+        refetchAlunos();
+        refetchAlunosVinculados();
+      }
+    });
+
+  const { mutate: desvincularAluno, isPending: isPendingDesvincularAluno } =
+    useDesvincularAluno({
+      onSuccess: () => {
+        showAlert('success', 'Aluno desvinculado com sucesso!');
+        refetchAlunos();
+        refetchAlunosVinculados();
+      }
+    });
+
+  const isVinculado = (alunoId: number) => {
+    return (
+      alunosVinculados?.some((aluno: Aluno) => aluno.id === alunoId) ?? false
+    );
+  };
+
+  const isLoading =
+    isFetchingTodosAlunos ||
+    isFetchingAlunosVinculados ||
+    isPendingVincularAluno ||
+    isPendingDesvincularAluno;
+
   return (
     <CustomLayout appBarText="Alunos">
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Atualizar Tabela', type: 'submit' }]}
-            height="50%"
+            buttons={[
+              { text: 'Atualizar Tabela', onClick: () => refetchAlunos }
+            ]}
+            height="60%"
           />
 
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Aluno</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Nome</TableCell>
+                  <TableCell>Sobrenome</TableCell>
+                  <TableCell>Sexo</TableCell>
                   <TableCell>Opções</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {rows.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Button color="primary" variant="text">
-                        Treinos
-                      </Button>
-                      <Button color="primary" variant="text">
-                        Planos Alimentares
-                      </Button>
-                      <Button color="primary" variant="text">
-                        Vincular
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              {isLoading ? (
+                <Skeleton variant="circular" width={80} height={80} />
+              ) : (
+                <TableBody>
+                  {alunos?.map((data: Aluno, index: number) => (
+                    <TableRow
+                      key={index}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {data.id}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {data.nome}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {data.sobrenome}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {data.sexo === 'OUTRO' ? 'Não declarado' : data.sexo}
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {isVinculado(data.id) ? (
+                          <>
+                            <Button color="primary" variant="text">
+                              Treinos
+                            </Button>
+
+                            <Button color="primary" variant="text">
+                              Planos Alimentares
+                            </Button>
+                          </>
+                        ) : (
+                          ''
+                        )}
+
+                        {!isVinculado(data.id) ? (
+                          <Button
+                            color="primary"
+                            variant="text"
+                            onClick={() => vincularAluno(data.id)}
+                          >
+                            Vincular
+                          </Button>
+                        ) : (
+                          <Button
+                            color="primary"
+                            variant="text"
+                            onClick={() => desvincularAluno(data.id)}
+                          >
+                            Desvincular
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
         </Grid>

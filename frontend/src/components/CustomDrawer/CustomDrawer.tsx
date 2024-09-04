@@ -73,13 +73,7 @@ const items = [
     text: 'Editar Pefil',
     Icon: Person,
     path: '/editar-perfil',
-    usuario: 'PROFISSIONAL'
-  },
-  {
-    text: 'Editar Pefil',
-    Icon: Person,
-    path: '/editar-perfil',
-    usuario: 'ALUNO'
+    usuario: 'PROFISSIONAL' || 'ALUNO'
   }
 ];
 
