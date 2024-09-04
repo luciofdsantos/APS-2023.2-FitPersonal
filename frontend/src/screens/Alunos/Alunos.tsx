@@ -9,7 +9,7 @@ import {
   TableRow,
   Paper
 } from '@mui/material';
-import { CustomLayout } from '../../components';
+import { CustomLayout, GroupButtons } from '../../components';
 
 function createData(name: string, id: string) {
   return { name, id };
@@ -20,8 +20,13 @@ const rows = [createData('Deise Santana', '1')];
 export default function Alunos() {
   return (
     <CustomLayout appBarText="Alunos">
-      <Grid container spacing={5}>
+      <Grid container spacing={1}>
         <Grid item xs={12}>
+          <GroupButtons
+            buttons={[{ text: 'Atualizar Tabela', type: 'submit' }]}
+            height="50%"
+          />
+
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>

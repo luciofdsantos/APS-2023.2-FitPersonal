@@ -18,19 +18,21 @@ interface GroupButtonsProps {
   buttons: ButtonProps[];
   style?: SxProps<Theme>;
   boxShadow?: boolean;
+  height?: string;
 }
 
 export default function GroupButtons({
   buttons,
   style,
-  boxShadow = false
+  boxShadow = false,
+  height = '100%'
 }: GroupButtonsProps) {
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        height,
         overflow: 'hidden',
         ...style
       }}

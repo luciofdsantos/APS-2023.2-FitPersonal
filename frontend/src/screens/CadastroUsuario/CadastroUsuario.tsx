@@ -43,6 +43,8 @@ interface Usuario {
   nome: string;
   sobrenome: string;
   senha: string;
+  altura: null;
+  peso: null;
   sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
   tipoUsuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
   registroProfissional: string | null;
@@ -140,6 +142,8 @@ export default function CadastroUsuario() {
       nome,
       sobrenome,
       senha,
+      altura: null,
+      peso: null,
       sexo: tipoSexo,
       tipoUsuario: tipoUsuario,
       registroProfissional: registroProfissional || null
@@ -178,6 +182,7 @@ export default function CadastroUsuario() {
             >
               CRIAR CONTA
             </Typography>
+
             <StyledForm noValidate autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 variant="outlined"

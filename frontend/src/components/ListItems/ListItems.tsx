@@ -27,7 +27,7 @@ export default function ListItems({ items, open }: ListItemsProps) {
   };
 
   const usuarioString = localStorage.getItem('usuario');
-  let isProfissional = 'TODOS';
+  let isProfissional = 'ALUNO';
 
   if (usuarioString) {
     try {
