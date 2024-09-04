@@ -17,7 +17,6 @@ import {
   useVincularAluno,
   useDesvincularAluno
 } from '../../hooks';
-import { useAlert } from '../../components/CustomAlert';
 
 interface Aluno {
   id: number;
@@ -27,8 +26,6 @@ interface Aluno {
 }
 
 export default function Alunos() {
-  const { showAlert } = useAlert();
-
   const {
     data: alunos,
     refetch: refetchAlunos,
@@ -44,7 +41,6 @@ export default function Alunos() {
   const { mutate: vincularAluno, isPending: isPendingVincularAluno } =
     useVincularAluno({
       onSuccess: () => {
-        showAlert('success', 'Aluno vinculado com sucesso!');
         refetchAlunos();
         refetchAlunosVinculados();
       }
@@ -53,7 +49,6 @@ export default function Alunos() {
   const { mutate: desvincularAluno, isPending: isPendingDesvincularAluno } =
     useDesvincularAluno({
       onSuccess: () => {
-        showAlert('success', 'Aluno desvinculado com sucesso!');
         refetchAlunos();
         refetchAlunosVinculados();
       }

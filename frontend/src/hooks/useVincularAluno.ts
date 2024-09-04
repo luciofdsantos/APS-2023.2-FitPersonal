@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useAlert } from '../components/CustomAlert';
 
 const endpoint =
   'http://localhost:8080/api/vincular-aluno/vincular-aluno-personal';
@@ -16,6 +17,8 @@ export default function useVincularAluno({
   onSuccess,
   onError
 }: UseVincularAlunoProps) {
+  const { showAlert } = useAlert();
+
   const usuarioString = localStorage.getItem('usuario');
   let usuario: Usuario | null = null;
 
@@ -44,6 +47,7 @@ export default function useVincularAluno({
 
       const responseText = await response.text();
       console.log('Resposta do servidor:', responseText);
+      showAlert('success', 'Aluno vinculado com sucesso!');
 
       if (!response.ok) {
         try {
