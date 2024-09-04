@@ -5,6 +5,7 @@ import {
   DialogTitle,
   Button
 } from '@mui/material';
+import React from 'react';
 
 interface CustomModalProps {
   open: boolean;

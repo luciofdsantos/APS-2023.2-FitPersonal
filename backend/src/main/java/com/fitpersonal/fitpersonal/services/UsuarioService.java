@@ -110,9 +110,9 @@ public Usuario updateUsuarioPerfil(Long id, UsuarioPerfilDTO usuarioPerfilDTO) {
 
 
         usuario.setNome(usuarioPerfilDTO.getNome());
+        usuario.setSobrenome(usuarioPerfilDTO.getSobrenome());
         usuario.setEmail(usuarioPerfilDTO.getEmail());
         usuario.setSenha(usuarioPerfilDTO.getSenha());
-
 
         if (usuario instanceof Aluno) {
             Aluno aluno = (Aluno) usuario;

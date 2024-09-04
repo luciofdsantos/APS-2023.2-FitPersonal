@@ -22,6 +22,7 @@ import {
   ContentContainer,
   HeaderContainer
 } from './style';
+import React from 'react';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
@@ -43,6 +44,8 @@ interface Usuario {
   nome: string;
   sobrenome: string;
   senha: string;
+  altura: 0;
+  peso: 0;
   sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
   tipoUsuario: 'ALUNO' | 'NUTRICIONISTA' | 'PERSONAL';
   registroProfissional: string | null;
@@ -140,6 +143,8 @@ export default function CadastroUsuario() {
       nome,
       sobrenome,
       senha,
+      altura: 0,
+      peso: 0,
       sexo: tipoSexo,
       tipoUsuario: tipoUsuario,
       registroProfissional: registroProfissional || null
@@ -178,6 +183,7 @@ export default function CadastroUsuario() {
             >
               CRIAR CONTA
             </Typography>
+
             <StyledForm noValidate autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 variant="outlined"

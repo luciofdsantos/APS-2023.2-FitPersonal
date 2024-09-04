@@ -8,10 +8,14 @@ import useDeleteTreino from './useDeleteTreino';
 import useLogin from './useLogin';
 import usePlanosAlimentares from './usePlanoAlimentar';
 import useRefeicoes from './useRefeicoes';
+import useTodosAlunos from './useTodosAlunos';
+import useTodosAlunosProfissional from './useTodosAlunosProfissional';
 import useTreinos from './useTreinos';
+import useUpdatePerfil from './useUpdatePerfil';
 import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
 import useUpdateTreino from './useUpdateTreino';
-import useUpdatePerfil from './useUpdatePerfil';
+import useVincularAluno from './useVincularAluno';
+import useDesvincularAluno from './useDesvincularAluno';
 
 export {
   useCreateExercicio,
@@ -21,11 +25,15 @@ export {
   useCreateUsuario,
   useDeletePlanoAlimentar,
   useDeleteTreino,
+  useDesvincularAluno,
   useLogin,
   usePlanosAlimentares,
   useRefeicoes,
-  useUpdatePerfil,
+  useTodosAlunos,
+  useTodosAlunosProfissional,
   useTreinos,
+  useUpdatePerfil,
   useUpdatePlanoAlimentar,
-  useUpdateTreino
+  useUpdateTreino,
+  useVincularAluno
 };

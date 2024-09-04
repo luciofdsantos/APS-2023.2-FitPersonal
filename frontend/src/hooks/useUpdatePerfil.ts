@@ -1,20 +1,22 @@
 import { useMutation } from '@tanstack/react-query';
 
-const endpoint = 'http://localhost:8080/api/usuario';
+const endpoint = 'http://localhost:8080/api/usuarios';
 
 interface Perfil {
   id: number;
   nome: string;
+  sobrenome: string;
   email: string;
   senha?: string;
   peso?: number;
   altura?: number;
   dataNascimento?: string;
-  objetivosSaude?: string;
+  objetivoDeSaude?: string;
+  sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
 }
 
 interface UseUpdatePerfilProps {
-  onSuccess: () => void;
+  onSuccess: (data: Perfil) => void;
   onError: (error: Error) => void;
 }
 

@@ -7,15 +7,20 @@ interface Usuario {
   senha: string;
 }
 
+interface UsuarioData {
+  id: number;
+  email: string;
+  nome: string;
+  sobrenome: string;
+  tipoUsuario: string;
+}
+
 interface UseLoginProps {
-  onSuccess: () => void;
+  onSuccess: (data: UsuarioData) => void;
   onError: (error: Error) => void;
 }
 
-export default function useLogin({
-  onSuccess,
-  onError
-}: UseLoginProps) {
+export default function useLogin({ onSuccess, onError }: UseLoginProps) {
   return useMutation({
     mutationFn: async (Usuario: Usuario) => {
       const response = await fetch(endpoint, {

@@ -6,7 +6,7 @@ import {
   SxProps,
   Theme
 } from '@mui/material';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import GroupButtons from '../GroupButtons';
 
 interface ButtonProps {

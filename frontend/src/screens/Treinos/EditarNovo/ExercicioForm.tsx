@@ -1,5 +1,6 @@
 import { Grid, TextField } from '@mui/material';
 import { DateInput, NumberInput } from '../../../components';
+import React from 'react';
 
 interface Exercicio {
   nome: string;

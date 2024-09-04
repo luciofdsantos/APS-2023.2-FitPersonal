@@ -1,4 +1,5 @@
 import { TextField } from '@mui/material';
+import React from 'react';
 
 interface NumberInputProps {
   label: string;
@@ -21,6 +22,10 @@ export default function NumberInput({
       value={value}
       onChange={onChange}
       disabled={disabled}
+      inputProps={{
+        min: 0,
+        step: 'any'
+      }}
     />
   );
 }

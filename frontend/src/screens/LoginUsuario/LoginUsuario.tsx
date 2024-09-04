@@ -19,6 +19,7 @@ import {
 } from './style';
 import { useAlert } from '../../components/CustomAlert';
 import { useLogin } from '../../hooks';
+import React from 'react';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
@@ -50,9 +51,13 @@ export default function LoginUsuario() {
   }, [email, senha]);
 
   const { mutate: validaUsuario, isPending } = useLogin({
-    onSuccess: () => {
+    onSuccess: (data) => {
       setError(false);
-      navigate('/dashboard');
+      localStorage.setItem('usuario', JSON.stringify(data));
+      showAlert('success', 'Login efetuado com sucesso!');
+      data.tipoUsuario === 'NUTRICIONISTA' || data.tipoUsuario === 'PERSONAL'
+        ? navigate('/alunos')
+        : navigate('/treinos');
     },
     onError: () => {
       setError(true);
