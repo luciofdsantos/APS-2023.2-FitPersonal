@@ -56,12 +56,11 @@ export default function Perfil() {
   );
 
   let isProfissional = false;
-  let usuarioParse;
+  let usuario;
 
   if (usuarioString) {
     try {
-      const usuario = JSON.parse(usuarioString);
-      usuarioParse = JSON.parse(usuarioString);
+      usuario = JSON.parse(usuarioString);
 
       isProfissional =
         usuario.tipoUsuario === 'NUTRICIONISTA' ||
@@ -74,24 +73,24 @@ export default function Perfil() {
   const todayDate = getTodayDate();
 
   const [formData, setFormData] = useState<Perfil>({
-    id: usuarioParse?.id || 0,
-    nome: usuarioParse?.nome || '',
-    sobrenome: usuarioParse?.sobrenome || '',
-    email: usuarioParse?.email || '',
-    senha: usuarioParse?.senha || '',
-    peso: usuarioParse?.peso || 0,
-    altura: usuarioParse?.altura || 0,
-    dataNascimento: usuarioParse?.dataNascimento || todayDate,
-    objetivoDeSaude: usuarioParse?.objetivoDeSaude || '',
-    sexo: usuarioParse?.objetivoDeSaude || 'OUTRO'
+    id: usuario?.id || 0,
+    nome: usuario?.nome || '',
+    sobrenome: usuario?.sobrenome || '',
+    email: usuario?.email || '',
+    senha: usuario?.senha || '',
+    peso: usuario?.peso || 0,
+    altura: usuario?.altura || 0,
+    dataNascimento: usuario?.dataNascimento || todayDate,
+    objetivoDeSaude: usuario?.objetivoDeSaude || '',
+    sexo: usuario?.objetivoDeSaude || 'OUTRO'
   });
 
   const [errors, setErrors] = useState<PerfilErrors>({});
 
   const { mutate: updatePerfil } = useUpdatePerfil({
-    onSuccess: () => {
+    onSuccess: (data) => {
       showAlert('success', 'Perfil editado com Sucesso!');
-      isProfissional ? navigate('/alunos') : navigate('/treinos');
+      localStorage.setItem('usuario', JSON.stringify(data));
     },
     onError: (error: Error) => {
       showAlert('error', 'Erro ao editar perfil. Tente novamente.');
@@ -192,80 +191,89 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={6}>
-            <TextField
-              name="peso"
-              label="Peso (kg)"
-              type="number"
-              fullWidth
-              value={formData.peso || 0}
-              onChange={handleChange}
-              error={Boolean(errors.peso)}
-              helperText={errors.peso}
-            />
-          </Grid>
+          {isProfissional ? (
+            <>
+              <Grid item xs={6}>
+                <TextField
+                  name="peso"
+                  label="Peso (kg)"
+                  type="number"
+                  fullWidth
+                  value={formData.peso || 0}
+                  onChange={handleChange}
+                  error={Boolean(errors.peso)}
+                  helperText={errors.peso}
+                />
+              </Grid>
 
-          <Grid item xs={6}>
-            <TextField
-              name="altura"
-              label="Altura (cm)"
-              type="number"
-              fullWidth
-              value={formData.altura || 0}
-              onChange={handleChange}
-              error={Boolean(errors.altura)}
-              helperText={errors.altura}
-            />
-          </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="altura"
+                  label="Altura (cm)"
+                  type="number"
+                  fullWidth
+                  value={formData.altura || 0}
+                  onChange={handleChange}
+                  error={Boolean(errors.altura)}
+                  helperText={errors.altura}
+                />
+              </Grid>
 
-          <Grid item xs={6}>
-            <TextField
-              type="date"
-              label="Data de Nascimento *"
-              name="dataNascimento"
-              defaultValue={formData.dataNascimento}
-              onChange={handleChange}
-              inputProps={{ min: '1900-01-01', max: todayDate }}
-              fullWidth
-            />
-          </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  type="date"
+                  label="Data de Nascimento *"
+                  name="dataNascimento"
+                  defaultValue={formData.dataNascimento}
+                  onChange={handleChange}
+                  inputProps={{ min: '1900-01-01', max: todayDate }}
+                  fullWidth
+                />
+              </Grid>
+            </>
+          ) : null}
 
-          <Grid item xs={6}>
-            <TextField
-              type="sexo"
-              label="Data de Nascimento *"
-              name="dataNascimento"
-              defaultValue={formData.dataNascimento}
-              onChange={handleChange}
-              inputProps={{ min: '1900-01-01', max: todayDate }}
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined" margin="normal" required>
-              <InputLabel id="sexo-label">Sexo</InputLabel>
-              <Select
-                labelId="sexo-label"
-                id="sexo"
-                value={tipoSexo}
-                onChange={(e) =>
-                  setTipoSexo(
-                    e.target.value as 'FEMININO' | 'MASCULINO' | 'OUTRO'
-                  )
-                }
-                label="Sexo"
-                error={!!errors.sexo}
-              >
-                <MenuItem value="FEMININO">Feminino</MenuItem>
-                <MenuItem value="MASCULINO">Masculino</MenuItem>
-                <MenuItem value="OUTRO">Prefiro não dizer</MenuItem>
-              </Select>
-              {errors.sexo && (
-                <Typography color="error">{errors.sexo}</Typography>
-              )}
-            </FormControl>
-          </Grid>
+          {isProfissional ? (
+            <>
+              <Grid item xs={isProfissional ? 6 : 12}>
+                <FormControl fullWidth variant="outlined" required>
+                  <InputLabel id="sexo-label">Sexo</InputLabel>
+                  <Select
+                    labelId="sexo-label"
+                    id="sexo"
+                    value={tipoSexo}
+                    onChange={(e) =>
+                      setTipoSexo(
+                        e.target.value as 'FEMININO' | 'MASCULINO' | 'OUTRO'
+                      )
+                    }
+                    label="Sexo"
+                    error={!!errors.sexo}
+                  >
+                    <MenuItem value="FEMININO">Feminino</MenuItem>
+                    <MenuItem value="MASCULINO">Masculino</MenuItem>
+                    <MenuItem value="OUTRO">Prefiro não dizer</MenuItem>
+                  </Select>
+                  {errors.sexo && (
+                    <Typography color="error">{errors.sexo}</Typography>
+                  )}
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="objetivoDeSaude"
+                  label="Objetivos de Saúde"
+                  multiline
+                  rows={4}
+                  fullWidth
+                  value={formData.objetivoDeSaude || ''}
+                  onChange={handleChange}
+                  error={Boolean(errors.objetivoDeSaude)}
+                  helperText={errors.objetivoDeSaude}
+                />
+              </Grid>{' '}
+            </>
+          ) : null}
 
           <Grid item xs={12}>
             <GroupButtons
