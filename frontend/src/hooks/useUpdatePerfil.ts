@@ -9,7 +9,7 @@ interface Perfil {
   senha?: string;
   peso?: number;
   altura?: number;
-  dataNascimento?: string;
+  dataNascimento?: string | null;
   objetivosSaude?: string;
 }
 

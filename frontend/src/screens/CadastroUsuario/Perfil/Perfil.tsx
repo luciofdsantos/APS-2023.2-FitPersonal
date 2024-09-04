@@ -8,6 +8,7 @@ import { useUpdatePerfil } from '../../../hooks';
 interface Perfil {
   id: number;
   nome: string;
+  sobrenome: string;
   email: string;
   senha?: string;
   peso?: number;
@@ -18,6 +19,7 @@ interface Perfil {
 
 interface PerfilErrors {
   nome?: string;
+  sobrenome?: string;
   email?: string;
   senha?: string;
   peso?: string;
@@ -26,6 +28,14 @@ interface PerfilErrors {
   objetivosSaude?: string;
 }
 
+const getTodayDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export default function Perfil() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -33,10 +43,12 @@ export default function Perfil() {
   const usuarioString = localStorage.getItem('usuario');
 
   let isProfissional = false;
+  let usuarioParse;
 
   if (usuarioString) {
     try {
       const usuario = JSON.parse(usuarioString);
+      usuarioParse = JSON.parse(usuarioString);
 
       isProfissional =
         usuario.tipoUsuario === 'NUTRICIONISTA' ||
@@ -46,15 +58,18 @@ export default function Perfil() {
     }
   }
 
+  const todayDate = getTodayDate();
+
   const [formData, setFormData] = useState<Perfil>({
-    id: 0,
-    nome: '',
-    email: '',
-    senha: '',
-    peso: 0,
-    altura: 0,
-    dataNascimento: '',
-    objetivosSaude: ''
+    id: usuarioParse?.id || 0,
+    nome: usuarioParse?.nome || '',
+    sobrenome: usuarioParse?.sobrenome || '',
+    email: usuarioParse?.email || '',
+    senha: usuarioParse?.senha || '',
+    peso: usuarioParse?.peso || 0,
+    altura: usuarioParse?.altura || 0,
+    dataNascimento: usuarioParse?.dataNascimento || todayDate,
+    objetivosSaude: usuarioParse?.objetivosSaude || ''
   });
 
   const [errors, setErrors] = useState<PerfilErrors>({});
@@ -85,6 +100,8 @@ export default function Perfil() {
     const validationErrors: PerfilErrors = {};
 
     if (!formData.nome) validationErrors.nome = 'Nome é obrigatório *';
+    if (!formData.sobrenome)
+      validationErrors.sobrenome = 'Sobrenome é obrigatório *';
     if (!formData.email) validationErrors.email = 'Email é obrigatório *';
     if (formData.senha && formData.senha.length < 6)
       validationErrors.senha = 'Senha deve ter pelo menos 6 caracteres';
@@ -109,7 +126,7 @@ export default function Perfil() {
     <CustomLayout appBarText="Editar Perfil">
       <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               name="nome"
               label="Nome"
@@ -121,7 +138,19 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
+            <TextField
+              name="sobrenome"
+              label="Sobrenome"
+              fullWidth
+              value={formData.sobrenome}
+              onChange={handleChange}
+              error={Boolean(errors.sobrenome)}
+              helperText={errors.sobrenome}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
             <TextField
               name="email"
               label="Email"
@@ -134,7 +163,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               name="senha"
               label="Senha"
@@ -147,7 +176,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               name="peso"
               label="Peso (kg)"
@@ -160,7 +189,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
               name="altura"
               label="Altura (cm)"
@@ -173,17 +202,15 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12}>
             <TextField
-              name="dataNascimento"
-              label="Data de Nascimento"
               type="date"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              value={formData.dataNascimento || ''}
+              label="Data de Nascimento *"
+              name="dataNascimento"
+              defaultValue={formData.dataNascimento}
               onChange={handleChange}
-              error={Boolean(errors.dataNascimento)}
-              helperText={errors.dataNascimento}
+              inputProps={{ min: '1900-01-01', max: todayDate }}
+              fullWidth
             />
           </Grid>
 

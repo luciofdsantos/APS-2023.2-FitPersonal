@@ -22,6 +22,7 @@ import {
   ContentContainer,
   HeaderContainer
 } from './style';
+import React from 'react';
 
 const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',

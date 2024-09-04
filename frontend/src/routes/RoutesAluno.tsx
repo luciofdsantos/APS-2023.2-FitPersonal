@@ -10,9 +10,7 @@ const RoutesProfissional: React.FC = () => {
     try {
       const usuario = JSON.parse(usuarioString);
 
-      isProfissional =
-        usuario.tipoUsuario === 'NUTRICIONISTA' ||
-        usuario.tipoUsuario === 'PERSONAL';
+      isProfissional = usuario.tipoUsuario === 'ALUNO';
     } catch (error) {
       console.error('Erro ao analisar o JSON do localStorage:', error);
     }

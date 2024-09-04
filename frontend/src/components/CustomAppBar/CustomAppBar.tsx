@@ -9,25 +9,26 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 
 interface AppBarProps {
   open?: boolean;
-  appBarText: string;
+  appBarText?: string;
   drawerWidth: number;
 }
 
 interface CustomAppBarProps {
   open: boolean;
-  appBarText: string;
+  appBarText?: string;
   toggleDrawer: () => void;
   drawerWidth: number;
 }
 
-const background = (type: string) => {
+const background = (type: string | undefined) => {
   if (type === 'TREINOS') return 'url("../../../treinos.png")';
   if (type === 'ALUNOS') return 'url("../../../entrar.png")';
   return 'url("../../../legumes.png")';
 };
 
 const StyledAppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'drawerWidth' && prop !== 'open'
+  shouldForwardProp: (prop) =>
+    prop !== 'drawerWidth' && prop !== 'open' && prop !== 'appBarText'
 })<AppBarProps>(({ theme, open, drawerWidth, appBarText }) => ({
   zIndex: theme.zIndex.drawer + 1,
   backgroundColor: '#6842FF',

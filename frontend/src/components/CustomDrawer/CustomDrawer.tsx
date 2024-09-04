@@ -4,7 +4,12 @@ import {
   IconButton,
   Toolbar
 } from '@mui/material';
-import { FitnessCenter, PersonAdd, FoodBank } from '@mui/icons-material';
+import {
+  FitnessCenter,
+  PersonAdd,
+  Person,
+  FoodBank
+} from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from '../ListItems';
@@ -63,7 +68,19 @@ const items = [
     path: '/planos-alimentares',
     usuario: 'ALUNO'
   },
-  { text: 'Alunos', Icon: PersonAdd, path: '/alunos', usuario: 'PROFISSIONAL' }
+  { text: 'Alunos', Icon: PersonAdd, path: '/alunos', usuario: 'PROFISSIONAL' },
+  {
+    text: 'Editar Pefil',
+    Icon: Person,
+    path: '/editar-perfil',
+    usuario: 'PROFISSIONAL'
+  },
+  {
+    text: 'Editar Pefil',
+    Icon: Person,
+    path: '/editar-perfil',
+    usuario: 'ALUNO'
+  }
 ];
 
 export default function CustomDrawer({
