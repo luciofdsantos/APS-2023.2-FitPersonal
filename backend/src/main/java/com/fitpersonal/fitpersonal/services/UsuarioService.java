@@ -119,6 +119,8 @@ public Usuario updateUsuarioPerfil(Long id, UsuarioPerfilDTO usuarioPerfilDTO) {
             aluno.setAltura(usuarioPerfilDTO.getAltura());
             aluno.setPeso(usuarioPerfilDTO.getPeso());
             aluno.setDataNascimento(usuarioPerfilDTO.getDataNascimento());
+            aluno.setSexo(Sexo.valueOf(usuarioPerfilDTO.getSexo()));
+            aluno.setObjetivoDeSaude(usuarioPerfilDTO.getObjetivoDeSaude());
         }
 
         return usuarioRepository.save(usuario);
