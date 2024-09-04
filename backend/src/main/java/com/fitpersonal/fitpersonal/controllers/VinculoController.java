@@ -194,4 +194,49 @@ public class VinculoController {
         }
     }
 
+    @GetMapping("/listar-alunos-sem-nutricionista")
+    public ResponseEntity<?> listarAlunosSemNutricionista() {
+        try {
+            // Filtra os alunos que não estão vinculados a nenhum nutricionista
+            List<Aluno> alunosSemNutricionista = alunoRepository.findAll().stream()
+                    .filter(aluno -> aluno.getNutricionista() == null)
+                    .collect(Collectors.toList());
+
+            if (alunosSemNutricionista.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum aluno sem nutricionista encontrado.");
+            }
+
+            List<AlunoResponseDTO> alunosResponse = alunosSemNutricionista.stream()
+                    .map(AlunoResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(alunosResponse);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao recuperar a lista de alunos.");
+        }
+    }
+
+    @GetMapping("/listar-alunos-sem-personal")
+    public ResponseEntity<?> listarAlunosSemPersonal() {
+        try {
+            // Filtra os alunos que não estão vinculados a nenhum personal trainer
+            List<Aluno> alunosSemPersonal = alunoRepository.findAll().stream()
+                    .filter(aluno -> aluno.getPersonal() == null)
+                    .collect(Collectors.toList());
+
+            if (alunosSemPersonal.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhum aluno sem personal trainer encontrado.");
+            }
+
+            List<AlunoResponseDTO> alunosResponse = alunosSemPersonal.stream()
+                    .map(AlunoResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(alunosResponse);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao recuperar a lista de alunos.");
+        }
+    }
 }
