@@ -15,6 +15,7 @@ public record PlanoAlimentarResponseDTO(
         Float metaConsumoCarboidrato,
         Float metaConsumoProteina,
         Float metaConsumoGordura,
+        Long alunoId,
         List<RefeicaoResponseDTO> refeicoes) {
 
     public PlanoAlimentarResponseDTO(PlanoAlimentar planoAlimentar) {
@@ -28,6 +29,7 @@ public record PlanoAlimentarResponseDTO(
                 planoAlimentar.getMetaConsumoCarboidrato(),
                 planoAlimentar.getMetaConsumoProteina(),
                 planoAlimentar.getMetaConsumoGordura(),
+                planoAlimentar.getAluno().getId(),
                 planoAlimentar.getRefeicoes().stream()
                         .map(RefeicaoResponseDTO::new)
                         .collect(Collectors.toList())

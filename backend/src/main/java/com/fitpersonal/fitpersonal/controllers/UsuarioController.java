@@ -40,7 +40,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable Long id){
+    public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable Long id) {
         Optional<Usuario> usuarioOpt = usuarioService.findUsuarioById(id);
 
         if (usuarioOpt.isPresent()) {
@@ -51,7 +51,7 @@ public class UsuarioController {
         }
     }
 
-//    @PutMapping("/{id}")
+    //    @PutMapping("/{id}")
 //    public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequestDTO) {
 //        Usuario usuario = usuarioService.updateUsuario(id, usuarioRequestDTO);
 //        if (usuario != null) {
@@ -61,11 +61,11 @@ public class UsuarioController {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //        }
 //    }
-        @PutMapping("/{id}")
-        public ResponseEntity<Usuario> editarPerfil(@PathVariable Long id, @RequestBody UsuarioPerfilDTO usuarioPerfilDTO) {
-            Usuario usuarioAtualizado = usuarioService.updateUsuarioPerfil(id, usuarioPerfilDTO);
-            return ResponseEntity.ok(usuarioAtualizado);
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> editarPerfil(@PathVariable Long id, @RequestBody UsuarioPerfilDTO usuarioPerfilDTO) {
+        Usuario usuarioAtualizado = usuarioService.updateUsuarioPerfil(id, usuarioPerfilDTO);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {

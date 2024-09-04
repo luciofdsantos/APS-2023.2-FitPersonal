@@ -16,4 +16,5 @@ public class UsuarioPerfilDTO {
     @NotNull(message = "O sexo é obrigatório.")
     private String sexo; // "MASCULINO, "FEMININO"
     private String registroProfissional;
+    private String objetivoDeSaude;
 }

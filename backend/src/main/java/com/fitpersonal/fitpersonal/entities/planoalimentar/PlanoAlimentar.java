@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.planoalimentar;
 
+import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarRequestDTO;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
 import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoRequestDTO;
@@ -35,6 +36,10 @@ public class PlanoAlimentar {
 
     @OneToMany(mappedBy = "planoAlimentar", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refeicao> refeicoes = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
 
     public PlanoAlimentar(PlanoAlimentarRequestDTO dto) {
         //Usuário não define totais, banco de dados que atualiza a partir de refeições
