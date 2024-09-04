@@ -1,5 +1,13 @@
 import { CustomLayout, GroupButtons } from '../../../components';
-import { Grid, TextField } from '@mui/material';
+import {
+  Grid,
+  TextField,
+  Typography,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl
+} from '@mui/material';
 import { useAlert } from '../../../components/CustomAlert';
 import { useNavigate } from 'react-router-dom';
 import { useState, ChangeEvent, FormEvent } from 'react';
@@ -14,7 +22,8 @@ interface Perfil {
   peso?: number;
   altura?: number;
   dataNascimento?: string;
-  objetivosSaude?: string;
+  objetivoDeSaude?: string;
+  sexo: 'FEMININO' | 'MASCULINO' | 'OUTRO';
 }
 
 interface PerfilErrors {
@@ -25,7 +34,8 @@ interface PerfilErrors {
   peso?: string;
   altura?: string;
   dataNascimento?: string;
-  objetivosSaude?: string;
+  objetivoDeSaude?: string;
+  sexo?: string;
 }
 
 const getTodayDate = () => {
@@ -41,6 +51,9 @@ export default function Perfil() {
   const navigate = useNavigate();
 
   const usuarioString = localStorage.getItem('usuario');
+  const [tipoSexo, setTipoSexo] = useState<'FEMININO' | 'MASCULINO' | 'OUTRO'>(
+    'OUTRO'
+  );
 
   let isProfissional = false;
   let usuarioParse;
@@ -69,7 +82,8 @@ export default function Perfil() {
     peso: usuarioParse?.peso || 0,
     altura: usuarioParse?.altura || 0,
     dataNascimento: usuarioParse?.dataNascimento || todayDate,
-    objetivosSaude: usuarioParse?.objetivosSaude || ''
+    objetivoDeSaude: usuarioParse?.objetivoDeSaude || '',
+    sexo: usuarioParse?.objetivoDeSaude || 'OUTRO'
   });
 
   const [errors, setErrors] = useState<PerfilErrors>({});
@@ -111,22 +125,24 @@ export default function Perfil() {
       validationErrors.altura = 'Altura é obrigatória *';
     if (!formData.dataNascimento)
       validationErrors.dataNascimento = 'Data de nascimento é obrigatória *';
-    if (!formData.objetivosSaude)
-      validationErrors.objetivosSaude = 'Objetivos de saúde são obrigatórios *';
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    updatePerfil(formData);
+    updatePerfil({
+      ...formData,
+      peso: Number(formData.peso),
+      altura: Number(formData.altura)
+    });
   };
 
   return (
     <CustomLayout appBarText="Editar Perfil">
       <form autoComplete="off" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="nome"
               label="Nome"
@@ -138,7 +154,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="sobrenome"
               label="Sobrenome"
@@ -150,7 +166,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="email"
               label="Email"
@@ -163,7 +179,7 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="senha"
               label="Senha"
@@ -176,33 +192,33 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="peso"
               label="Peso (kg)"
               type="number"
               fullWidth
-              value={formData.peso || ''}
+              value={formData.peso || 0}
               onChange={handleChange}
               error={Boolean(errors.peso)}
               helperText={errors.peso}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               name="altura"
               label="Altura (cm)"
               type="number"
               fullWidth
-              value={formData.altura || ''}
+              value={formData.altura || 0}
               onChange={handleChange}
               error={Boolean(errors.altura)}
               helperText={errors.altura}
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
               type="date"
               label="Data de Nascimento *"
@@ -214,18 +230,41 @@ export default function Perfil() {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <TextField
-              name="objetivosSaude"
-              label="Objetivos de Saúde"
-              multiline
-              rows={4}
-              fullWidth
-              value={formData.objetivosSaude || ''}
+              type="sexo"
+              label="Data de Nascimento *"
+              name="dataNascimento"
+              defaultValue={formData.dataNascimento}
               onChange={handleChange}
-              error={Boolean(errors.objetivosSaude)}
-              helperText={errors.objetivosSaude}
+              inputProps={{ min: '1900-01-01', max: todayDate }}
+              fullWidth
             />
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl fullWidth variant="outlined" margin="normal" required>
+              <InputLabel id="sexo-label">Sexo</InputLabel>
+              <Select
+                labelId="sexo-label"
+                id="sexo"
+                value={tipoSexo}
+                onChange={(e) =>
+                  setTipoSexo(
+                    e.target.value as 'FEMININO' | 'MASCULINO' | 'OUTRO'
+                  )
+                }
+                label="Sexo"
+                error={!!errors.sexo}
+              >
+                <MenuItem value="FEMININO">Feminino</MenuItem>
+                <MenuItem value="MASCULINO">Masculino</MenuItem>
+                <MenuItem value="OUTRO">Prefiro não dizer</MenuItem>
+              </Select>
+              {errors.sexo && (
+                <Typography color="error">{errors.sexo}</Typography>
+              )}
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>

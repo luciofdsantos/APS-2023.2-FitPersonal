@@ -10,7 +10,7 @@ interface Perfil {
   peso?: number;
   altura?: number;
   dataNascimento?: string | null;
-  objetivosSaude?: string;
+  objetivoDeSaude?: string;
 }
 
 interface UseUpdatePerfilProps {
