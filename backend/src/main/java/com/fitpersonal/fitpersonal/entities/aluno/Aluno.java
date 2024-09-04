@@ -19,6 +19,7 @@ public class Aluno extends Usuario {
     private double altura;
     private double peso;
     private LocalDate dataNascimento;
+    private String objetivoDeSaude;
 
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanoAlimentar> planosAlimentares = new ArrayList<>();
