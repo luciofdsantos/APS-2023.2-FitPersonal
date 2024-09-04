@@ -30,6 +30,22 @@ export default function Perfil() {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
 
+  const usuarioString = localStorage.getItem('usuario');
+
+  let isProfissional = false;
+
+  if (usuarioString) {
+    try {
+      const usuario = JSON.parse(usuarioString);
+
+      isProfissional =
+        usuario.tipoUsuario === 'NUTRICIONISTA' ||
+        usuario.tipoUsuario === 'PERSONAL';
+    } catch (error) {
+      console.error('Erro ao analisar o JSON do localStorage:', error);
+    }
+  }
+
   const [formData, setFormData] = useState<Perfil>({
     id: 0,
     nome: '',
@@ -46,7 +62,7 @@ export default function Perfil() {
   const { mutate: updatePerfil } = useUpdatePerfil({
     onSuccess: () => {
       showAlert('success', 'Perfil editado com Sucesso!');
-      navigate('/dashboard');
+      isProfissional ? navigate('/alunos') : navigate('/treinos');
     },
     onError: (error: Error) => {
       showAlert('error', 'Erro ao editar perfil. Tente novamente.');

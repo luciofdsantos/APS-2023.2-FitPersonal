@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Container, Toolbar } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import CustomAppBar from '../CustomAppBar';
 import CustomDrawer from '../CustomDrawer';
+import { useEffect } from 'react';
 
 interface LayoutProps {
   appBarText?: string;
@@ -16,6 +18,21 @@ export default function CustomLayout({ appBarText, children }: LayoutProps) {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const navigate = useNavigate();
+  const isAuthenticated = !!localStorage.getItem('usuario');
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [navigate, isAuthenticated]);
+
+  // useEffect(() => {
+  //   window.addEventListener('load', () => {
+  //     localStorage.removeItem('usuario');
+  //   });
+  // }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
