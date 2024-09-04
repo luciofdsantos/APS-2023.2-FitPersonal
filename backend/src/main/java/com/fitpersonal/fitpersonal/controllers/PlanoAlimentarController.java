@@ -31,12 +31,12 @@ public class PlanoAlimentarController {
     private AlunoRepository alunoRepository;
 
     @PostMapping
-    public ResponseEntity<PlanoAlimentarResponseDTO> savePlanoAlimentar(@RequestBody PlanoAlimentarRequestDTO data) {
+    public ResponseEntity<String> savePlanoAlimentar(@RequestBody PlanoAlimentarRequestDTO data) {
         Long alunoId = data.alunoId();
 
-        // Verificar se o ID do aluno é válido
+        // Verificar se o ID do aluno é null ou inválido
         if (alunoId == null || alunoId <= 0) {
-            return ResponseEntity.badRequest().build(); // HTTP 400 Bad Request
+            return ResponseEntity.badRequest().body("O ID do aluno é inválido ou não foi fornecido."); // HTTP 400 Bad Request com mensagem
         }
 
         Aluno aluno;
@@ -44,8 +44,8 @@ public class PlanoAlimentarController {
             aluno = alunoRepository.findById(alunoId)
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
         } catch (RuntimeException e) {
-            // Se o aluno não for encontrado, retornamos uma resposta de erro
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // HTTP 404 Not Found
+            // Se o aluno não for encontrado retorna uma resposta de erro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado."); // HTTP 404 Not Found com mensagem
         }
 
         PlanoAlimentar planoAlimentarData = new PlanoAlimentar(data);
@@ -53,21 +53,27 @@ public class PlanoAlimentarController {
 
         PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentarData);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PlanoAlimentarResponseDTO(savedPlanoAlimentar));
+        return ResponseEntity.status(HttpStatus.CREATED).body("Plano alimentar criado com sucesso."); // HTTP 201 Created com mensagem de sucesso
     }
+
 
     @PostMapping("/withrefeicoes")
     @Transactional
-    public ResponseEntity<PlanoAlimentarResponseDTO> savePlanoAlimentarWithRefeicoes(@RequestBody PlanoAlimentarRequestDTO data) {
+    public ResponseEntity<String> savePlanoAlimentarWithRefeicoes(@RequestBody PlanoAlimentarRequestDTO data) {
         Long alunoId = data.alunoId();
+
+        // Verificar se o ID do aluno é null
+        if (alunoId == null) {
+            return ResponseEntity.badRequest().body("O ID do aluno não foi fornecido."); // HTTP 400 Bad Request com mensagem
+        }
 
         Aluno aluno;
         try {
             aluno = alunoRepository.findById(alunoId)
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
         } catch (RuntimeException e) {
-            // Se o aluno não for encontrado, retornamos uma resposta de erro
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // HTTP 404 Not Found
+            // Se o aluno não for encontrado retorna uma resposta de erro
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado."); // HTTP 404 Not Found com mensagem
         }
 
         PlanoAlimentar planoAlimentar = new PlanoAlimentar(data);
@@ -80,7 +86,7 @@ public class PlanoAlimentarController {
         planoAlimentar.setRefeicoes(refeicoes);
 
         PlanoAlimentar savedPlanoAlimentar = planoAlimentarRepository.save(planoAlimentar);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PlanoAlimentarResponseDTO(savedPlanoAlimentar));
+        return ResponseEntity.status(HttpStatus.CREATED).body("Plano alimentar criado com sucesso."); // HTTP 201 Created com mensagem de sucesso
     }
 
 
@@ -104,14 +110,23 @@ public class PlanoAlimentarController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlanoAlimentar(@PathVariable Long id) {
-        if (planoAlimentarRepository.existsById(id)) {
-            planoAlimentarRepository.deleteById(id);
-            return ResponseEntity.noContent().build(); // HTTP 204 No Content
-        } else {
-            return ResponseEntity.notFound().build(); // HTTP 404 Not Found
+    public ResponseEntity<String> deletePlanoAlimentar(@PathVariable Long id) {
+        try {
+            if (planoAlimentarRepository.existsById(id)) {
+                planoAlimentarRepository.deleteById(id);
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Plano alimentar com ID " + id + " não foi encontrado.");
+            }
+        } catch (Exception e) {
+            // Captura qualquer exceção que ocorra e retorna uma resposta de erro
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro interno ao tentar deletar o plano alimentar com ID " + id);
         }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<PlanoAlimentarResponseDTO> updatePlanoAlimentar(@PathVariable Long id, @RequestBody PlanoAlimentarRequestDTO data) {
