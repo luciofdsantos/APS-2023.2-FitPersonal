@@ -34,26 +34,25 @@ public class ProgressoService {
         try {
             ProgressoTreino progresso = new ProgressoTreino();
 
-            // Recuperar o treino e o aluno a partir dos IDs no DTO
+
             Treino treino = treinoRepository.findById(progressoTreinoDTO.getTreinoId())
                     .orElseThrow(() -> new IllegalArgumentException("Treino não encontrado."));
             Aluno aluno = alunoRepository.findById(progressoTreinoDTO.getAlunoId())
                     .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado."));
 
-            // Setar treino, aluno e data de finalização
+
             progresso.setTreino(treino);
             progresso.setAluno(aluno);
-            progresso.setDataFinalizacao(LocalDate.now());  // Definir a data de finalização como a data atual
+            progresso.setDataFinalizacao(LocalDate.now());
 
-            // Setar o progresso dos exercícios
+
             List<ExercicioProgresso> exerciciosProgresso = new ArrayList<>();
             for (ExercicioProgressoDTO exercicioDTO : progressoTreinoDTO.getExercicios()) {
                 ExercicioProgresso exercicioProgresso = new ExercicioProgresso();
 
-                Exercicio exercicio = new Exercicio();  // Supondo que a classe Exercicio já exista
-                exercicio.setId(exercicioDTO.getExercicioId());  // Definir o ID do exercício
+                Exercicio exercicio = new Exercicio();
+                exercicio.setId(exercicioDTO.getExercicioId());
 
-                // Setar o progresso do exercício (feito ou não feito)
                 exercicioProgresso.setExercicio(exercicio);
                 exercicioProgresso.setFeito(exercicioDTO.getFeito());
                 exerciciosProgresso.add(exercicioProgresso);
@@ -61,7 +60,6 @@ public class ProgressoService {
 
             progresso.setExercicios(exerciciosProgresso);
 
-            // Salvar o progresso
             progressoRepository.save(progresso);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Erro ao registrar o progresso: " + e.getMessage());
@@ -72,17 +70,17 @@ public class ProgressoService {
 
     public List<ProgressoTreinoDTO> getHistoricoPorAluno(Long alunoId) {
         try {
-            // Buscar o histórico de progresso do aluno
+
             List<ProgressoTreino> progressos = progressoRepository.findByAlunoId(alunoId);
             List<ProgressoTreinoDTO> progressoDTOs = new ArrayList<>();
 
-            // Converter cada ProgressoTreino em ProgressoTreinoDTO
+
             for (ProgressoTreino progresso : progressos) {
                 ProgressoTreinoDTO progressoDTO = new ProgressoTreinoDTO();
                 progressoDTO.setTreinoId(progresso.getTreino().getId());
                 progressoDTO.setDataFinalizacao(progresso.getDataFinalizacao());
 
-                // Converter cada exercício em ExercicioProgressoDTO
+               
                 List<ExercicioProgressoDTO> exerciciosProgressoDTO = new ArrayList<>();
                 for (ExercicioProgresso exercicioProgresso : progresso.getExercicios()) {
                     ExercicioProgressoDTO exercicioDTO = new ExercicioProgressoDTO();
