@@ -1,7 +1,9 @@
 package com.fitpersonal.fitpersonal.services;
 
+import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
+import com.fitpersonal.fitpersonal.repositories.AlunoRepository;
 import com.fitpersonal.fitpersonal.repositories.ExercicioRepository;
 import com.fitpersonal.fitpersonal.repositories.TreinoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,14 @@ public class TreinoService {
     @Autowired
     private ExercicioRepository exercicioRepository;
 
-    public Treino createTreino(Treino treino) {
+    @Autowired
+    private AlunoRepository alunoRepository;
+    public Treino createTreino(Long alunoId, Treino treino) {
+
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+
+        treino.setAluno(aluno);
         // Atribui o treino a cada exercício
         for (Exercicio exercicio : treino.getExercicios()) {
             exercicio.setTreino(treino);
