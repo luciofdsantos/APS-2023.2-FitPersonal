@@ -8,4 +8,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlanoAlimentarRepository  extends JpaRepository<PlanoAlimentar, Long> {
+    List<PlanoAlimentar> findByAlunoId(Long alunoId);
 }
