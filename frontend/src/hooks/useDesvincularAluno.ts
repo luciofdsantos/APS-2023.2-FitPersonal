@@ -47,6 +47,9 @@ export default function useDesvincularAluno({
 
       const responseText = await response.text();
       console.log('Resposta do servidor:', responseText);
+
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+
       showAlert('success', 'Aluno desvinculado com sucesso!');
 
       if (!response.ok) {

@@ -55,9 +55,14 @@ export default function LoginUsuario() {
       setError(false);
       localStorage.setItem('usuario', JSON.stringify(data));
       showAlert('success', 'Login efetuado com sucesso!');
-      data.tipoUsuario === 'NUTRICIONISTA' || data.tipoUsuario === 'PERSONAL'
-        ? navigate('/alunos')
-        : navigate('/treinos');
+      navigate(
+        data.tipoUsuario === 'NUTRICIONISTA' || data.tipoUsuario === 'PERSONAL'
+          ? '/alunos'
+          : '/treinos',
+        {
+          state: { data }
+        }
+      );
     },
     onError: () => {
       setError(true);

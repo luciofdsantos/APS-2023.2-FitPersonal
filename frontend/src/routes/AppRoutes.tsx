@@ -1,15 +1,20 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Alunos from '../screens/Alunos';
-import CadastroUsuario from '../screens/CadastroUsuario';
-import EditarNovo from '../screens/Treinos/EditarNovo';
-import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
-import LoginUsuario from '../screens/LoginUsuario';
-import PlanosAlimentares from '../screens/PlanosAlimentares';
-import Treinos from '../screens/Treinos';
-import RoutesAluno from './RoutesAluno';
+
 import RoutesProfissional from './RoutesProfissional';
-import EditarPerfil from '../screens/CadastroUsuario/Perfil';
+import Alunos from '../screens/Alunos';
+import TreinosVinculados from '../screens/Treinos';
+import EditarNovoVinculado from '../screens/Treinos/EditarNovo';
+
+import RoutesAluno from './RoutesAluno';
+import Treinos from '../screens/Treinos';
+import EditarNovo from '../screens/Treinos/EditarNovo';
+import PlanosAlimentares from '../screens/PlanosAlimentares';
+import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
+
 import RoutesLogin from './RoutesLogin';
+import LoginUsuario from '../screens/LoginUsuario';
+import CadastroUsuario from '../screens/CadastroUsuario';
+import EditarPerfil from '../screens/CadastroUsuario/Perfil';
 
 export default function AppRoutes() {
   return (
@@ -36,6 +41,18 @@ export default function AppRoutes() {
 
         <Route element={<RoutesProfissional />}>
           <Route path="/alunos" element={<Alunos />} />
+          <Route
+            path="/treinos-aluno-vinculado/:idAluno"
+            element={<TreinosVinculados vinculado={true} />}
+          />
+          <Route
+            path="/treinos-aluno-vinculado/novo"
+            element={<EditarNovoVinculado vinculado={true} />}
+          />
+          <Route
+            path="/treinos-aluno-vinculado/:id"
+            element={<EditarNovoVinculado vinculado={true} />}
+          />
         </Route>
       </Routes>
     </Router>

@@ -34,7 +34,11 @@ interface Exercicio {
   treinoId: number;
 }
 
-export default function EditarNovo() {
+interface TreinosProps {
+  vinculado?: boolean;
+}
+
+export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const { showAlert } = useAlert();
 
   const { id } = useParams<{ id?: string }>();
@@ -92,7 +96,14 @@ export default function EditarNovo() {
   const { mutate: updateTreino } = useUpdateTreino({
     onSuccess: () => {
       showAlert('success', 'Treino atualizado com sucesso!');
-      navigate('/treinos');
+      navigate(
+        !vinculado
+          ? '/treinos'
+          : `/treinos-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: { data: location.state.data }
+        }
+      );
     },
     onError: (error) => {
       console.error('Erro ao atualizar treino:', error.message);
@@ -125,9 +136,14 @@ export default function EditarNovo() {
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/treinos', {
-        state: { isSuccessTreino: true }
-      });
+      navigate(
+        !vinculado
+          ? '/treinos'
+          : `/treinos-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: { isSuccessTreino: true, data: location.state.data }
+        }
+      );
     },
     onError: (error: Error) => {
       console.error(error.message);
@@ -236,7 +252,15 @@ export default function EditarNovo() {
               buttons={[
                 {
                   text: 'Cancelar',
-                  onClick: () => navigate('/treinos')
+                  onClick: () =>
+                    navigate(
+                      vinculado
+                        ? `/treinos-aluno-vinculado/${location.state.data.id}`
+                        : '/treinos',
+                      {
+                        state: { data: location.state.data }
+                      }
+                    )
                 },
                 { text: 'Salvar', type: 'submit' }
               ]}
