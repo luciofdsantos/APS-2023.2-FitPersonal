@@ -80,9 +80,9 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
 
   const handleEdit = (treino: Treino) => {
     navigate(
-      vinculado
-        ? `/treinos-aluno-vinculado/${treino.id}`
-        : `/treinos/${treino.id}`,
+      !vinculado
+        ? `/treinos/${treino.id}`
+        : `/treinos-aluno-vinculado/${treino.id}`,
       {
         state: { treino }
       }
@@ -90,7 +90,7 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
   };
 
   const handleEditNovo = () => {
-    navigate(vinculado ? '/treinos-aluno-vinculado/novo' : '/treinos/novo', {
+    navigate(!vinculado ? '/treinos/novo' : '/treinos-aluno-vinculado/novo', {
       state: { data: location.state.data }
     });
   };

@@ -14,6 +14,7 @@ interface FormData {
   nome: string;
   descricao: string;
   exercicios: Exercicio[];
+  aluno_id: number;
 }
 
 interface FormErrors {
@@ -47,6 +48,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const navigate = useNavigate();
 
   const treinoData = location.state?.treino || {
+    aluno_id: 0,
     nome: '',
     descricao: '',
     exercicios: []
@@ -55,6 +57,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const [formData, setFormData] = useState<
     FormData & { exercicios: Exercicio[] }
   >({
+    aluno_id: location.state.data.id || 0,
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
     exercicios: treinoData?.exercicios || []

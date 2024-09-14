@@ -79,6 +79,13 @@ public class TreinoService {
 //        return savedTreino;
 //    }
 
+    public List<Treino> findTreinosByAlunoId(Long alunoId) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado"));
+
+        return treinoRepository.findByAluno(aluno);
+    }
+
     // Criar Treino com Exercícios
     public Treino createTreinoWithExercicios(Treino treino, List<Exercicio> exercicios) {
         // Vincular cada exercício ao treino

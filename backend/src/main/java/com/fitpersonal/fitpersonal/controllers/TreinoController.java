@@ -37,6 +37,16 @@ public class TreinoController {
         return ResponseEntity.ok(savedTreino);
     }
 
+    @GetMapping("/aluno/{alunoId}")
+    public ResponseEntity<List<Treino>> getTreinosByAlunoId(@PathVariable Long alunoId) {
+        List<Treino> treinos = treinoService.findTreinosByAlunoId(alunoId);
+        if (!treinos.isEmpty()) {
+            return ResponseEntity.ok(treinos);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     // Listar Todos os Treinos
     @GetMapping
     public List<Treino> getAllTreinos() {

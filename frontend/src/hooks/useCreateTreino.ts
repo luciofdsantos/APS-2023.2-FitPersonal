@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 const endpoint = 'http://localhost:8080/api/treinos/addTreino';
 
 interface Treino {
+  aluno_id?: number;
   nome: string;
   descricao: string;
 }
@@ -30,7 +31,7 @@ export default function useCreateTreino({
 }: CreateTreinoProps) {
   return useMutation({
     mutationFn: async (treino: Treino & { exercicios: Exercicio[] }) => {
-      const response = await fetch(endpoint, {
+      const response = await fetch(`${endpoint}/${treino.aluno_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
