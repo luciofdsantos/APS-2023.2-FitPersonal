@@ -1,11 +1,10 @@
-import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomLayout, CustomModal, GroupButtons } from '../../../components';
 import { Grid, TextField, Button } from '@mui/material';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import {
   useCreatePlanoAlimentar,
-  useCreateRefeicao,
   useUpdatePlanoAlimentar
 } from '../../../hooks';
 import RefeicaoForm from './RefeicaoForm';
@@ -13,6 +12,7 @@ import RefeicaoCard from './RefeicaoCard';
 import { useAlert } from '../../../components/CustomAlert';
 
 interface FormData {
+  id?: number;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -21,6 +21,8 @@ interface FormData {
   totalConsumoProteina: number;
   metaConsumoGordura: number;
   totalConsumoGordura: number;
+  refeicoes: Refeicao[];
+  alunoId: number;
 }
 
 interface FormErrors {
@@ -44,6 +46,7 @@ interface Refeicao {
   proteina: number;
   gordura: number;
   tipoRefeicao: TipoRefeicao;
+  planoAlimentarId: number;
 }
 
 export enum TipoRefeicao {
@@ -53,7 +56,13 @@ export enum TipoRefeicao {
   LANCHE = 'LANCHE'
 }
 
-export default function EditarNovo() {
+interface PlanosAlimentaresProps {
+  vinculado?: boolean;
+}
+
+export default function EditarNovo({
+  vinculado = false
+}: PlanosAlimentaresProps) {
   const { showAlert } = useAlert();
 
   const { id } = useParams<{ id?: string }>();
@@ -62,6 +71,7 @@ export default function EditarNovo() {
   const navigate = useNavigate();
 
   const planoAlimentarData = location.state?.planoalimentar || {
+    alunoId: 0,
     totalConsumoCarboidrato: 0,
     totalConsumoProteina: 0,
     totalConsumoGordura: 0,
@@ -76,6 +86,7 @@ export default function EditarNovo() {
   const [formData, setFormData] = useState<
     FormData & { refeicoes: Refeicao[] }
   >({
+    alunoId: location.state.data.id || 0,
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
@@ -89,7 +100,7 @@ export default function EditarNovo() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedRefeicoes, setSelectedRefeicoes] = useState<Refeicao[]>(
-    formData?.refeicoes || []
+    planoAlimentarData?.refeicoes || []
   );
 
   const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
@@ -100,7 +111,8 @@ export default function EditarNovo() {
     carboidrato: 0,
     proteina: 0,
     gordura: 0,
-    tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
+    tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA,
+    planoAlimentarId: 0
   });
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
@@ -113,24 +125,31 @@ export default function EditarNovo() {
     }
   });
 
-  const { mutate: mutateCreateRefeicao } = useCreateRefeicao({
-    onSuccess: () => {
-      showAlert('success', 'Refeição criada com sucesso!');
-    },
-    onError: (error) => {
-      console.error('Erro ao criar refeição:', error.message);
-      showAlert('error', 'Erro ao criar refeição. Tente novamente.');
-    }
-  });
+  // const { mutate: mutateCreateRefeicao } = useCreateRefeicao({
+  //   onSuccess: () => {
+  //     showAlert('success', 'Refeição criada com sucesso!');
+  //   },
+  //   onError: (error) => {
+  //     console.error('Erro ao criar refeição:', error.message);
+  //     showAlert('error', 'Erro ao criar refeição. Tente novamente.');
+  //   }
+  // });
 
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
     onSuccess: () => {
       showAlert('success', 'Plano atualizado com sucesso!');
-      navigate('/planos-alimentares');
+      navigate(
+        !vinculado
+          ? '/planos-alimentares'
+          : `/planos-alimentares-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: { data: location.state.data }
+        }
+      );
     },
     onError: (error) => {
-      showAlert('error', 'Erro ao atualizar plano alimentar. Tente novamente.');
       console.error('Erro ao atualizar plano alimentar:', error.message);
+      showAlert('error', 'Erro ao atualizar plano alimentar. Tente novamente.');
     }
   });
 
@@ -145,25 +164,27 @@ export default function EditarNovo() {
         throw new Error('Validação falhou');
       }
 
-      if (id) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { refeicoes, ...resto } = formData;
+      formData.refeicoes = selectedRefeicoes;
 
+      if (id) {
         return updatePlanoAlimentar({
           id: Number(id),
-          planoalimentar: resto
+          planoalimentar: formData
         });
       } else {
-        formData.refeicoes = selectedRefeicoes;
-
         return createPlanoAlimentar(formData);
       }
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/planos-alimentares', {
-        state: { isSuccessPlanoAlimentar: 'true' }
-      });
+      navigate(
+        !vinculado
+          ? '/planos-alimentares'
+          : `/planos-alimentares-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: { isSuccessPlanoAlimentar: true, data: location.state.data }
+        }
+      );
     },
     onError: (error: Error) => {
       console.error(error.message);
@@ -187,13 +208,10 @@ export default function EditarNovo() {
     setOpenAddRefeicaoModal(false);
   };
 
-  const handleSaveRefeicao = useCallback(() => {
-    if (id) {
-      mutateCreateRefeicao({ ...newRefeicao, planoAlimentarId: Number(id) });
-    }
-
+  const handleSaveRefeicao = () => {
     setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
     setOpenAddRefeicaoModal(false);
+    showAlert('success', 'Refeição adicionada com sucesso!');
     setNewRefeicao({
       alimento: '',
       quantidade: 0,
@@ -201,15 +219,10 @@ export default function EditarNovo() {
       carboidrato: 0,
       proteina: 0,
       gordura: 0,
-      tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA
+      tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA,
+      planoAlimentarId: 0
     });
-  }, [
-    id,
-    mutateCreateRefeicao,
-    setSelectedRefeicoes,
-    newRefeicao,
-    selectedRefeicoes
-  ]);
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -240,7 +253,7 @@ export default function EditarNovo() {
 
   return (
     <CustomLayout appBarText="Plano Alimentar">
-      <form autoComplete="off" onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -297,23 +310,38 @@ export default function EditarNovo() {
           <Grid container spacing={2}>
             {selectedRefeicoes.map((refeicao: Refeicao, index: number) => (
               <Grid item xs={4} key={index}>
-                <RefeicaoCard refeicao={refeicao} />
+                <RefeicaoCard
+                  refeicao={refeicao}
+                  onDeleteSuccess={() => {
+                    console.log('delete');
+                  }}
+                />
               </Grid>
             ))}
           </Grid>
 
           <Grid item xs={12}>
-            <Button onClick={handleAddRefeicao}>+ Adicionar refeição</Button>
+            <Button onClick={handleAddRefeicao} variant="contained">
+              + Adicionar refeição
+            </Button>
           </Grid>
 
           <Grid item xs={12}>
             <GroupButtons
               buttons={[
-                { text: 'Salvar', type: 'submit' },
                 {
                   text: 'Cancelar',
-                  onClick: () => navigate('/planos-alimentares')
-                }
+                  onClick: () =>
+                    navigate(
+                      vinculado
+                        ? `/planos-alimentares-aluno-vinculado/${location.state.data.id}`
+                        : '/planos-alimentares',
+                      {
+                        state: { data: location.state.data }
+                      }
+                    )
+                },
+                { text: 'Salvar', type: 'submit' }
               ]}
             />
           </Grid>

@@ -16,6 +16,7 @@ import useUpdatePlanoAlimentar from './useUpdatePlanoAlimentar';
 import useUpdateTreino from './useUpdateTreino';
 import useVincularAluno from './useVincularAluno';
 import useDesvincularAluno from './useDesvincularAluno';
+import useDeleteRefeicao from './useDeleteRefeicao';
 
 export {
   useCreateExercicio,
@@ -35,5 +36,6 @@ export {
   useUpdatePerfil,
   useUpdatePlanoAlimentar,
   useUpdateTreino,
-  useVincularAluno
+  useVincularAluno,
+  useDeleteRefeicao
 };

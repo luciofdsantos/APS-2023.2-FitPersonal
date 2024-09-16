@@ -1,4 +1,6 @@
-import { Card, CardContent, Typography, Grid } from '@mui/material';
+import { Card, CardContent, Typography, Grid, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDeleteRefeicao } from '../../../hooks';
 
 interface Refeicao {
   id?: number;
@@ -13,9 +15,28 @@ interface Refeicao {
 
 interface RefeicaoCardProps {
   refeicao: Refeicao;
+  onDeleteSuccess: () => void;
 }
 
-export default function RefeicaoCard({ refeicao }: RefeicaoCardProps) {
+export default function RefeicaoCard({
+  refeicao,
+  onDeleteSuccess
+}: RefeicaoCardProps) {
+  const { mutate: deleteRefeicao } = useDeleteRefeicao({
+    onSuccess: () => {
+      onDeleteSuccess();
+    },
+    onError: (error) => {
+      console.error('Erro ao deletar refeição:', error.message);
+    }
+  });
+
+  const handleDelete = () => {
+    if (refeicao.id) {
+      deleteRefeicao(refeicao.id);
+    }
+  };
+
   return (
     <Card>
       <CardContent>
@@ -52,6 +73,12 @@ export default function RefeicaoCard({ refeicao }: RefeicaoCardProps) {
             <Typography variant="body2" color="textSecondary">
               <strong>Tipo de Refeição:</strong> {refeicao.tipoRefeicao}
             </Typography>
+          </Grid>
+
+          <Grid item xs={12} container justifyContent="flex-end">
+            <IconButton color="secondary" onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
           </Grid>
         </Grid>
       </CardContent>

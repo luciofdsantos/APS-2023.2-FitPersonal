@@ -13,10 +13,10 @@ import {
 } from '@mui/material';
 import { CustomLayout, GroupButtons } from '../../components';
 import {
-  useTodosAlunosProfissional,
+  useTodosAlunosProfissionalNutricionista,
   useTodosAlunos,
-  useVincularAluno,
-  useDesvincularAluno
+  useVincularAlunoNutricionista,
+  useDesvincularAlunoNutricionista
 } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,28 +30,6 @@ interface Aluno {
 export default function Alunos() {
   const navigate = useNavigate();
 
-  const usuarioString = localStorage.getItem('usuario');
-  let tipoUsuario: 'NUTRICIONISTA' | 'PERSONAL' | null = null;
-
-  if (usuarioString) {
-    try {
-      const usuario = JSON.parse(usuarioString);
-      tipoUsuario = usuario?.tipoUsuario; // Assumindo que 'tipoUsuario' está no objeto 'usuario'
-    } catch (error) {
-      console.error('Erro ao analisar o JSON do localStorage:', error);
-    }
-  }
-
-  // Define o endpoint com base no tipo de usuário
-  const endpointVincular =
-    tipoUsuario === 'NUTRICIONISTA'
-      ? 'http://localhost:8080/api/vincular-aluno/vincular-aluno-nutricionista'
-      : 'http://localhost:8080/api/vincular-aluno/vincular-aluno-personal';
-
-  const endpointDesvincular =
-    tipoUsuario === 'NUTRICIONISTA'
-      ? 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-nutricionista'
-      : 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-personal';
   const {
     data: alunos,
     refetch: refetchAlunos,
@@ -62,11 +40,10 @@ export default function Alunos() {
     data: alunosVinculados,
     refetch: refetchAlunosVinculados,
     isFetching: isFetchingAlunosVinculados
-  } = useTodosAlunosProfissional();
+  } = useTodosAlunosProfissionalNutricionista();
 
   const { mutate: vincularAluno, isPending: isPendingVincularAluno } =
-    useVincularAluno({
-      endpoint: endpointVincular,
+    useVincularAlunoNutricionista({
       onSuccess: () => {
         refetchAlunos();
         refetchAlunosVinculados();
@@ -74,8 +51,7 @@ export default function Alunos() {
     });
 
   const { mutate: desvincularAluno, isPending: isPendingDesvincularAluno } =
-    useDesvincularAluno({
-      endpoint: endpointDesvincular,
+    useDesvincularAlunoNutricionista({
       onSuccess: () => {
         refetchAlunos();
         refetchAlunosVinculados();
@@ -101,12 +77,6 @@ export default function Alunos() {
 
   const isLoading =
     isFetchingTodosAlunos || isFetchingAlunosVinculados || showSkeleton;
-
-  const handleTreinosAlunoVinculado = (data: Aluno) => {
-    navigate(`/treinos-aluno-vinculado/${data.id}`, {
-      state: { data }
-    });
-  };
 
   const handlePlanosAlimentaresAlunoVinculado = (data: Aluno) => {
     navigate(`/planos-alimentares-aluno-vinculado/${data.id}`, {
@@ -170,19 +140,13 @@ export default function Alunos() {
                                 color="primary"
                                 variant="text"
                                 onClick={() =>
-                                  handleTreinosAlunoVinculado(data)
-                                }
-                              >
-                                Treinos
-                              </Button>
-                              <Button
-                                color="primary"
-                                variant="text"
-                                onClick={() =>
                                   handlePlanosAlimentaresAlunoVinculado(data)
                                 }
                               >
                                 Planos Alimentares
+                              </Button>
+                              <Button color="primary" variant="text">
+                                Treinos
                               </Button>
                             </>
                           )}

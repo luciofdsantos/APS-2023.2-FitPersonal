@@ -4,6 +4,7 @@ import RoutesProfissional from './RoutesProfissional';
 import Alunos from '../screens/Alunos';
 import TreinosVinculados from '../screens/Treinos';
 import EditarNovoVinculado from '../screens/Treinos/EditarNovo';
+import PlanosAlimentaresVinculados from '../screens/PlanosAlimentares';
 
 import RoutesAluno from './RoutesAluno';
 import Treinos from '../screens/Treinos';
@@ -52,6 +53,18 @@ export default function AppRoutes() {
           <Route
             path="/treinos-aluno-vinculado/:id"
             element={<EditarNovoVinculado vinculado={true} />}
+          />
+          <Route
+            path="/planos-alimentares-aluno-vinculado/:idAluno"
+            element={<PlanosAlimentaresVinculados vinculado={true} />}
+          />
+          <Route
+            path="/planos-alimentares-aluno-vinculado/novo"
+            element={<EditarNovoPlano vinculado={true} />}
+          />
+          <Route
+            path="/planos-alimentares-aluno-vinculado/:id"
+            element={<EditarNovoPlano vinculado={true} />}
           />
         </Route>
       </Routes>

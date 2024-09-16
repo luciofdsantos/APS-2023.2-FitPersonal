@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import React from 'react';
 
-const RoutesProfissional: React.FC = () => {
+const RoutesAluno: React.FC = () => {
   const usuarioString = localStorage.getItem('usuario');
 
   let isProfissional = false;
@@ -19,4 +19,4 @@ const RoutesProfissional: React.FC = () => {
   return isProfissional ? <Outlet /> : <Navigate to="/" />;
 };
 
-export default RoutesProfissional;
+export default RoutesAluno;
