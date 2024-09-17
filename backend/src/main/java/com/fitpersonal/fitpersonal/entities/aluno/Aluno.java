@@ -3,6 +3,7 @@ package com.fitpersonal.fitpersonal.entities.aluno;
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
 import com.fitpersonal.fitpersonal.entities.personal.Personal;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
+import com.fitpersonal.fitpersonal.entities.treino.Treino;
 import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -41,5 +42,4 @@ public class Aluno extends Usuario {
         planosAlimentares.remove(planoAlimentar);
         planoAlimentar.setAluno(null); // Remover a referência bidirecional
     }
-
 }

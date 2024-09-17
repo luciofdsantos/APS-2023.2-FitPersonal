@@ -3,17 +3,18 @@ import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
 import { useAlert } from '../../../components/CustomAlert';
 import { Button, Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useCreateTreino, useUpdateTreino } from '../../../hooks';
-import { useParams } from 'react-router-dom';
 import ExercicioForm from './ExercicioForm';
 import ExercicioCard from './ExercicioCard';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 
 interface FormData {
   id?: number;
   nome: string;
   descricao: string;
   exercicios: Exercicio[];
+  aluno_id: number;
 }
 
 interface FormErrors {
@@ -23,6 +24,7 @@ interface FormErrors {
 }
 
 interface Exercicio {
+  id?: number;
   nome: string;
   inicio: string;
   fim: string;
@@ -34,39 +36,52 @@ interface Exercicio {
   treinoId: number;
 }
 
-export default function EditarNovo() {
+interface TreinosProps {
+  vinculado?: boolean;
+}
+
+export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const { showAlert } = useAlert();
-
   const { id } = useParams<{ id?: string }>();
-
   const location = useLocation();
   const navigate = useNavigate();
 
   const treinoData = location.state?.treino || {
+    aluno_id: 0,
     nome: '',
     descricao: '',
     exercicios: []
   };
 
-  const [formData, setFormData] = useState<
-    FormData & { exercicios: Exercicio[] }
-  >({
-    nome: treinoData?.nome || '',
-    descricao: treinoData?.descricao || '',
-    exercicios: treinoData?.exercicios || []
+  const [formData, setFormData] = useState<FormData>({
+    aluno_id: location.state?.treino?.aluno.id || location.state?.login.id || 0,
+    nome: treinoData.nome || '',
+    descricao: treinoData.descricao || '',
+    exercicios: treinoData.exercicios || []
   });
+
+  const today = new Date().toISOString().split('T')[0];
+  const tomorrowDate = new Date(Date.now() + 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0];
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedExercicios, setSelectedExercicios] = useState<Exercicio[]>(
-    treinoData?.exercicios || []
+    treinoData.exercicios || []
   );
-
-  const today = new Date().toISOString().split('T')[0];
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowDate = tomorrow.toISOString().split('T')[0];
-
+  const [selectedExercicio, setSelectedExercicio] = useState<Exercicio>({
+    nome: '',
+    inicio: today,
+    fim: tomorrowDate,
+    grupoMuscular: '',
+    series: 0,
+    repeticoes: 0,
+    carga: 0,
+    finalizado: false,
+    treinoId: 0
+  });
   const [openAddExercicioModal, setOpenAddExercicioModal] = useState(false);
+  const [openEditExercicioModal, setOpenEditExercicioModal] = useState(false);
   const [newExercicio, setNewExercicio] = useState<Exercicio>({
     nome: '',
     inicio: today,
@@ -80,9 +95,7 @@ export default function EditarNovo() {
   });
 
   const { mutate: createTreino } = useCreateTreino({
-    onSuccess: () => {
-      showAlert('success', 'Treino criado com sucesso!');
-    },
+    onSuccess: () => showAlert('success', 'Treino criado com sucesso!'),
     onError: (error) => {
       console.error('Erro ao criar treino:', error.message);
       showAlert('error', 'Erro ao criar treino. Tente novamente.');
@@ -92,7 +105,14 @@ export default function EditarNovo() {
   const { mutate: updateTreino } = useUpdateTreino({
     onSuccess: () => {
       showAlert('success', 'Treino atualizado com sucesso!');
-      navigate('/treinos');
+      navigate(
+        !vinculado
+          ? '/treinos'
+          : `/treinos-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: { login: location.state.login, treino: location.state.treino }
+        }
+      );
     },
     onError: (error) => {
       console.error('Erro ao atualizar treino:', error.message);
@@ -108,7 +128,7 @@ export default function EditarNovo() {
       if (!formData.descricao)
         validationErrors.descricao = 'Descrição é obrigatória *';
       if (selectedExercicios.length === 0)
-        validationErrors.exercicios = 'Exercícios é obrigatório *';
+        alert('Exercícios são obrigatórios *');
 
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
@@ -125,13 +145,20 @@ export default function EditarNovo() {
     },
     onSuccess: () => {
       setErrors({});
-      navigate('/treinos', {
-        state: { isSuccessTreino: true }
-      });
+      navigate(
+        !vinculado
+          ? '/treinos'
+          : `/treinos-aluno-vinculado/${location.state.data.id}`,
+        {
+          state: {
+            isSuccessTreino: true,
+            login: location.state.login,
+            treino: location.state.treino
+          }
+        }
+      );
     },
-    onError: (error: Error) => {
-      console.error(error.message);
-    }
+    onError: (error: Error) => console.error(error.message)
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -143,17 +170,16 @@ export default function EditarNovo() {
     }
   };
 
-  const handleAddExercicio = () => {
-    setOpenAddExercicioModal(true);
-  };
+  const handleAddExercicio = () => setOpenAddExercicioModal(true);
 
   const handleCloseModal = () => {
     setOpenAddExercicioModal(false);
+    setOpenEditExercicioModal(false);
   };
 
   const handleSaveExercicio = () => {
-    setSelectedExercicios([...selectedExercicios, newExercicio]);
-    setOpenAddExercicioModal(false);
+    setSelectedExercicios((prev) => [...prev, newExercicio]);
+    handleCloseModal();
     showAlert('success', 'Exercício adicionado com sucesso!');
     setNewExercicio({
       nome: '',
@@ -168,6 +194,39 @@ export default function EditarNovo() {
     });
   };
 
+  const handleEditExercicio = (exercicio: Exercicio) => {
+    setOpenEditExercicioModal(true);
+    setSelectedExercicio(exercicio);
+  };
+
+  const handleSaveEditExercicio = () => {
+    setSelectedExercicios((prev) =>
+      prev.map((exercicio) =>
+        exercicio?.id === selectedExercicio?.id ? selectedExercicio : exercicio
+      )
+    );
+
+    handleCloseModal();
+    showAlert('success', 'Exercício atualizado com sucesso!');
+    setNewExercicio({
+      nome: '',
+      inicio: today,
+      fim: tomorrowDate,
+      grupoMuscular: '',
+      series: 0,
+      repeticoes: 0,
+      carga: 0,
+      finalizado: false,
+      treinoId: 0
+    });
+  };
+
+  const handleDeleteExercicio = (exercicio: Exercicio) => {
+    setSelectedExercicios((prev) =>
+      prev.filter((item) => item.id !== exercicio.id)
+    );
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -177,21 +236,22 @@ export default function EditarNovo() {
     if (!formData.descricao)
       validationErrors.descricao = 'Descrição é obrigatória *';
     if (selectedExercicios.length === 0)
-      validationErrors.exercicios = 'Exercícios é obrigatório *';
+      validationErrors.exercicios = 'Exercícios são obrigatórios *';
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
+    formData.exercicios = selectedExercicios;
     mutation.mutate();
   };
 
   return (
     <CustomLayout appBarText="Treinos">
       <form onSubmit={handleSubmit} noValidate>
-        <Grid container>
-          <Grid item xs={12} style={{ marginBottom: '1rem' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
             <TextField
               name="nome"
               label="Nome do treino *"
@@ -204,7 +264,7 @@ export default function EditarNovo() {
             />
           </Grid>
 
-          <Grid item xs={12} style={{ marginBottom: '1rem' }}>
+          <Grid item xs={12}>
             <TextField
               name="descricao"
               label="Descrição *"
@@ -217,26 +277,55 @@ export default function EditarNovo() {
             />
           </Grid>
 
-          <Grid container spacing={2}>
-            {selectedExercicios.map((exercicio: Exercicio, index: number) => (
-              <Grid item xs={4} key={index}>
-                <ExercicioCard exercicio={exercicio} />
+          <Grid container spacing={2} style={{ marginTop: '1rem' }}>
+            {selectedExercicios.map((exercicio, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <ExercicioCard
+                  exercicio={exercicio}
+                  buttons={[
+                    {
+                      startIcon: <EditIcon />,
+                      onClick: () => handleEditExercicio(exercicio),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    },
+                    {
+                      startIcon: <DeleteIcon />,
+                      onClick: () => handleDeleteExercicio(exercicio),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    }
+                  ]}
+                />
               </Grid>
             ))}
           </Grid>
 
-          <Grid item xs={12} sx={{ marginTop: '1rem' }}>
+          <Grid item xs={12} style={{ marginTop: '1rem' }}>
             <Button onClick={handleAddExercicio} variant="contained">
               + Adicionar exercício
             </Button>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ marginTop: '1rem' }}>
             <GroupButtons
               buttons={[
                 {
                   text: 'Cancelar',
-                  onClick: () => navigate('/treinos')
+                  onClick: () =>
+                    navigate(
+                      vinculado
+                        ? `/treinos-aluno-vinculado/${location.state.data.id}`
+                        : '/treinos',
+                      {
+                        state: {
+                          login: location.state.login,
+                          treino: location.state.treino
+                        }
+                      }
+                    )
                 },
                 { text: 'Salvar', type: 'submit' }
               ]}
@@ -246,10 +335,22 @@ export default function EditarNovo() {
       </form>
 
       <CustomModal
+        open={openEditExercicioModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveEditExercicio}
+        title="Editar Exercício"
+      >
+        <ExercicioForm
+          newExercicio={selectedExercicio}
+          setNewExercicio={setSelectedExercicio}
+        />
+      </CustomModal>
+
+      <CustomModal
         open={openAddExercicioModal}
         onClose={handleCloseModal}
         onSave={handleSaveExercicio}
-        title="Adicionar Novo Exercicio"
+        title="Adicionar Novo Exercício"
       >
         <ExercicioForm
           newExercicio={newExercicio}

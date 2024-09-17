@@ -103,7 +103,7 @@ export default function CustomDrawer({
         </IconButton>
       </Toolbar>
       <Divider />
-      <ListItems open={open} items={items} />
+      <ListItems open={open} />
     </Drawer>
   );
 }

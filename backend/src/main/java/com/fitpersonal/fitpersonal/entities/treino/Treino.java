@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.treino;
 
+import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import jakarta.persistence.*;
@@ -33,6 +34,10 @@ public class Treino {
 //    @ManyToOne
 //    @JoinColumn(name = "usuario_id")
 //    private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
 
     @OneToMany(mappedBy = "treino", cascade =  CascadeType.ALL, orphanRemoval = true)
     private List<Exercicio> exercicios = new ArrayList<>();

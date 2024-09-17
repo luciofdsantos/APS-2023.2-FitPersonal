@@ -109,6 +109,34 @@ public class PlanoAlimentarController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/plano_alimentar_aluno/{alunoId}")
+    public ResponseEntity<?> getPlanosAlimentaresByAlunoId(@PathVariable Long alunoId) {
+        try {
+            // Verifica se o aluno existe no banco de dados
+            Aluno aluno = alunoRepository.findById(alunoId)
+                    .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+            // Busca os planos alimentares associados ao aluno
+            List<PlanoAlimentar> planosAlimentares = planoAlimentarRepository.findByAlunoId(alunoId);
+
+            if (planosAlimentares.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Nenhum plano alimentar encontrado para o aluno com ID: " + alunoId);
+            }
+
+            // Converte os planos alimentares em DTOs
+            List<PlanoAlimentarResponseDTO> response = planosAlimentares.stream()
+                    .map(PlanoAlimentarResponseDTO::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(response); // Retorna a lista de planos alimentares
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao recuperar planos alimentares para o aluno com ID: " + alunoId);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePlanoAlimentar(@PathVariable Long id) {
         try {

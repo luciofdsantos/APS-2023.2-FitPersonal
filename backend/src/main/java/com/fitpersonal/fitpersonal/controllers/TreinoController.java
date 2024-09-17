@@ -23,9 +23,9 @@ public class TreinoController {
     private ExercicioRepository exercicioRepository;
 
     // Criar um Treino
-    @PostMapping("/addTreino")
-    public ResponseEntity<Treino> createTreino(@RequestBody Treino treino) {
-        Treino novoTreino = treinoService.createTreino(treino);
+    @PostMapping("/addTreino/{alunoId}")
+    public ResponseEntity<Treino> createTreino(@PathVariable Long alunoId,@RequestBody Treino treino) {
+        Treino novoTreino = treinoService.createTreino(alunoId, treino);
         return new ResponseEntity<>(novoTreino, HttpStatus.CREATED);
     }
 
@@ -35,6 +35,16 @@ public class TreinoController {
     public ResponseEntity<Treino> createTreinoWithExercicios(@RequestBody TreinoComExerciciosDTO treinoComExerciciosDTO) {
         Treino savedTreino = treinoService.createTreinoWithExercicios(treinoComExerciciosDTO.getTreino(), treinoComExerciciosDTO.getExercicios());
         return ResponseEntity.ok(savedTreino);
+    }
+
+    @GetMapping("/aluno/{alunoId}")
+    public ResponseEntity<List<Treino>> getTreinosByAlunoId(@PathVariable Long alunoId) {
+        List<Treino> treinos = treinoService.findTreinosByAlunoId(alunoId);
+        if (!treinos.isEmpty()) {
+            return ResponseEntity.ok(treinos);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // Listar Todos os Treinos
