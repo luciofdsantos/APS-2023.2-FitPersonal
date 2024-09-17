@@ -1,6 +1,5 @@
 package com.fitpersonal.fitpersonal.controllers;
 
-import com.fitpersonal.fitpersonal.entities.dtos.AlunoResponseDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.ProgressoTreinoDTO;
 import com.fitpersonal.fitpersonal.services.ProgressoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,9 @@ public class ProgressoController {
     private ProgressoService progressoService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<String> registrarProgresso(@RequestBody ProgressoTreinoDTO progressoTreinoDTO) {
-        progressoService.registrarProgresso(progressoTreinoDTO);
-        return ResponseEntity.ok("Progresso registrado com sucesso!");
+    public ResponseEntity<ProgressoTreinoDTO> registrarProgresso(@RequestBody ProgressoTreinoDTO progressoTreinoDTO) {
+        ProgressoTreinoDTO responseDTO = progressoService.registrarProgresso(progressoTreinoDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/historico/{alunoId}")

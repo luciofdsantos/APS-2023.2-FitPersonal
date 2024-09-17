@@ -1,14 +1,12 @@
 package com.fitpersonal.fitpersonal.services;
 
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
-import com.fitpersonal.fitpersonal.entities.dtos.AlunoResponseDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.ExercicioProgressoDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.ProgressoTreinoDTO;
 import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.exercicioprogresso.ExercicioProgresso;
 import com.fitpersonal.fitpersonal.entities.progressotreino.ProgressoTreino;
 import com.fitpersonal.fitpersonal.entities.treino.Treino;
-import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
 import com.fitpersonal.fitpersonal.repositories.AlunoRepository;
 import com.fitpersonal.fitpersonal.repositories.ProgressoRepository;
 import com.fitpersonal.fitpersonal.repositories.TreinoRepository;
@@ -30,7 +28,7 @@ public class ProgressoService {
     @Autowired
     private AlunoRepository alunoRepository;
 
-    public void registrarProgresso(ProgressoTreinoDTO progressoTreinoDTO) {
+    public ProgressoTreinoDTO registrarProgresso(ProgressoTreinoDTO progressoTreinoDTO) {
         try {
             ProgressoTreino progresso = new ProgressoTreino();
 
@@ -66,6 +64,7 @@ public class ProgressoService {
         } catch (Exception e) {
             throw new RuntimeException("Ocorreu um erro ao registrar o progresso.");
         }
+        return progressoTreinoDTO;
     }
 
     public List<ProgressoTreinoDTO> getHistoricoPorAluno(Long alunoId) {
