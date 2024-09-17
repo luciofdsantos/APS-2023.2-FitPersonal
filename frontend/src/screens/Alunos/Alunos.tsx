@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Button,
   Grid,
@@ -17,6 +18,7 @@ import {
   useVincularAluno,
   useDesvincularAluno
 } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface Aluno {
   id: number;
@@ -26,6 +28,8 @@ interface Aluno {
 }
 
 export default function Alunos() {
+  const navigate = useNavigate();
+
   const {
     data: alunos,
     refetch: refetchAlunos,
@@ -60,11 +64,25 @@ export default function Alunos() {
     );
   };
 
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  useEffect(() => {
+    if (isPendingVincularAluno || isPendingDesvincularAluno) {
+      setShowSkeleton(true);
+    } else {
+      const timer = setTimeout(() => setShowSkeleton(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [isPendingVincularAluno, isPendingDesvincularAluno]);
+
   const isLoading =
-    isFetchingTodosAlunos ||
-    isFetchingAlunosVinculados ||
-    isPendingVincularAluno ||
-    isPendingDesvincularAluno;
+    isFetchingTodosAlunos || isFetchingAlunosVinculados || showSkeleton;
+
+  const handleTreinosAlunoVinculado = (data: Aluno) => {
+    navigate(`/treinos-aluno-vinculado/${data.id}`, {
+      state: { data }
+    });
+  };
 
   return (
     <CustomLayout appBarText="Alunos">
@@ -72,9 +90,9 @@ export default function Alunos() {
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
-              { text: 'Atualizar Tabela', onClick: () => refetchAlunos }
+              { text: 'Atualizar Tabela', onClick: () => refetchAlunos() } // Fixed the onClick function
             ]}
-            height="60%"
+            height="30%"
           />
 
           <TableContainer component={Paper}>
@@ -88,64 +106,68 @@ export default function Alunos() {
                   <TableCell>Opções</TableCell>
                 </TableRow>
               </TableHead>
-              {isLoading ? (
-                <Skeleton variant="circular" width={80} height={80} />
-              ) : (
-                <TableBody>
-                  {alunos?.map((data: Aluno, index: number) => (
-                    <TableRow
-                      key={index}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {data.id}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {data.nome}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {data.sobrenome}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {data.sexo === 'OUTRO' ? 'Não declarado' : data.sexo}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {isVinculado(data.id) ? (
-                          <>
-                            <Button color="primary" variant="text">
-                              Treinos
-                            </Button>
 
-                            <Button color="primary" variant="text">
-                              Planos Alimentares
-                            </Button>
-                          </>
-                        ) : (
-                          ''
-                        )}
+              <TableBody>
+                {alunos?.map((data: Aluno) => (
+                  <TableRow
+                    key={data.id} // Using data.id for a unique key
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {data.id}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.nome}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.sobrenome}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {data.sexo === 'OUTRO' ? 'Não declarado' : data.sexo}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {isLoading ? (
+                        <Skeleton
+                          variant="rectangular"
+                          width={200}
+                          height={40}
+                        />
+                      ) : (
+                        <>
+                          {isVinculado(data.id) && (
+                            <>
+                              <Button
+                                color="primary"
+                                variant="text"
+                                onClick={() =>
+                                  handleTreinosAlunoVinculado(data)
+                                }
+                              >
+                                Treinos
+                              </Button>
+                              <Button color="primary" variant="text">
+                                Planos Alimentares
+                              </Button>
+                            </>
+                          )}
 
-                        {!isVinculado(data.id) ? (
                           <Button
                             color="primary"
                             variant="text"
-                            onClick={() => vincularAluno(data.id)}
+                            onClick={() =>
+                              isVinculado(data.id)
+                                ? desvincularAluno(data.id)
+                                : vincularAluno(data.id)
+                            }
                           >
-                            Vincular
+                            {!isVinculado(data.id) ? 'Vincular' : 'Desvincular'}
                           </Button>
-                        ) : (
-                          <Button
-                            color="primary"
-                            variant="text"
-                            onClick={() => desvincularAluno(data.id)}
-                          >
-                            Desvincular
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              )}
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </Grid>

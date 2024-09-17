@@ -1,33 +1,55 @@
-import React from 'react';
 import {
   Grid,
   ListItemButton,
   ListItemIcon,
   ListItemText
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-
-interface Item {
-  text: string;
-  Icon: React.ElementType;
-  path: string;
-  usuario: string;
-}
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+  FitnessCenter,
+  FoodBank,
+  Person,
+  PersonAdd
+} from '@mui/icons-material';
 
 interface ListItemsProps {
-  items: Item[];
   open: boolean;
 }
 
-export default function ListItems({ items, open }: ListItemsProps) {
+const items = [
+  {
+    text: 'Treinos',
+    Icon: FitnessCenter,
+    path: '/treinos',
+    usuario: 'ALUNO'
+  },
+  {
+    text: 'Planos Alimentares',
+    Icon: FoodBank,
+    path: '/planos-alimentares',
+    usuario: 'ALUNO'
+  },
+  { text: 'Alunos', Icon: PersonAdd, path: '/alunos', usuario: 'PROFISSIONAL' },
+  {
+    text: 'Editar Pefil',
+    Icon: Person,
+    path: '/editar-perfil',
+    usuario: 'ALUNO'
+  }
+];
+
+export default function ListItems({ open }: ListItemsProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = (path: string) => {
-    navigate(path);
+    navigate(path, {
+      state: { login: location.state.login, treino: location.state.treino }
+    });
   };
 
   const usuarioString = localStorage.getItem('usuario');
-  let isProfissional = 'ALUNO';
+  let typeUsuario = 'ALUNO';
 
   if (usuarioString) {
     try {
@@ -37,7 +59,7 @@ export default function ListItems({ items, open }: ListItemsProps) {
         usuario.tipoUsuario === 'NUTRICIONISTA' ||
         usuario.tipoUsuario === 'PERSONAL'
       ) {
-        isProfissional = 'PROFISSIONAL';
+        typeUsuario = 'PROFISSIONAL';
       }
     } catch (error) {
       console.error('Erro ao analisar o JSON do localStorage:', error);
@@ -47,7 +69,7 @@ export default function ListItems({ items, open }: ListItemsProps) {
   return (
     <Grid item xs={12} md={8} lg={9}>
       {items.map((item, index) => {
-        const shouldShow = item.usuario === isProfissional;
+        const shouldShow: boolean = item.usuario === typeUsuario;
 
         return (
           shouldShow && (

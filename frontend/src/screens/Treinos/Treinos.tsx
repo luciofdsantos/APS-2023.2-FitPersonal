@@ -10,6 +10,7 @@ import { Grid, CircularProgress, Box } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
+import { useParams } from 'react-router-dom';
 
 interface Exercicio {
   nome: string;
@@ -29,10 +30,15 @@ interface Treino {
   exercicios: Exercicio[];
 }
 
-export default function Treinos() {
+interface TreinosProps {
+  vinculado?: boolean;
+}
+
+export default function Treinos({ vinculado = false }: TreinosProps) {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const location = useLocation();
+  const { idAluno } = useParams();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
@@ -42,7 +48,7 @@ export default function Treinos() {
     refetch: refetchTreino,
     isSuccess,
     isFetching
-  } = useTreinos();
+  } = useTreinos(!vinculado ? location.state.login.id : Number(idAluno));
 
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
@@ -73,8 +79,19 @@ export default function Treinos() {
   };
 
   const handleEdit = (treino: Treino) => {
-    navigate(`/treinos/${treino.id}`, {
-      state: { treino }
+    navigate(
+      !vinculado
+        ? `/treinos/${treino.id}`
+        : `/treinos-aluno-vinculado/${treino.id}`,
+      {
+        state: { login: location.state.login, treino: treino }
+      }
+    );
+  };
+
+  const handleEditNovo = () => {
+    navigate(!vinculado ? '/treinos/novo' : '/treinos-aluno-vinculado/novo', {
+      state: { login: location.state.login, treino: location.state.treino }
     });
   };
 
@@ -86,11 +103,20 @@ export default function Treinos() {
   }, [location.state, refetchTreino]);
 
   return (
-    <CustomLayout appBarText="Treinos">
+    <CustomLayout
+      appBarText={
+        vinculado ? `Aluno ${location.state.data.nome} - Treinos` : 'Treinos'
+      }
+    >
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
-            buttons={[{ text: 'Novo treino', href: '/treinos/novo' }]}
+            buttons={[
+              {
+                text: 'Novo treino',
+                onClick: () => handleEditNovo()
+              }
+            ]}
           />
         </Grid>
 
@@ -148,7 +174,6 @@ export default function Treinos() {
                 buttons={[
                   {
                     startIcon: <EditIcon />,
-                    href: `/treinos/${treino.id}`,
                     onClick: () => handleEdit(treino),
                     backgroundColor: 'transparent',
                     iconColor: '#6842FF',

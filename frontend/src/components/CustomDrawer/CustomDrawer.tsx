@@ -55,28 +55,6 @@ const Drawer = styled(MuiDrawer, {
   }
 }));
 
-const items = [
-  {
-    text: 'Treinos',
-    Icon: FitnessCenter,
-    path: '/treinos',
-    usuario: 'ALUNO'
-  },
-  {
-    text: 'Planos Alimentares',
-    Icon: FoodBank,
-    path: '/planos-alimentares',
-    usuario: 'ALUNO'
-  },
-  { text: 'Alunos', Icon: PersonAdd, path: '/alunos', usuario: 'PROFISSIONAL' },
-  {
-    text: 'Editar Pefil',
-    Icon: Person,
-    path: '/editar-perfil',
-    usuario: 'PROFISSIONAL' || 'ALUNO'
-  }
-];
-
 export default function CustomDrawer({
   open,
   drawerWidth,
@@ -97,7 +75,7 @@ export default function CustomDrawer({
         </IconButton>
       </Toolbar>
       <Divider />
-      <ListItems open={open} items={items} />
+      <ListItems open={open} />
     </Drawer>
   );
 }
