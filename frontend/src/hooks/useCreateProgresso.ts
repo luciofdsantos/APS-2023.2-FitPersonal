@@ -17,7 +17,7 @@ interface UseCreateProgressoProps {
   onError: (error: Error) => void;
 }
 
-export default function useCreateProgresso ({
+export default function useCreateProgresso({
   onSuccess,
   onError
 }: UseCreateProgressoProps) {
