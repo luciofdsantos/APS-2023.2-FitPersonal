@@ -42,6 +42,4 @@ public class Aluno extends Usuario {
         planosAlimentares.remove(planoAlimentar);
         planoAlimentar.setAluno(null); // Remover a referência bidirecional
     }
-
-
 }

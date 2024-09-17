@@ -60,7 +60,7 @@ export default function LoginUsuario() {
           ? '/alunos'
           : '/treinos',
         {
-          state: { data }
+          state: { login: data }
         }
       );
     },

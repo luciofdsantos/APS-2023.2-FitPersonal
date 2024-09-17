@@ -1,6 +1,9 @@
 import { Grid, Card, CardContent, Typography } from '@mui/material';
+import { GroupButtons } from '../../../components';
+import React, { ReactNode } from 'react';
 
-interface Exercicio {
+export interface Exercicio {
+  id?: number;
   nome: string;
   inicio: string;
   fim: string;
@@ -9,13 +12,31 @@ interface Exercicio {
   repeticoes: number;
   carga: number;
   finalizado: boolean;
+  treinoId: number; // Certifique-se de que esta propriedade está presente
+}
+
+interface ButtonProps {
+  text?: string;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'text' | 'outlined' | 'contained';
+  startIcon?: ReactNode;
+  backgroundColor?: string;
+  iconColor?: string;
+  border?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 interface ExercicioCardProps {
   exercicio: Exercicio;
+  buttons: ButtonProps[];
 }
 
-export default function ExercicioCard({ exercicio }: ExercicioCardProps) {
+export default function ExercicioCard({
+  exercicio,
+  buttons
+}: ExercicioCardProps) {
   return (
     <Card>
       <CardContent>
@@ -60,6 +81,10 @@ export default function ExercicioCard({ exercicio }: ExercicioCardProps) {
               <strong>Status:</strong>
               {exercicio.finalizado ? 'Finalizado' : 'Não Finalizado'}
             </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <GroupButtons buttons={buttons} />
           </Grid>
         </Grid>
       </CardContent>

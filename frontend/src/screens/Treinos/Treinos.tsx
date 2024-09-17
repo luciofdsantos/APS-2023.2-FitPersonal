@@ -48,7 +48,7 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
     refetch: refetchTreino,
     isSuccess,
     isFetching
-  } = useTreinos(!vinculado ? location.state.data.id : Number(idAluno));
+  } = useTreinos(!vinculado ? location.state.login.id : Number(idAluno));
 
   const { mutate: deleteTreino } = useDeleteTreino({
     onSuccess: () => {
@@ -84,14 +84,14 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
         ? `/treinos/${treino.id}`
         : `/treinos-aluno-vinculado/${treino.id}`,
       {
-        state: { treino }
+        state: { login: location.state.login, treino: treino }
       }
     );
   };
 
   const handleEditNovo = () => {
     navigate(!vinculado ? '/treinos/novo' : '/treinos-aluno-vinculado/novo', {
-      state: { data: location.state.data }
+      state: { login: location.state.login, treino: location.state.treino }
     });
   };
 
