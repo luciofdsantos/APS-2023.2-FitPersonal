@@ -10,6 +10,7 @@ import {
 import RefeicaoForm from './RefeicaoForm';
 import RefeicaoCard from './RefeicaoCard';
 import { useAlert } from '../../../components/CustomAlert';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 
 interface FormData {
   id?: number;
@@ -86,7 +87,8 @@ export default function EditarNovo({
   const [formData, setFormData] = useState<
     FormData & { refeicoes: Refeicao[] }
   >({
-    alunoId: location.state.data.id || 0,
+    alunoId:
+      location.state?.planoAlimentar?.aluno.id || location.state?.login.id || 0,
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
@@ -103,7 +105,19 @@ export default function EditarNovo({
     planoAlimentarData?.refeicoes || []
   );
 
+  const [selectedRefeicao, setSelectedRefeicao] = useState<Refeicao>({
+    alimento: '',
+    quantidade: 0,
+    kcal: 0,
+    carboidrato: 0,
+    proteina: 0,
+    gordura: 0,
+    tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA,
+    planoAlimentarId: 0
+  });
+
   const [openAddRefeicaoModal, setOpenAddRefeicaoModal] = useState(false);
+  const [openEditRefeicaoModal, setOpenEditRefeicaoModal] = useState(false);
   const [newRefeicao, setNewRefeicao] = useState<Refeicao>({
     alimento: '',
     quantidade: 0,
@@ -143,7 +157,10 @@ export default function EditarNovo({
           ? '/planos-alimentares'
           : `/planos-alimentares-aluno-vinculado/${location.state.data.id}`,
         {
-          state: { data: location.state.data }
+          state: {
+            login: location.state.login,
+            planoalimentar: location.state.planoalimentar
+          }
         }
       );
     },
@@ -182,7 +199,11 @@ export default function EditarNovo({
           ? '/planos-alimentares'
           : `/planos-alimentares-aluno-vinculado/${location.state.data.id}`,
         {
-          state: { isSuccessPlanoAlimentar: true, data: location.state.data }
+          state: {
+            isSuccessPlanoAlimentar: true,
+            data: location.state.login,
+            planoalimentar: location.state.planoalimentar
+          }
         }
       );
     },
@@ -206,11 +227,12 @@ export default function EditarNovo({
 
   const handleCloseModal = () => {
     setOpenAddRefeicaoModal(false);
+    setOpenEditRefeicaoModal(false);
   };
 
   const handleSaveRefeicao = () => {
-    setSelectedRefeicoes([...selectedRefeicoes, newRefeicao]);
-    setOpenAddRefeicaoModal(false);
+    setSelectedRefeicoes((prev) => [...prev, newRefeicao]);
+    handleCloseModal();
     showAlert('success', 'Refeição adicionada com sucesso!');
     setNewRefeicao({
       alimento: '',
@@ -222,6 +244,38 @@ export default function EditarNovo({
       tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA,
       planoAlimentarId: 0
     });
+  };
+
+  const handleEditRefeicao = (refeicao: Refeicao) => {
+    setOpenEditRefeicaoModal(true);
+    setSelectedRefeicao(refeicao);
+  };
+
+  const handleSaveEditRefeicao = () => {
+    setSelectedRefeicoes((prev) =>
+      prev.map((refeicao) =>
+        refeicao?.id === selectedRefeicao?.id ? selectedRefeicao : refeicao
+      )
+    );
+
+    handleCloseModal();
+    showAlert('success', 'Exercício atualizado com sucesso!');
+    setNewRefeicao({
+      alimento: '',
+      quantidade: 0,
+      kcal: 0,
+      carboidrato: 0,
+      proteina: 0,
+      gordura: 0,
+      tipoRefeicao: TipoRefeicao.CAFE_DA_MANHA,
+      planoAlimentarId: 0
+    });
+  };
+
+  const handleDeleteRefeicao = (refeicao: Refeicao) => {
+    setSelectedRefeicoes((prev) =>
+      prev.filter((item) => item.id !== refeicao.id)
+    );
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -248,6 +302,7 @@ export default function EditarNovo({
       return;
     }
 
+    formData.refeicoes = selectedRefeicoes;
     mutation.mutate();
   };
 
@@ -307,14 +362,27 @@ export default function EditarNovo({
             />
           </Grid>
 
-          <Grid container spacing={2}>
-            {selectedRefeicoes.map((refeicao: Refeicao, index: number) => (
-              <Grid item xs={4} key={index}>
+          <Grid container spacing={2} style={{ marginTop: '1rem' }}>
+            {selectedRefeicoes.map((refeicao, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <RefeicaoCard
                   refeicao={refeicao}
-                  onDeleteSuccess={() => {
-                    console.log('delete');
-                  }}
+                  buttons={[
+                    {
+                      startIcon: <EditIcon />,
+                      onClick: () => handleEditRefeicao(refeicao),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    },
+                    {
+                      startIcon: <DeleteIcon />,
+                      onClick: () => handleDeleteRefeicao(refeicao),
+                      backgroundColor: 'transparent',
+                      iconColor: '#6842FF',
+                      border: 'none'
+                    }
+                  ]}
                 />
               </Grid>
             ))}
@@ -337,7 +405,10 @@ export default function EditarNovo({
                         ? `/planos-alimentares-aluno-vinculado/${location.state.data.id}`
                         : '/planos-alimentares',
                       {
-                        state: { data: location.state.data }
+                        state: {
+                          login: location.state.login,
+                          refeicao: location.state.refeicao
+                        }
                       }
                     )
                 },
@@ -347,6 +418,18 @@ export default function EditarNovo({
           </Grid>
         </Grid>
       </form>
+
+      <CustomModal
+        open={openEditRefeicaoModal}
+        onClose={handleCloseModal}
+        onSave={handleSaveEditRefeicao}
+        title="Editar Refeicao"
+      >
+        <RefeicaoForm
+          newRefeicao={selectedRefeicao}
+          setNewRefeicao={setSelectedRefeicao}
+        />
+      </CustomModal>
 
       <CustomModal
         open={openAddRefeicaoModal}

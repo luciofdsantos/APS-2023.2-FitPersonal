@@ -59,7 +59,7 @@ export default function PlanosAlimentares({
     isSuccess,
     isFetching
   } = usePlanosAlimentares(
-    !vinculado ? location.state.data.id : Number(idAluno)
+    !vinculado ? location.state.login.id : Number(idAluno)
   );
 
   const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
@@ -96,7 +96,7 @@ export default function PlanosAlimentares({
         ? `/planos-alimentares/${planoalimentar.id}`
         : `/planos-alimentares-aluno-vinculado/${planoalimentar.id}`,
       {
-        state: { planoalimentar }
+        state: { login: location.state.login, planoalimentar: planoalimentar }
       }
     );
   };
@@ -107,7 +107,10 @@ export default function PlanosAlimentares({
         ? '/planos-alimentares/novo'
         : '/planos-alimentares-aluno-vinculado/novo',
       {
-        state: { data: location.state.data }
+        state: {
+          login: location.state.login,
+          planoalimentar: location.state.planoalimentar
+        }
       }
     );
   };

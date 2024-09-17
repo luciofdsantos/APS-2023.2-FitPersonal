@@ -36,7 +36,7 @@ export default function Alunos() {
   if (usuarioString) {
     try {
       const usuario = JSON.parse(usuarioString);
-      tipoUsuario = usuario?.tipoUsuario; // Assumindo que 'tipoUsuario' está no objeto 'usuario'
+      tipoUsuario = usuario?.tipoUsuario;
     } catch (error) {
       console.error('Erro ao analisar o JSON do localStorage:', error);
     }
