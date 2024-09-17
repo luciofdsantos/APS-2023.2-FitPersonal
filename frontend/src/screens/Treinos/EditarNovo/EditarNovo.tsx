@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { CustomModal, GroupButtons, CustomLayout } from '../../../components';
-import { useAlert } from 'components/CustomAlert';
+import { useAlert } from '../../../components/CustomAlert';
 import { Button, Grid, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
