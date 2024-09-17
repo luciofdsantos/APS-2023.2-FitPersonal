@@ -46,7 +46,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
 
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const treinoData = location.state?.treino || {
     aluno_id: 0,
     nome: '',
@@ -57,7 +57,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const [formData, setFormData] = useState<
     FormData & { exercicios: Exercicio[] }
   >({
-    aluno_id: location.state.data.id || 0,
+    aluno_id: location.state.treino.aluno.id || 0,
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
     exercicios: treinoData?.exercicios || []
@@ -104,7 +104,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
           ? '/treinos'
           : `/treinos-aluno-vinculado/${location.state.data.id}`,
         {
-          state: { data: location.state.data }
+          state: { login: location.state.login, treino: location.state.treino }
         }
       );
     },
@@ -144,7 +144,11 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
           ? '/treinos'
           : `/treinos-aluno-vinculado/${location.state.data.id}`,
         {
-          state: { isSuccessTreino: true, data: location.state.data }
+          state: {
+            isSuccessTreino: true,
+            login: location.state.login,
+            treino: location.state.treino
+          }
         }
       );
     },
@@ -261,7 +265,10 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
                         ? `/treinos-aluno-vinculado/${location.state.data.id}`
                         : '/treinos',
                       {
-                        state: { data: location.state.data }
+                        state: {
+                          login: location.state.login,
+                          treino: location.state.treino
+                        }
                       }
                     )
                 },
