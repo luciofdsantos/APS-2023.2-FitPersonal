@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Alunos from '../screens/Alunos';
 import CadastroUsuario from '../screens/CadastroUsuario';
 import EditarNovo from '../screens/Treinos/EditarNovo';
+import MonitorarProgresso from '../screens/Treinos/MonitorarProgresso';
 import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
 import LoginUsuario from '../screens/LoginUsuario';
 import PlanosAlimentares from '../screens/PlanosAlimentares';
@@ -26,6 +27,7 @@ export default function AppRoutes() {
           <Route path="/treinos" element={<Treinos />} />
           <Route path="/treinos/novo" element={<EditarNovo />} />
           <Route path="/treinos/:id" element={<EditarNovo />} />
+          <Route path="/treinos/progresso" element={<MonitorarProgresso />} />
           <Route path="/planos-alimentares" element={<PlanosAlimentares />} />
           <Route
             path="/planos-alimentares/novo"

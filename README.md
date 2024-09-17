@@ -1,4 +1,18 @@
-# APS-2023.2-Fitness
+# FitPersonal
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <img src="https://skillicons.dev/icons?i=react" alt="React" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=spring" alt="Spring Boot" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=mysql" alt="MySQL" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=webstorm" alt="WebStorm" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=idea" alt="IntelliJ IDEA" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=discord" alt="Discord" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=figma" alt="Figma" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=git" alt="Git" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=github" alt="GitHub" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=npm" alt="NPM" style="margin: 0 5px;" />
+    <img src="https://skillicons.dev/icons?i=postman" alt="PostMan" style="margin: 0 5px;" />
+</div>
 
 # **Sobre o Projeto**
 

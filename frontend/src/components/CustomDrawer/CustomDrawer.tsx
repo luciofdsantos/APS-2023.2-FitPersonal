@@ -74,6 +74,12 @@ const items = [
     Icon: Person,
     path: '/editar-perfil',
     usuario: 'PROFISSIONAL' || 'ALUNO'
+  },
+  {
+    text: 'Monitorar Progresso',
+    Icon: Person,
+    path: '/treinos/progresso',
+    usuario: 'ALUNO'
   }
 ];
 
