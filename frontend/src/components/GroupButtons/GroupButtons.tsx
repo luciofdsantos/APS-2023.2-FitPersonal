@@ -12,6 +12,7 @@ interface ButtonProps {
   border?: string;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  noShow?: boolean;
 }
 
 interface GroupButtonsProps {
@@ -47,28 +48,35 @@ export default function GroupButtons({
           gap: '1rem'
         }}
       >
-        {buttons.map((button, index) => (
-          <Button
-            key={index}
-            variant={button.variant || 'contained'}
-            href={button.href}
-            type={button.type}
-            onClick={button.onClick}
-            startIcon={button.startIcon}
-            sx={{
-              backgroundColor: button.backgroundColor || '#6842FF',
-              color: button.iconColor || '#FFFFFF',
-              boxShadow: boxShadow ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
-              '&:hover': {
-                backgroundColor:
-                  button.backgroundColor || 'rgba(104, 66, 255, 0.8)',
-                boxShadow: boxShadow ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none'
-              }
-            }}
-          >
-            {button.text}
-          </Button>
-        ))}
+        {buttons.map(
+          (button, index) =>
+            !button.noShow && (
+              <Button
+                key={index}
+                variant={button.variant || 'contained'}
+                href={button.href}
+                type={button.type}
+                onClick={button.onClick}
+                startIcon={button.startIcon}
+                sx={{
+                  backgroundColor: button.backgroundColor || '#6842FF',
+                  color: button.iconColor || '#FFFFFF',
+                  boxShadow: boxShadow
+                    ? '0 4px 6px rgba(0, 0, 0, 0.1)'
+                    : 'none',
+                  '&:hover': {
+                    backgroundColor:
+                      button.backgroundColor || 'rgba(104, 66, 255, 0.8)',
+                    boxShadow: boxShadow
+                      ? '0 4px 6px rgba(0, 0, 0, 0.1)'
+                      : 'none'
+                  }
+                }}
+              >
+                {button.text}
+              </Button>
+            )
+        )}
       </Box>
     </Box>
   );

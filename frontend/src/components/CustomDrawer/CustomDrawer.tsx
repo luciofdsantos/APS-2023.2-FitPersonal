@@ -4,12 +4,6 @@ import {
   IconButton,
   Toolbar
 } from '@mui/material';
-import {
-  FitnessCenter,
-  PersonAdd,
-  Person,
-  FoodBank
-} from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from '../ListItems';
@@ -54,34 +48,6 @@ const Drawer = styled(MuiDrawer, {
     })
   }
 }));
-
-const items = [
-  {
-    text: 'Treinos',
-    Icon: FitnessCenter,
-    path: '/treinos',
-    usuario: 'ALUNO'
-  },
-  {
-    text: 'Planos Alimentares',
-    Icon: FoodBank,
-    path: '/planos-alimentares',
-    usuario: 'ALUNO'
-  },
-  { text: 'Alunos', Icon: PersonAdd, path: '/alunos', usuario: 'PROFISSIONAL' },
-  {
-    text: 'Editar Pefil',
-    Icon: Person,
-    path: '/editar-perfil',
-    usuario: 'PROFISSIONAL' || 'ALUNO'
-  },
-  {
-    text: 'Monitorar Progresso',
-    Icon: Person,
-    path: '/treinos/progresso',
-    usuario: 'ALUNO'
-  }
-];
 
 export default function CustomDrawer({
   open,

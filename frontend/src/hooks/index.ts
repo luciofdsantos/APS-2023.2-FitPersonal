@@ -7,6 +7,7 @@ import useDeletePlanoAlimentar from './useDeletePlanoAlimentar';
 import useDeleteTreino from './useDeleteTreino';
 import useLogin from './useLogin';
 import usePlanosAlimentares from './usePlanoAlimentar';
+import useCreateProgresso from './useCreateProgresso';
 import useRefeicoes from './useRefeicoes';
 import useTodosAlunos from './useTodosAlunos';
 import useTodosAlunosProfissional from './useTodosAlunosProfissional';
@@ -34,6 +35,7 @@ export {
   useTreinos,
   useUpdatePerfil,
   useUpdatePlanoAlimentar,
+  useCreateProgresso,
   useUpdateTreino,
   useVincularAluno
 };
