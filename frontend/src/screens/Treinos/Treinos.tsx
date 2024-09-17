@@ -42,7 +42,7 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedTreinoId, setSelectedTreinoId] = useState<number | null>(null);
-  
+
   const {
     data: treinos,
     refetch: refetchTreino,

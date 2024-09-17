@@ -46,7 +46,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
 
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const treinoData = location.state?.treino || {
     aluno_id: 0,
     nome: '',
@@ -57,7 +57,9 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   const [formData, setFormData] = useState<
     FormData & { exercicios: Exercicio[] }
   >({
-    aluno_id: location.state.treino.aluno.id || 0,
+    aluno_id: location.state.treino
+      ? location.state.treino.aluno.id
+      : location.state.login.id,
     nome: treinoData?.nome || '',
     descricao: treinoData?.descricao || '',
     exercicios: treinoData?.exercicios || []
