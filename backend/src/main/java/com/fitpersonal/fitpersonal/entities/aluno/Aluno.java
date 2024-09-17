@@ -25,6 +25,10 @@ public class Aluno extends Usuario {
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanoAlimentar> planosAlimentares = new ArrayList<>();
 
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Treino> treinos = new ArrayList<>();
+
+
     @ManyToOne
     @JoinColumn(name = "nutricionista_id")
     private Nutricionista nutricionista;
@@ -42,6 +46,16 @@ public class Aluno extends Usuario {
         planosAlimentares.remove(planoAlimentar);
         planoAlimentar.setAluno(null); // Remover a referência bidirecional
     }
+
+    public void addTreino(Treino treino) {
+        treinos.add(treino);
+        treino.setAluno(this);     }
+
+    public void removeTreino(Treino treino) {
+        treinos.remove(treino);
+        treino.setAluno(null);
+    }
+
 
 
 }
