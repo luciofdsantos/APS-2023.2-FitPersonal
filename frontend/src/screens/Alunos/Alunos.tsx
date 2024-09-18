@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import {
   Button,
   Grid,
@@ -8,10 +7,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Skeleton
+  Paper
 } from '@mui/material';
 import { CustomLayout, GroupButtons } from '../../components';
+import { useAlert } from '../../components/CustomAlert';
 import {
   useTodosAlunosProfissional,
   useTodosAlunos,
@@ -27,11 +26,17 @@ interface Aluno {
   sexo: string;
 }
 
+enum TipoUsuario {
+  NUTRICIONISTA = 'NUTRICIONISTA',
+  PERSONAL = 'PERSONAL'
+}
+
 export default function Alunos() {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const usuarioString = localStorage.getItem('usuario');
-  let tipoUsuario: 'NUTRICIONISTA' | 'PERSONAL' | null = null;
+  let tipoUsuario: TipoUsuario | null = null;
 
   if (usuarioString) {
     try {
@@ -42,7 +47,6 @@ export default function Alunos() {
     }
   }
 
-  // Define o endpoint com base no tipo de usuário
   const endpointVincular =
     tipoUsuario === 'NUTRICIONISTA'
       ? 'http://localhost:8080/api/vincular-aluno/vincular-aluno-nutricionista'
@@ -52,6 +56,7 @@ export default function Alunos() {
     tipoUsuario === 'NUTRICIONISTA'
       ? 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-nutricionista'
       : 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-personal';
+
   const {
     data: alunos,
     refetch: refetchAlunos,
@@ -68,6 +73,8 @@ export default function Alunos() {
     useVincularAluno({
       endpoint: endpointVincular,
       onSuccess: () => {
+        showAlert('success', 'Aluno vinculado com sucesso!');
+
         refetchAlunos();
         refetchAlunosVinculados();
       }
@@ -77,6 +84,8 @@ export default function Alunos() {
     useDesvincularAluno({
       endpoint: endpointDesvincular,
       onSuccess: () => {
+        showAlert('success', 'Aluno desvinculado com sucesso!');
+
         refetchAlunos();
         refetchAlunosVinculados();
       }
@@ -88,19 +97,11 @@ export default function Alunos() {
     );
   };
 
-  const [showSkeleton, setShowSkeleton] = useState(false);
-
-  useEffect(() => {
-    if (isPendingVincularAluno || isPendingDesvincularAluno) {
-      setShowSkeleton(true);
-    } else {
-      const timer = setTimeout(() => setShowSkeleton(false), 8000);
-      return () => clearTimeout(timer);
-    }
-  }, [isPendingVincularAluno, isPendingDesvincularAluno]);
-
   const isLoading =
-    isFetchingTodosAlunos || isFetchingAlunosVinculados || showSkeleton;
+    isFetchingTodosAlunos ||
+    isFetchingAlunosVinculados ||
+    isPendingDesvincularAluno ||
+    isPendingVincularAluno;
 
   const handleTreinosAlunoVinculado = (data: Aluno) => {
     navigate(`/treinos-aluno-vinculado/${data.id}`, {
@@ -122,7 +123,7 @@ export default function Alunos() {
             buttons={[
               { text: 'Atualizar Tabela', onClick: () => refetchAlunos() } // Fixed the onClick function
             ]}
-            height="30%"
+            height="40%"
           />
 
           <TableContainer component={Paper}>
@@ -140,7 +141,7 @@ export default function Alunos() {
               <TableBody>
                 {alunos?.map((data: Aluno) => (
                   <TableRow
-                    key={data.id} // Using data.id for a unique key
+                    key={data.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
@@ -156,50 +157,54 @@ export default function Alunos() {
                       {data.sexo === 'OUTRO' ? 'Não declarado' : data.sexo}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {isLoading ? (
-                        <Skeleton
-                          variant="rectangular"
-                          width={200}
-                          height={40}
-                        />
-                      ) : (
-                        <>
-                          {isVinculado(data.id) && (
-                            <>
-                              <Button
-                                color="primary"
-                                variant="text"
-                                onClick={() =>
-                                  handleTreinosAlunoVinculado(data)
-                                }
-                              >
-                                Treinos
-                              </Button>
-                              <Button
-                                color="primary"
-                                variant="text"
-                                onClick={() =>
-                                  handlePlanosAlimentaresAlunoVinculado(data)
-                                }
-                              >
-                                Planos Alimentares
-                              </Button>
-                            </>
-                          )}
+                      <>
+                        {isLoading ? (
+                          'Carregando...'
+                        ) : (
+                          <>
+                            {isVinculado(data.id) &&
+                              tipoUsuario === TipoUsuario.PERSONAL && (
+                                <Button
+                                  color="primary"
+                                  variant="text"
+                                  onClick={() =>
+                                    handleTreinosAlunoVinculado(data)
+                                  }
+                                >
+                                  Treinos
+                                </Button>
+                              )}
 
-                          <Button
-                            color="primary"
-                            variant="text"
-                            onClick={() =>
-                              isVinculado(data.id)
-                                ? desvincularAluno(data.id)
-                                : vincularAluno(data.id)
-                            }
-                          >
-                            {!isVinculado(data.id) ? 'Vincular' : 'Desvincular'}
-                          </Button>
-                        </>
-                      )}
+                            {isVinculado(data.id) &&
+                              tipoUsuario === TipoUsuario.NUTRICIONISTA && (
+                                <Button
+                                  color="primary"
+                                  variant="text"
+                                  onClick={() =>
+                                    handlePlanosAlimentaresAlunoVinculado(data)
+                                  }
+                                >
+                                  Planos Alimentares
+                                </Button>
+                              )}
+
+                            <Button
+                              color="primary"
+                              variant="text"
+                              onClick={() =>
+                                isVinculado(data.id)
+                                  ? desvincularAluno(data.id)
+                                  : vincularAluno(data.id)
+                              }
+                              disabled={isLoading}
+                            >
+                              {isVinculado(data.id)
+                                ? 'Desvincular'
+                                : 'Vincular'}
+                            </Button>
+                          </>
+                        )}
+                      </>
                     </TableCell>
                   </TableRow>
                 ))}

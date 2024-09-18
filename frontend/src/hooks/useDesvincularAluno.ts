@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { useAlert } from '../components/CustomAlert';
 
 interface Usuario {
   id: number;
@@ -16,8 +15,6 @@ export default function useDesvincularAluno({
   onSuccess,
   onError
 }: UseDesvincularAlunoProps) {
-  const { showAlert } = useAlert();
-
   const usuarioString = localStorage.getItem('usuario');
   let usuario: Usuario | null = null;
 
@@ -44,24 +41,10 @@ export default function useDesvincularAluno({
         })
       });
 
-      const responseText = await response.text();
-      console.log('Resposta do servidor:', responseText);
-
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-
-      showAlert('success', 'Aluno desvinculado com sucesso!');
-
       if (!response.ok) {
-        try {
-          const errorJson = JSON.parse(responseText);
-          throw new Error(
-            `Erro ao desvincular aluno: ${errorJson.message || errorJson}`
-          );
-        } catch {
-          throw new Error(`Erro ao desvincular aluno: ${responseText}`);
-        }
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao criar progresso: ${errorMessage}`);
       }
-
       return response.json();
     },
     onSuccess,

@@ -33,7 +33,7 @@ public class VinculoController {
 
     @PutMapping("/vincular-aluno-nutricionista")
     @Transactional
-    public ResponseEntity<Void> vincularNutricionista(@RequestBody VinculoRequestDTO vinculoRequest) {
+    public ResponseEntity<VinculoResponseDTO> vincularNutricionista(@RequestBody VinculoRequestDTO vinculoRequest) {
         try {
             Aluno aluno = alunoRepository.findById(vinculoRequest.alunoId())
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
@@ -41,51 +41,74 @@ public class VinculoController {
             Nutricionista nutricionista = nutricionistaRepository.findById(vinculoRequest.profissionalId())
                     .orElseThrow(() -> new RuntimeException("Nutricionista não encontrado"));
 
+            // Verifica se o aluno já está vinculado a um nutricionista
             if (aluno.getNutricionista() != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new VinculoResponseDTO("Aluno já está vinculado a um nutricionista", null, null));
             }
 
+            // Vincula aluno ao nutricionista
             nutricionista.getListaAlunos().add(aluno);
             aluno.setNutricionista(nutricionista);
 
             alunoRepository.save(aluno);
             nutricionistaRepository.save(nutricionista);
 
-            return ResponseEntity.ok().build(); // Retorna apenas status OK sem mensagem
+            // Retorna um VinculoResponseDTO com os detalhes do aluno e nutricionista
+            VinculoResponseDTO responseDTO = new VinculoResponseDTO(
+                    "Aluno vinculado ao nutricionista com sucesso",
+                    aluno.getNome(), // Nome do aluno
+                    nutricionista.getNome() // Nome do nutricionista
+            );
+
+            return ResponseEntity.ok(responseDTO); // Retorna o DTO com a resposta
+
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new VinculoResponseDTO("Erro: " + e.getMessage(), null, null));
         }
     }
 
     @PutMapping("/desvincular-aluno-nutricionista")
     @Transactional
-    public ResponseEntity<Void> desvincularNutricionista(@RequestBody VinculoRequestDTO vinculoRequest) {
+    public ResponseEntity<VinculoResponseDTO> desvincularNutricionista(@RequestBody VinculoRequestDTO vinculoRequest) {
         try {
             Aluno aluno = alunoRepository.findById(vinculoRequest.alunoId())
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
             Nutricionista nutricionista = aluno.getNutricionista();
             if (nutricionista == null || !nutricionista.getId().equals(vinculoRequest.profissionalId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new VinculoResponseDTO("Aluno não está vinculado ao nutricionista especificado", null, null));
             }
 
+            // Remove o vínculo do aluno com o nutricionista
             nutricionista.getListaAlunos().remove(aluno);
             aluno.setNutricionista(null);
 
             alunoRepository.save(aluno);
             nutricionistaRepository.save(nutricionista);
 
-            return ResponseEntity.ok().build(); // Retorna apenas status OK sem mensagem
+            // Retorna um VinculoResponseDTO com os detalhes do aluno e nutricionista
+            VinculoResponseDTO responseDTO = new VinculoResponseDTO(
+                    "Aluno desvinculado do nutricionista com sucesso",
+                    aluno.getNome(), // Nome do aluno
+                    nutricionista.getNome() // Nome do nutricionista
+            );
+
+            return ResponseEntity.ok(responseDTO);
+
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new VinculoResponseDTO("Erro: " + e.getMessage(), null, null));
         }
     }
 
     @PutMapping("/vincular-aluno-personal")
     @Transactional
-    public ResponseEntity<Void> vincularPersonal(@RequestBody VinculoRequestDTO vinculoRequest) {
+    public ResponseEntity<VinculoResponseDTO> vincularPersonal(@RequestBody VinculoRequestDTO vinculoRequest) {
         try {
             Aluno aluno = alunoRepository.findById(vinculoRequest.alunoId())
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
@@ -93,45 +116,68 @@ public class VinculoController {
             Personal personal = personalRepository.findById(vinculoRequest.profissionalId())
                     .orElseThrow(() -> new RuntimeException("Personal não encontrado"));
 
+            // Verifica se o aluno já está vinculado a um personal
             if (aluno.getPersonal() != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new VinculoResponseDTO("Aluno já está vinculado a um personal", null, null));
             }
 
+            // Vincula aluno ao personal
             personal.getListaAlunos().add(aluno);
             aluno.setPersonal(personal);
 
             alunoRepository.save(aluno);
             personalRepository.save(personal);
 
-            return ResponseEntity.ok().build(); // Retorna apenas status OK sem mensagem
+            // Retorna um VinculoResponseDTO com os detalhes do aluno e personal
+            VinculoResponseDTO responseDTO = new VinculoResponseDTO(
+                    "Aluno vinculado ao personal com sucesso",
+                    aluno.getNome(), // Nome do aluno
+                    personal.getNome() // Nome do personal
+            );
+
+            return ResponseEntity.ok(responseDTO); // Retorna o DTO com a resposta
+
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new VinculoResponseDTO("Erro: " + e.getMessage(), null, null));
         }
     }
 
     @PutMapping("/desvincular-aluno-personal")
     @Transactional
-    public ResponseEntity<Void> desvincularPersonal(@RequestBody VinculoRequestDTO vinculoRequest) {
+    public ResponseEntity<VinculoResponseDTO> desvincularPersonal(@RequestBody VinculoRequestDTO vinculoRequest) {
         try {
             Aluno aluno = alunoRepository.findById(vinculoRequest.alunoId())
                     .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
             Personal personal = aluno.getPersonal();
             if (personal == null || !personal.getId().equals(vinculoRequest.profissionalId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new VinculoResponseDTO("Aluno não está vinculado ao personal especificado", null, null));
             }
 
+            // Remove o vínculo do aluno com o personal
             personal.getListaAlunos().remove(aluno);
             aluno.setPersonal(null);
 
             alunoRepository.save(aluno);
             personalRepository.save(personal);
 
-            return ResponseEntity.ok().build(); // Retorna apenas status OK sem mensagem
+            // Retorna um VinculoResponseDTO com os detalhes do aluno e do personal
+            VinculoResponseDTO responseDTO = new VinculoResponseDTO(
+                    "Aluno desvinculado do personal com sucesso",
+                    aluno.getNome(), // Nome do aluno
+                    personal.getNome() // Nome do personal
+            );
+
+            return ResponseEntity.ok(responseDTO);
+
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new VinculoResponseDTO("Erro: " + e.getMessage(), null, null));
         }
     }
 

@@ -1,20 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Alunos from '../screens/Alunos';
 import CadastroUsuario from '../screens/CadastroUsuario';
-import TreinosVinculados from '../screens/Treinos';
-import EditarNovoVinculado from '../screens/Treinos/EditarNovo';
-import PlanosAlimentaresVinculados from '../screens/PlanosAlimentares';
-import RoutesAluno from './RoutesAluno';
-import Treinos from '../screens/Treinos';
 import EditarNovo from '../screens/Treinos/EditarNovo';
 import EditarNovoPlano from '../screens/PlanosAlimentares/EditarNovo';
+import EditarNovoVinculado from '../screens/Treinos/EditarNovo';
+import EditarPerfil from '../screens/CadastroUsuario/Perfil';
 import LoginUsuario from '../screens/LoginUsuario';
 import PlanosAlimentares from '../screens/PlanosAlimentares';
+import PlanosAlimentaresVinculados from '../screens/PlanosAlimentares';
 import Treinos from '../screens/Treinos';
+import TreinosVinculados from '../screens/Treinos';
+
 import RoutesAluno from './RoutesAluno';
-import RoutesProfissional from './RoutesProfissional';
-import EditarPerfil from '../screens/CadastroUsuario/Perfil';
 import RoutesLogin from './RoutesLogin';
+import RoutesProfissional from './RoutesProfissional';
 
 export default function AppRoutes() {
   return (
