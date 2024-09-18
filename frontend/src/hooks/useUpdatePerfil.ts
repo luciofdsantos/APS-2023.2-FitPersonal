@@ -23,6 +23,7 @@ interface UseUpdatePerfilProps {
 export default function useUpdatePerfil({
   onSuccess,
   onError
+
 }: UseUpdatePerfilProps) {
   return useMutation({
     mutationFn: async ({ id, ...perfil }: Perfil) => {

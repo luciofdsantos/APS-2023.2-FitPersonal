@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   useCreateTreino,
   useUpdateTreino,
-  useCreateProgresso
+  useCreateProgresso,
 } from '../../../hooks';
 import ExercicioForm from './ExercicioForm';
 import ExercicioCard from './ExercicioCard';
@@ -53,7 +53,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
 
   const isViewAluno = location.state?.isViewAluno;
 
-  const alunoId = location.state.treino.aluno?.id || location.state.login.id;
+  const alunoId = location.state.login?.id;
 
   const treinoData = location.state?.treino || {
     aluno_id: 0,
@@ -104,7 +104,10 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   });
 
   const { mutate: createTreino } = useCreateTreino({
-    onSuccess: () => showAlert('success', 'Treino criado com sucesso'),
+    onSuccess: () => {
+      location.state.isSuccessTreino = true;
+      showAlert('success', 'Treino criado com sucesso'); 
+    },
     onError: (error) => {
       console.error('Erro ao criar treino:', error.message);
       showAlert('error', 'Erro ao criar treino. Tente novamente.');
