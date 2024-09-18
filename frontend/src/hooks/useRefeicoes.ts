@@ -1,14 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 
-const fetchRefeicoes = async () => {
-  const response = await fetch('http://localhost:8080/api/refeicoes');
+const endpoint = 'http://localhost:8080/api/refeicoes';
+
+const fetchRefeicoes = async (idAluno?: number | null) => {
+  const url = idAluno ? `${endpoint}/aluno/${idAluno}` : endpoint;
+
+  const response = await fetch(url);
   if (!response.ok) throw new Error('Erro ao buscar refeições');
   return response.json();
 };
 
-export default function useRefeicoes() {
+export default function useRefeicoes(idAluno?: number | null) {
   return useQuery({
-    queryKey: ['fetchRefeicoes'],
-    queryFn: fetchRefeicoes
+    queryKey: ['refeicoes', idAluno],
+    queryFn: () => fetchRefeicoes(idAluno)
   });
 }

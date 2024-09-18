@@ -1,19 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAlert } from '../components/CustomAlert';
 
-const endpoint =
-  'http://localhost:8080/api/vincular-aluno/vincular-aluno-personal';
-
 interface Usuario {
   id: number;
 }
 
 interface UseVincularAlunoProps {
+  endpoint: string;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }
 
 export default function useVincularAluno({
+  endpoint,
   onSuccess,
   onError
 }: UseVincularAlunoProps) {

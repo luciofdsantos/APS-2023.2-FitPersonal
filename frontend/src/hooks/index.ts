@@ -37,5 +37,5 @@ export {
   useUpdatePlanoAlimentar,
   useCreateProgresso,
   useUpdateTreino,
-  useVincularAluno
+  useVincularAluno,
 };

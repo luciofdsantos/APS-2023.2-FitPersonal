@@ -30,6 +30,28 @@ interface Aluno {
 export default function Alunos() {
   const navigate = useNavigate();
 
+  const usuarioString = localStorage.getItem('usuario');
+  let tipoUsuario: 'NUTRICIONISTA' | 'PERSONAL' | null = null;
+
+  if (usuarioString) {
+    try {
+      const usuario = JSON.parse(usuarioString);
+      tipoUsuario = usuario?.tipoUsuario;
+    } catch (error) {
+      console.error('Erro ao analisar o JSON do localStorage:', error);
+    }
+  }
+
+  // Define o endpoint com base no tipo de usuário
+  const endpointVincular =
+    tipoUsuario === 'NUTRICIONISTA'
+      ? 'http://localhost:8080/api/vincular-aluno/vincular-aluno-nutricionista'
+      : 'http://localhost:8080/api/vincular-aluno/vincular-aluno-personal';
+
+  const endpointDesvincular =
+    tipoUsuario === 'NUTRICIONISTA'
+      ? 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-nutricionista'
+      : 'http://localhost:8080/api/vincular-aluno/desvincular-aluno-personal';
   const {
     data: alunos,
     refetch: refetchAlunos,
@@ -44,6 +66,7 @@ export default function Alunos() {
 
   const { mutate: vincularAluno, isPending: isPendingVincularAluno } =
     useVincularAluno({
+      endpoint: endpointVincular,
       onSuccess: () => {
         refetchAlunos();
         refetchAlunosVinculados();
@@ -52,6 +75,7 @@ export default function Alunos() {
 
   const { mutate: desvincularAluno, isPending: isPendingDesvincularAluno } =
     useDesvincularAluno({
+      endpoint: endpointDesvincular,
       onSuccess: () => {
         refetchAlunos();
         refetchAlunosVinculados();
@@ -80,6 +104,12 @@ export default function Alunos() {
 
   const handleTreinosAlunoVinculado = (data: Aluno) => {
     navigate(`/treinos-aluno-vinculado/${data.id}`, {
+      state: { data }
+    });
+  };
+
+  const handlePlanosAlimentaresAlunoVinculado = (data: Aluno) => {
+    navigate(`/planos-alimentares-aluno-vinculado/${data.id}`, {
       state: { data }
     });
   };
@@ -145,7 +175,13 @@ export default function Alunos() {
                               >
                                 Treinos
                               </Button>
-                              <Button color="primary" variant="text">
+                              <Button
+                                color="primary"
+                                variant="text"
+                                onClick={() =>
+                                  handlePlanosAlimentaresAlunoVinculado(data)
+                                }
+                              >
                                 Planos Alimentares
                               </Button>
                             </>

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import React from 'react';
 
-const RoutesProfissional: React.FC = () => {
+const RoutesLogin: React.FC = () => {
   const usuarioString = localStorage.getItem('usuario');
 
   let isAuthenticated = false;
@@ -22,4 +22,4 @@ const RoutesProfissional: React.FC = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to="/" />;
 };
 
-export default RoutesProfissional;
+export default RoutesLogin;

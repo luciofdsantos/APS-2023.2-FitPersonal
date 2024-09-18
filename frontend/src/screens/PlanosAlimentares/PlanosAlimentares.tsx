@@ -8,7 +8,7 @@ import {
 import { useAlert } from '../../components/CustomAlert';
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { CircularProgress, Box, Grid } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { usePlanosAlimentares, useDeletePlanoAlimentar } from '../../hooks';
 
 interface Refeicao {
@@ -36,10 +36,17 @@ interface PlanoAlimentar {
   refeicoes: Refeicao[];
 }
 
-export default function PlanosAlimentares() {
+interface PlanosAlimentaresProps {
+  vinculado?: boolean;
+}
+
+export default function PlanosAlimentares({
+  vinculado = false
+}: PlanosAlimentaresProps) {
   const { showAlert } = useAlert();
   const navigate = useNavigate();
   const location = useLocation();
+  const { idAluno } = useParams();
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedPlanoAlimentarId, setSelectedPlanoAlimentarId] = useState<
@@ -51,7 +58,9 @@ export default function PlanosAlimentares() {
     refetch: refetchPlanoAlimentar,
     isSuccess,
     isFetching
-  } = usePlanosAlimentares();
+  } = usePlanosAlimentares(
+    !vinculado ? location.state.login.id : Number(idAluno)
+  );
 
   const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({
     onSuccess: () => {
@@ -82,9 +91,28 @@ export default function PlanosAlimentares() {
   };
 
   const handleEdit = (planoalimentar: PlanoAlimentar) => {
-    navigate(`/planos-alimentares/${planoalimentar.id}`, {
-      state: { planoalimentar }
-    });
+    navigate(
+      !vinculado
+        ? `/planos-alimentares/${planoalimentar.id}`
+        : `/planos-alimentares-aluno-vinculado/${planoalimentar.id}`,
+      {
+        state: { login: location.state.login, planoalimentar: planoalimentar }
+      }
+    );
+  };
+
+  const handleEditNovo = () => {
+    navigate(
+      !vinculado
+        ? '/planos-alimentares/novo'
+        : '/planos-alimentares-aluno-vinculado/novo',
+      {
+        state: {
+          login: location.state.login,
+          planoalimentar: location.state.planoalimentar
+        }
+      }
+    );
   };
 
   useEffect(() => {
@@ -95,14 +123,20 @@ export default function PlanosAlimentares() {
   }, [location.state, refetchPlanoAlimentar]);
 
   return (
-    <CustomLayout appBarText="Planos Alimentares">
+    <CustomLayout
+      appBarText={
+        vinculado
+          ? `Aluno ${location.state.data.nome} - Planos Alimentares`
+          : 'Planos Alimentares'
+      }
+    >
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
               {
                 text: 'Novo Plano Alimentar',
-                href: '/planos-alimentares/novo'
+                onClick: () => handleEditNovo()
               }
             ]}
           />
@@ -206,7 +240,6 @@ export default function PlanosAlimentares() {
                   buttons={[
                     {
                       startIcon: <EditIcon />,
-                      href: `/planos-alimentares/${planoalimentar.id}`,
                       onClick: () => handleEdit(planoalimentar),
                       backgroundColor: 'transparent',
                       iconColor: '#6842FF',

@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 
 const endpoint = 'http://localhost:8080/api/planoalimentar';
 
-const fetchPlanosAlimentares = async () => {
-  const response = await fetch(endpoint);
+const fetchPlanosAlimentares = async (idAluno?: number | null) => {
+  const url = idAluno ? `${endpoint}/aluno/${idAluno}` : endpoint;
+
+  const response = await fetch(url);
   if (!response.ok) {
     const errorMessage = await response.text();
     throw new Error(`Erro ao buscar planos alimentares: ${errorMessage}`);
@@ -11,10 +13,10 @@ const fetchPlanosAlimentares = async () => {
   return response.json();
 };
 
-export default function usePlanosAlimentares() {
+export default function usePlanosAlimentares(idAluno?: number | null) {
   return useQuery({
-    queryKey: ['planoalimentar'],
-    queryFn: fetchPlanosAlimentares,
+    queryKey: ['planoalimentar', idAluno],
+    queryFn: () => fetchPlanosAlimentares(idAluno),
     retry: false
   });
 }

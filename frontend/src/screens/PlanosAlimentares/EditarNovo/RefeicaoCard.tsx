@@ -1,4 +1,6 @@
 import { Card, CardContent, Typography, Grid } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { GroupButtons } from '../../../components';
 
 interface Refeicao {
   id?: number;
@@ -9,13 +11,28 @@ interface Refeicao {
   proteina: number;
   gordura: number;
   tipoRefeicao: string;
+  planoAlimentarId: number;
+}
+
+interface ButtonProps {
+  text?: string;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'text' | 'outlined' | 'contained';
+  startIcon?: ReactNode;
+  backgroundColor?: string;
+  iconColor?: string;
+  border?: string;
+  disabled?: boolean;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 interface RefeicaoCardProps {
   refeicao: Refeicao;
+  buttons: ButtonProps[];
 }
 
-export default function RefeicaoCard({ refeicao }: RefeicaoCardProps) {
+export default function RefeicaoCard({ refeicao, buttons }: RefeicaoCardProps) {
   return (
     <Card>
       <CardContent>
@@ -52,6 +69,10 @@ export default function RefeicaoCard({ refeicao }: RefeicaoCardProps) {
             <Typography variant="body2" color="textSecondary">
               <strong>Tipo de Refeição:</strong> {refeicao.tipoRefeicao}
             </Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <GroupButtons buttons={buttons} />
           </Grid>
         </Grid>
       </CardContent>

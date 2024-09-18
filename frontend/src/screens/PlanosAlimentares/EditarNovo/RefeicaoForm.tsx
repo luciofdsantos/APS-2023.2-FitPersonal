@@ -18,6 +18,7 @@ interface Refeicao {
   proteina: number;
   gordura: number;
   tipoRefeicao: TipoRefeicao;
+  planoAlimentarId: number;
 }
 
 interface RefeicaoFormProps {

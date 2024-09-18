@@ -3,6 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 const endpoint = 'http://localhost:8080/api/planoalimentar';
 
 interface PlanoAlimentar {
+  id?: number;
+  alunoId: number;
   metaConsumoKcal: number;
   totalConsumoKcal: number;
   metaConsumoCarboidrato: number;
@@ -18,6 +20,18 @@ interface CreatePlanoAlimentarProps {
   onError: (error: Error) => void;
 }
 
+interface Refeicao {
+  id?: number;
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: string;
+  planoAlimentarId: number;
+}
+
 export enum TipoRefeicao {
   CAFE_DA_MANHA = 'CAFE_DA_MANHA',
   ALMOCO = 'ALMOCO',
@@ -30,8 +44,10 @@ export default function useCreatePlanoAlimentar({
   onError
 }: CreatePlanoAlimentarProps) {
   return useMutation({
-    mutationFn: async (planoAlimentar: PlanoAlimentar) => {
-      const response = await fetch(endpoint, {
+    mutationFn: async (
+      planoAlimentar: PlanoAlimentar & { refeicoes: Refeicao[] }
+    ) => {
+      const response = await fetch(`${endpoint}/${planoAlimentar.alunoId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
