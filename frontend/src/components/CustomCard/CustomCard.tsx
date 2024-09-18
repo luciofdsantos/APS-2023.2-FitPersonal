@@ -24,7 +24,7 @@ interface ButtonProps {
 
 interface CustomCardProps {
   title: string;
-  items: {
+  items?: {
     label: string;
     value: React.ReactNode;
   }[];
@@ -72,7 +72,7 @@ export default function CustomCard({
             gap: 1
           }}
         >
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <Typography
               key={index}
               variant="body1"

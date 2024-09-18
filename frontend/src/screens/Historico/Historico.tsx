@@ -1,7 +1,10 @@
 import { useLocation } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import { CustomCard, CustomLayout } from '../../components';
+import { GroupButtons, CustomCard, CustomLayout } from '../../components';
 import { useHistoricoProgresso } from '../../hooks';
+import jsPDF from 'jspdf';
+import { format, parseISO } from 'date-fns';
+import autoTable from 'jspdf-autotable';
 
 interface Exercicio {
   nome: string;
@@ -12,6 +15,7 @@ interface Exercicio {
   repeticoes: number;
   carga: number;
   finalizado: boolean;
+  treinoId: number;
 }
 
 interface Progresso {
@@ -27,14 +31,62 @@ export default function Historico() {
     location.state.login.id
   );
 
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(`Histórico de Treino - ${location.state.login.nome}`, 10, 10);
+    doc.setFontSize(12);
+
+    const headers = [
+      { title: 'Data', dataKey: 'dataFinalizacao' },
+      { title: 'Exercício', dataKey: 'nome' },
+      { title: 'Grupo Muscular', dataKey: 'grupoMuscular' },
+      { title: 'Séries', dataKey: 'series' },
+      { title: 'Repetições', dataKey: 'repeticoes' },
+      { title: 'Carga (kg)', dataKey: 'carga' }
+    ];
+
+    const data = progressos.flatMap((progresso: Progresso) =>
+      progresso.exercicios.map((exercicio) => ({
+        dataFinalizacao: format(
+          parseISO(progresso.dataFinalizacao),
+          'dd-MM-yyyy'
+        ),
+        nome: exercicio.nome,
+        grupoMuscular: exercicio.grupoMuscular,
+        series: exercicio.series,
+        repeticoes: exercicio.repeticoes,
+        carga: exercicio.carga
+      }))
+    );
+
+    autoTable(doc, {
+      columns: headers,
+      body: data
+    });
+
+    doc.save(`treino_${location.state.login.nome}.pdf`);
+  };
+
   return (
     <CustomLayout appBarText={'Histórico'}>
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <GroupButtons
+            buttons={[
+              {
+                text: 'Baixar Relatório',
+                onClick: () => handleDownloadPDF()
+              }
+            ]}
+          />
+        </Grid>
+
         {isSuccess && progressos && progressos.length > 0 ? (
           progressos.map((progresso: Progresso, index: number) => (
             <Grid item xs={12} md={8} lg={4} key={index}>
               <CustomCard
-                title={`Data ${progresso.dataFinalizacao}`}
+                title={`Data ${format(parseISO(progresso.dataFinalizacao), 'dd-MM-yyyy')}`}
                 items={[
                   {
                     label: 'Exercícios',
@@ -43,40 +95,9 @@ export default function Historico() {
                         <CustomCard
                           key={indexExercicio}
                           title={`Exercício - ${exercicio.nome}`}
-                          items={[
-                            {
-                              label: 'Grupo Muscular',
-                              value: exercicio.grupoMuscular
-                            },
-                            { label: 'Séries', value: exercicio.series },
-                            {
-                              label: 'Repetições',
-                              value: exercicio.repeticoes
-                            },
-                            { label: 'Carga', value: exercicio.carga },
-                            {
-                              label: 'Status',
-                              value: exercicio.finalizado
-                                ? 'Finalizado'
-                                : 'Não Finalizado'
-                            }
-                          ]}
                         />
                       )
                     )
-                  }
-                ]}
-                style={{
-                  borderRadius: '16px',
-                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
-                }}
-                buttons={[
-                  {
-                    // startIcon: <VisibilityIcon />,
-                    // onClick: () => handleView(treino),
-                    backgroundColor: 'transparent',
-                    iconColor: '#6842FF',
-                    border: 'none'
                   }
                 ]}
               />
@@ -85,24 +106,6 @@ export default function Historico() {
         ) : (
           <Grid item xs={12} sx={{ pb: 2 }}>
             <div>Nenhum treino encontrado</div>
-          </Grid>
-        )}
-
-        {isSuccess ? (
-          progressos && progressos.length > 0 ? (
-            progressos.map((progresso: Progresso) => (
-              <Grid item xs={12} key={progresso.id}>
-                <div>{progresso.dataFinalizacao}</div>
-              </Grid>
-            ))
-          ) : (
-            <Grid item xs={12} sx={{ pb: 2 }}>
-              <div>Nenhum progresso encontrado</div>
-            </Grid>
-          )
-        ) : (
-          <Grid item xs={12} sx={{ pb: 2 }}>
-            <div>Carregando...</div>
           </Grid>
         )}
       </Grid>
