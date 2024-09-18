@@ -36,6 +36,7 @@ public class RefeicaoController {
         return planoAlimentarRepository.findById(idPlanoAlimentar)
                 .map(planoAlimentar -> {
                     Refeicao refeicao = new Refeicao(dto, planoAlimentar);
+                    refeicao.isConsumo();
                     Refeicao savedRefeicao = refeicaoRepository.save(refeicao);
 
                     // Atualizar o total no PlanoAlimentar
@@ -72,8 +73,9 @@ public class RefeicaoController {
                     existingRefeicao.setCarboidrato(dto.carboidrato());
                     existingRefeicao.setProteina(dto.proteina());
                     existingRefeicao.setGordura(dto.gordura());
+                    existingRefeicao.setConsumido(dto.consumido());
                     existingRefeicao.setTipoRefeicao(dto.tipoRefeicao());
-
+                    existingRefeicao.isConsumo();
                     Refeicao updatedRefeicao = refeicaoRepository.save(existingRefeicao);
                     return ResponseEntity.ok(new RefeicaoResponseDTO(updatedRefeicao)); // HTTP 200 OK
                 })

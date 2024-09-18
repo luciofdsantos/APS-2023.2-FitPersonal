@@ -6,6 +6,8 @@ import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity(name = "refeicao")
 @Table(name = "refeicao")
 @Getter
@@ -29,6 +31,10 @@ public class Refeicao {
     private Float proteina;
     @Column(nullable = false)
     private Float gordura;
+    @Column
+    private LocalDate dataConsumo;
+    @Column
+    private Boolean consumido = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -45,7 +51,17 @@ public class Refeicao {
         this.carboidrato = dto.carboidrato();
         this.proteina = dto.proteina();
         this.gordura = dto.gordura();
+        this.consumido = dto.consumido();
         this.tipoRefeicao = dto.tipoRefeicao();
         this.planoAlimentar = planoAlimentar;
+    }
+
+    public void isConsumo() {
+        if (this.consumido == true){
+           dataConsumo = LocalDate.now();
+        }
+        if(this.consumido == false){
+            dataConsumo = null;
+        }
     }
 }
