@@ -7,6 +7,7 @@ import useCreateUsuario from './useCreateUsuario';
 import useDeletePlanoAlimentar from './useDeletePlanoAlimentar';
 import useDeleteTreino from './useDeleteTreino';
 import useDesvincularAluno from './useDesvincularAluno';
+import useHistoricoProgresso from './useHistoricoProgresso';
 import useLogin from './useLogin';
 import usePlanosAlimentares from './usePlanoAlimentar';
 import useRefeicoes from './useRefeicoes';
@@ -29,6 +30,7 @@ export {
   useDeletePlanoAlimentar,
   useDeleteTreino,
   useDesvincularAluno,
+  useHistoricoProgresso,
   useLogin,
   usePlanosAlimentares,
   useRefeicoes,

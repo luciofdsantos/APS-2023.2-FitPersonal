@@ -38,7 +38,7 @@ interface ExercicioCardProps {
   onStatusChange: (id: number, status: boolean) => void;
 }
 
-export default function ExercicioCard ({
+export default function ExercicioCard({
   exercicio,
   isViewAluno,
   buttons,
@@ -55,26 +55,26 @@ export default function ExercicioCard ({
           {exercicio.nome.toUpperCase()}
         </Typography>
 
-        <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid container sx={{ mt: 2 }}>
           {!isViewAluno && (
             <div>
               <Grid item xs={12}>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Início:</strong>
+                  <strong>Início: </strong>
                   {new Date(exercicio.inicio).toLocaleDateString()}
                 </Typography>
               </Grid>
 
               <Grid item xs={12}>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Fim:</strong>
+                  <strong>Fim: </strong>
                   {new Date(exercicio.fim).toLocaleDateString()}
                 </Typography>
               </Grid>
 
               <Grid item xs={12}>
                 <Typography variant="body2" color="textSecondary">
-                  <strong>Grupo Muscular:</strong> {exercicio.grupoMuscular}
+                  <strong>Grupo Muscular: </strong> {exercicio.grupoMuscular}
                 </Typography>
               </Grid>
             </div>
@@ -82,24 +82,24 @@ export default function ExercicioCard ({
 
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">
-              <strong>Séries:</strong> {exercicio.series}
+              <strong>Séries: </strong> {exercicio.series}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">
-              <strong>Repetições:</strong> {exercicio.repeticoes}
+              <strong>Repetições: </strong> {exercicio.repeticoes}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" color="textSecondary">
-              <strong>Carga:</strong> {exercicio.carga}
+              <strong>Carga: </strong> {exercicio.carga}
             </Typography>
           </Grid>
 
           {!isViewAluno && (
             <Grid item xs={12}>
               <Typography variant="body2" color="textSecondary">
-                <strong>Status:</strong>
+                <strong>Status: </strong>
                 {exercicio.finalizado ? 'Finalizado' : 'Não Finalizado'}
               </Typography>
             </Grid>

@@ -10,6 +10,7 @@ import PlanosAlimentares from '../screens/PlanosAlimentares';
 import PlanosAlimentaresVinculados from '../screens/PlanosAlimentares';
 import Treinos from '../screens/Treinos';
 import TreinosVinculados from '../screens/Treinos';
+import Historico from '../screens/Historico';
 
 import RoutesAluno from './RoutesAluno';
 import RoutesLogin from './RoutesLogin';
@@ -35,6 +36,7 @@ export default function AppRoutes() {
             path="/planos-alimentares/novo"
             element={<EditarNovoPlano />}
           />
+          <Route path="/historico-progresso" element={<Historico />} />
           <Route path="/planos-alimentares/:id" element={<EditarNovoPlano />} />
         </Route>
 

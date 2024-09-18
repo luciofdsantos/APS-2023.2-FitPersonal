@@ -9,7 +9,8 @@ import {
   FitnessCenter,
   FoodBank,
   Person,
-  PersonAdd
+  PersonAdd,
+  CalendarMonth
 } from '@mui/icons-material';
 
 interface ListItemsProps {
@@ -34,6 +35,12 @@ const items = [
     text: 'Editar Pefil',
     Icon: Person,
     path: '/editar-perfil',
+    usuario: 'ALUNO'
+  },
+  {
+    text: 'Histórico',
+    Icon: CalendarMonth,
+    path: '/historico-progresso',
     usuario: 'ALUNO'
   }
 ];

@@ -53,6 +53,8 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
 
   const isViewAluno = location.state?.isViewAluno;
 
+  const alunoId = location.state.treino.aluno?.id || location.state.login.id;
+
   const treinoData = location.state?.treino || {
     aluno_id: 0,
     nome: '',
@@ -61,7 +63,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   };
 
   const [formData, setFormData] = useState<FormData>({
-    aluno_id: location.state?.treino?.aluno.id || location.state?.login.id || 0,
+    aluno_id: alunoId,
     nome: treinoData.nome || '',
     descricao: treinoData.descricao || '',
     exercicios: treinoData.exercicios || []
@@ -202,7 +204,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
 
     const progresso = {
       treinoId: location.state.treino.id,
-      alunoId: location.state.treino.aluno.id,
+      alunoId: alunoId,
       dataFinalizacao: todayApi,
       exercicios: selectedExercicios.map((exercicio) => ({
         exercicioId: exercicio.id!,
@@ -219,25 +221,42 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
   };
 
   const handleSaveExercicio = () => {
-    setSelectedExercicios((prev) => [...prev, newExercicio]);
-    handleCloseModal();
-    showAlert('success', 'Exercício adicionado com sucesso!');
-    setNewExercicio({
-      nome: '',
-      inicio: today,
-      fim: tomorrowDate,
-      grupoMuscular: '',
-      series: 0,
-      repeticoes: 0,
-      carga: 0,
-      finalizado: false,
-      treinoId: 0
-    });
+    const existe = selectedExercicios.some(
+      (exercicio) =>
+        exercicio.nome.toUpperCase() === newExercicio.nome.toUpperCase()
+    );
+
+    if (existe) {
+      showAlert('error', 'Esse nome já está em uso.');
+      return;
+    } else {
+      setSelectedExercicios((prev) => [...prev, newExercicio]);
+      handleCloseModal();
+      showAlert('success', 'Exercício adicionado com sucesso!');
+
+      setNewExercicio({
+        nome: '',
+        inicio: today,
+        fim: tomorrowDate,
+        grupoMuscular: '',
+        series: 0,
+        repeticoes: 0,
+        carga: 0,
+        finalizado: false,
+        treinoId: 0
+      });
+    }
   };
 
   const handleEditExercicio = (exercicio: Exercicio) => {
     setOpenEditExercicioModal(true);
     setSelectedExercicio(exercicio);
+  };
+
+  const handleDeleteExercicio = (exercicio: Exercicio) => {
+    setSelectedExercicios((prev) => {
+      return prev.filter((item) => item.nome !== exercicio.nome);
+    });
   };
 
   const handleSaveEditExercicio = () => {
@@ -260,12 +279,6 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
       finalizado: false,
       treinoId: 0
     });
-  };
-
-  const handleDeleteExercicio = (exercicio: Exercicio) => {
-    setSelectedExercicios((prev) =>
-      prev.filter((item) => item.id !== exercicio.id)
-    );
   };
 
   const handleStatusChange = (id: number, status: boolean) => {
@@ -328,35 +341,33 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
             />
           </Grid>
 
-          <Grid container spacing={2} style={{ marginTop: '1rem' }}>
-            {selectedExercicios.map((exercicio, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <ExercicioCard
-                  exercicio={exercicio}
-                  isViewAluno={isViewAluno}
-                  onStatusChange={handleStatusChange}
-                  buttons={[
-                    {
-                      startIcon: <EditIcon />,
-                      onClick: () => handleEditExercicio(exercicio),
-                      backgroundColor: 'transparent',
-                      iconColor: '#6842FF',
-                      border: 'none',
-                      noShow: isViewAluno
-                    },
-                    {
-                      startIcon: <DeleteIcon />,
-                      onClick: () => handleDeleteExercicio(exercicio),
-                      backgroundColor: 'transparent',
-                      iconColor: '#6842FF',
-                      border: 'none',
-                      noShow: isViewAluno
-                    }
-                  ]}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          {selectedExercicios.map((exercicio, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <ExercicioCard
+                exercicio={exercicio}
+                isViewAluno={isViewAluno}
+                onStatusChange={handleStatusChange}
+                buttons={[
+                  {
+                    startIcon: <EditIcon />,
+                    onClick: () => handleEditExercicio(exercicio),
+                    backgroundColor: 'transparent',
+                    iconColor: '#6842FF',
+                    border: 'none',
+                    noShow: isViewAluno
+                  },
+                  {
+                    startIcon: <DeleteIcon />,
+                    onClick: () => handleDeleteExercicio(exercicio),
+                    backgroundColor: 'transparent',
+                    iconColor: '#6842FF',
+                    border: 'none',
+                    noShow: isViewAluno
+                  }
+                ]}
+              />
+            </Grid>
+          ))}
 
           {!isViewAluno ? (
             <Grid item xs={12} style={{ marginTop: '1rem' }}>
@@ -408,6 +419,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
         <ExercicioForm
           newExercicio={selectedExercicio}
           setNewExercicio={setSelectedExercicio}
+          selectedExercicios={selectedExercicios}
         />
       </CustomModal>
 
@@ -420,6 +432,7 @@ export default function EditarNovo({ vinculado = false }: TreinosProps) {
         <ExercicioForm
           newExercicio={newExercicio}
           setNewExercicio={setNewExercicio}
+          selectedExercicios={selectedExercicios}
         />
       </CustomModal>
     </CustomLayout>
