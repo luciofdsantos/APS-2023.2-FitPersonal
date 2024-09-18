@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.aluno;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitpersonal.fitpersonal.entities.nutricionista.Nutricionista;
 import com.fitpersonal.fitpersonal.entities.personal.Personal;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
@@ -26,10 +27,12 @@ public class Aluno extends Usuario {
 
     @ManyToOne
     @JoinColumn(name = "nutricionista_id")
+    @JsonIgnore
     private Nutricionista nutricionista;
 
     @ManyToOne
     @JoinColumn(name = "personal_id")
+    @JsonIgnore
     private Personal personal;
 
     public void addPlanoAlimentar(PlanoAlimentar planoAlimentar) {

@@ -1,6 +1,7 @@
 package com.fitpersonal.fitpersonal.controllers;
 
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
+import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoAlunoDataRequestDTO;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarRequestDTO;
 import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarResponseDTO;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -155,4 +157,22 @@ public class PlanoAlimentarController {
                 .orElseGet(() -> ResponseEntity.notFound().build()); // HTTP 404 Not Found se não encontrar
     }
 
+    @PostMapping("/refeicoes/por-data")
+    public ResponseEntity<List<Refeicao>> getRefeicoesByAlunoAndDataConsumo(@RequestBody RefeicaoAlunoDataRequestDTO requestDTO) {
+        Long alunoId = requestDTO.alunoId();
+        LocalDate dataConsumo = requestDTO.dataConsumo();
+
+        if (alunoId == null || alunoId <= 0 || dataConsumo == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        List<Refeicao> refeicoes = refeicaoRepository.findByPlanoAlimentarAlunoIdAndDataConsumo(alunoId, dataConsumo);
+
+        if (refeicoes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(refeicoes);
+    }
 }
+

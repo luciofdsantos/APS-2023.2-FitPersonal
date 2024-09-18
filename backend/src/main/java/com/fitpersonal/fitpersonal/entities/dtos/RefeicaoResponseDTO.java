@@ -16,7 +16,8 @@ public record RefeicaoResponseDTO(
         LocalDate dataConsumo,
         Boolean consumido,
         TipoRefeicao tipoRefeicao,
-        Long planoAlimentarId) {
+        Long planoAlimentarId
+) {
 
     public RefeicaoResponseDTO(Refeicao refeicao) {
         this(
@@ -30,7 +31,7 @@ public record RefeicaoResponseDTO(
                 refeicao.getDataConsumo(),
                 refeicao.getConsumido(),
                 refeicao.getTipoRefeicao(),
-                refeicao.getPlanoAlimentar().getId()
+               refeicao.getPlanoAlimentar().getId()
         );
     }
 }

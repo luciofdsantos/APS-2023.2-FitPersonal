@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.refeicao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitpersonal.fitpersonal.entities.dtos.RefeicaoRequestDTO;
 import com.fitpersonal.fitpersonal.entities.planoalimentar.PlanoAlimentar;
 import com.fitpersonal.fitpersonal.enums.TipoRefeicao;
@@ -42,6 +43,7 @@ public class Refeicao {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "planoalimentar_id")
+    @JsonIgnore
     private PlanoAlimentar planoAlimentar;
 
     public Refeicao(RefeicaoRequestDTO dto, PlanoAlimentar planoAlimentar) {

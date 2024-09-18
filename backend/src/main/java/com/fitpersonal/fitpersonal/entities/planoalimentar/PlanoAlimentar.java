@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.planoalimentar;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.dtos.PlanoAlimentarRequestDTO;
 import com.fitpersonal.fitpersonal.entities.refeicao.Refeicao;
@@ -34,11 +35,13 @@ public class PlanoAlimentar {
     @Column
     private Float metaConsumoGordura = 0f;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "planoAlimentar", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Refeicao> refeicoes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "aluno_id")
+    @JsonIgnore
     private Aluno aluno;
 
     public PlanoAlimentar(PlanoAlimentarRequestDTO dto) {
