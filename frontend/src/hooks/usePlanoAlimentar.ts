@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 const endpoint = 'http://localhost:8080/api/planoalimentar';
 
 const fetchPlanosAlimentares = async (idAluno?: number | null) => {
-  const url = idAluno ? `${endpoint}/aluno/${idAluno}` : endpoint;
+  const url = idAluno ? `${endpoint}/plano_alimentar_aluno/${idAluno}` : endpoint;
 
   const response = await fetch(url);
   if (!response.ok) {

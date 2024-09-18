@@ -47,13 +47,14 @@ export default function useCreatePlanoAlimentar({
     mutationFn: async (
       planoAlimentar: PlanoAlimentar & { refeicoes: Refeicao[] }
     ) => {
-      const response = await fetch(`${endpoint}/${planoAlimentar.alunoId}`, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(planoAlimentar)
       });
+      
       if (!response.ok) {
         const errorMessage = await response.text();
         throw new Error(`Erro ao criar plano alimentar: ${errorMessage}`);

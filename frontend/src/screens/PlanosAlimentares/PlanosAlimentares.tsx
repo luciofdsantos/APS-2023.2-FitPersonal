@@ -59,7 +59,7 @@ export default function PlanosAlimentares({
     isSuccess,
     isFetching
   } = usePlanosAlimentares(
-    !vinculado ? location.state.login.id : Number(idAluno)
+    !vinculado ? location.state.login?.id : Number(idAluno)
   );
 
   const { mutate: deletePlanoAlimentar } = useDeletePlanoAlimentar({

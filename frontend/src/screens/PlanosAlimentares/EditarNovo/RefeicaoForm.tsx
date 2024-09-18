@@ -25,6 +25,7 @@ interface RefeicaoFormProps {
   newRefeicao: Refeicao;
   setNewRefeicao?: React.Dispatch<React.SetStateAction<Refeicao>>;
   disabled?: boolean;
+  selectedRefeicoes: Refeicao[];
 }
 
 export enum TipoRefeicao {
@@ -37,8 +38,13 @@ export enum TipoRefeicao {
 export default function RefeicaoForm({
   newRefeicao,
   setNewRefeicao,
-  disabled = false
+  disabled = false,
+  selectedRefeicoes
 }: RefeicaoFormProps) {
+  const existe = selectedRefeicoes?.some(
+    (refeicao: Refeicao) => refeicao.alimento === newRefeicao.alimento
+  );
+
   const tipoRefeicaoOptions = Object.values(TipoRefeicao);
 
   const handleTipoRefeicaoChange = (event: SelectChangeEvent<TipoRefeicao>) => {
@@ -58,6 +64,11 @@ export default function RefeicaoForm({
             label="Alimento"
             fullWidth
             value={newRefeicao.alimento}
+            aria-label={
+              existe
+                ? 'Esse nome já está em uso. Por favor, escolha outro.'
+                : ''
+            }
             onChange={(e) =>
               setNewRefeicao &&
               setNewRefeicao({ ...newRefeicao, alimento: e.target.value })

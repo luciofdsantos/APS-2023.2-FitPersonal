@@ -51,7 +51,7 @@ export default function ListItems({ open }: ListItemsProps) {
 
   const handleClick = (path: string) => {
     navigate(path, {
-      state: { login: location.state.login, treino: location.state.treino }
+      state: { login: location.state.login, treino: location.state.treino, planoalimentar: location.state.planoalimentar }
     });
   };
 

@@ -88,7 +88,7 @@ export default function EditarNovo({
     FormData & { refeicoes: Refeicao[] }
   >({
     alunoId:
-      location.state?.planoAlimentar?.aluno.id || location.state?.login.id || 0,
+      location.state?.planoAlimentar?.aluno.id || location.state.login?.id || 0,
     totalConsumoCarboidrato: planoAlimentarData?.totalConsumoCarboidrato || 0,
     totalConsumoProteina: planoAlimentarData?.totalConsumoProteina || 0,
     totalConsumoGordura: planoAlimentarData?.totalConsumoGordura || 0,
@@ -131,12 +131,10 @@ export default function EditarNovo({
 
   const { mutate: createPlanoAlimentar } = useCreatePlanoAlimentar({
     onSuccess: () => {
+      location.state.isSuccessPlanoAlimentar = true;
       showAlert('success', 'Plano Alimentar criado com sucesso!');
     },
-    onError: (error) => {
-      console.error('Erro ao criar plano alimentar:', error.message);
-      showAlert('error', 'Erro ao criar plano alimentar. Tente novamente.');
-    }
+    onError: () => {}
   });
 
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
@@ -154,8 +152,7 @@ export default function EditarNovo({
         }
       );
     },
-    onError: (error) => {
-      console.error('Erro ao atualizar plano alimentar:', error.message);
+    onError: () => {
       showAlert('error', 'Erro ao atualizar plano alimentar. Tente novamente.');
     }
   });
@@ -187,11 +184,11 @@ export default function EditarNovo({
       navigate(
         !vinculado
           ? '/planos-alimentares'
-          : `/planos-alimentares-aluno-vinculado/${location.state.data.id}`,
+          : `/planos-alimentares-aluno-vinculado/${location.state.login.id}`,
         {
           state: {
             isSuccessPlanoAlimentar: true,
-            data: location.state.login,
+            login: location.state.login,
             planoalimentar: location.state.planoalimentar
           }
         }
@@ -249,6 +246,7 @@ export default function EditarNovo({
     );
 
     handleCloseModal();
+    location.state.isSuccessPlanoAlimentar = true;
     showAlert('success', 'Exercício atualizado com sucesso!');
     setNewRefeicao({
       alimento: '',
@@ -264,7 +262,7 @@ export default function EditarNovo({
 
   const handleDeleteRefeicao = (refeicao: Refeicao) => {
     setSelectedRefeicoes((prev) =>
-      prev.filter((item) => item.id !== refeicao.id)
+      prev.filter((item) => item.alimento !== refeicao.alimento)
     );
   };
 
@@ -397,7 +395,7 @@ export default function EditarNovo({
                       {
                         state: {
                           login: location.state.login,
-                          refeicao: location.state.refeicao
+                          planoalimentar: location.state.planoalimentar
                         }
                       }
                     )
@@ -418,6 +416,7 @@ export default function EditarNovo({
         <RefeicaoForm
           newRefeicao={selectedRefeicao}
           setNewRefeicao={setSelectedRefeicao}
+          selectedRefeicoes={selectedRefeicoes}
         />
       </CustomModal>
 
@@ -430,6 +429,7 @@ export default function EditarNovo({
         <RefeicaoForm
           newRefeicao={newRefeicao}
           setNewRefeicao={setNewRefeicao}
+          selectedRefeicoes={selectedRefeicoes}
         />
       </CustomModal>
     </CustomLayout>
