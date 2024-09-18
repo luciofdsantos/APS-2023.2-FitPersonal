@@ -139,16 +139,6 @@ export default function EditarNovo({
     }
   });
 
-  // const { mutate: mutateCreateRefeicao } = useCreateRefeicao({
-  //   onSuccess: () => {
-  //     showAlert('success', 'Refeição criada com sucesso!');
-  //   },
-  //   onError: (error) => {
-  //     console.error('Erro ao criar refeição:', error.message);
-  //     showAlert('error', 'Erro ao criar refeição. Tente novamente.');
-  //   }
-  // });
-
   const { mutate: updatePlanoAlimentar } = useUpdatePlanoAlimentar({
     onSuccess: () => {
       showAlert('success', 'Plano atualizado com sucesso!');

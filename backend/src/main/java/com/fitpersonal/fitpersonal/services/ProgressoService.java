@@ -86,6 +86,7 @@ public class ProgressoService {
                     exercicioDTO.setExercicioId(exercicioProgresso.getExercicio().getId());
                     exercicioDTO.setFeito(exercicioProgresso.getFeito());
                     exerciciosProgressoDTO.add(exercicioDTO);
+                    exercicioDTO.setNome(exercicioProgresso.getExercicio().getNome());
                 }
                 progressoDTO.setExercicios(exerciciosProgressoDTO);
 

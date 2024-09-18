@@ -20,6 +20,7 @@ public class ProgressoTreino {
     private Treino treino;
 
     @ManyToOne
+    @JoinColumn(name = "aluno_id")
     private Aluno aluno;
 
     private LocalDate dataFinalizacao;

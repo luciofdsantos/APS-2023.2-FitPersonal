@@ -28,12 +28,6 @@ export default function CustomLayout({ appBarText, children }: LayoutProps) {
     }
   }, [navigate, isAuthenticated]);
 
-  // useEffect(() => {
-  //   window.addEventListener('load', () => {
-  //     localStorage.removeItem('usuario');
-  //   });
-  // }, []);
-
   return (
     <Box sx={{ display: 'flex' }}>
       {appBarText && open && (

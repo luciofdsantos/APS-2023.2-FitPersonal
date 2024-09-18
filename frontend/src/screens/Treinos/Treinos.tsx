@@ -6,11 +6,11 @@ import {
   ConfirmationDialog
 } from '../../components';
 import { useAlert } from '../../components/CustomAlert';
-import { Grid, CircularProgress, Box } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import {
-  Visibility as VisibilityIcon,
+  Delete as DeleteIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon
+  Visibility as VisibilityIcon
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
@@ -50,8 +50,7 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
   const {
     data: treinos,
     refetch: refetchTreino,
-    isSuccess,
-    isFetching
+    isSuccess
   } = useTreinos(!vinculado ? location.state.login.id : Number(idAluno));
 
   const { mutate: deleteTreino } = useDeleteTreino({
@@ -130,19 +129,7 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
           />
         </Grid>
 
-        {isFetching ? (
-          <Grid
-            item
-            xs={12}
-            container
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          </Grid>
-        ) : isSuccess && treinos && treinos.length > 0 ? (
+        {isSuccess && treinos && treinos.length > 0 ? (
           treinos.map((treino: Treino, index: number) => (
             <Grid item xs={12} md={8} lg={4} key={index}>
               <CustomCard
@@ -154,27 +141,32 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
                   },
                   {
                     label: 'Exercícios',
-                    value: treino.exercicios.map((exercicio) => (
-                      <CustomCard
-                        key={index}
-                        title={`Exercício - ${exercicio.nome}`}
-                        items={[
-                          {
-                            label: 'Grupo Muscular',
-                            value: exercicio.grupoMuscular
-                          },
-                          { label: 'Séries', value: exercicio.series },
-                          { label: 'Repetições', value: exercicio.repeticoes },
-                          { label: 'Carga', value: exercicio.carga },
-                          {
-                            label: 'Status',
-                            value: exercicio.finalizado
-                              ? 'Finalizado'
-                              : 'Não Finalizado'
-                          }
-                        ]}
-                      />
-                    ))
+                    value: treino.exercicios.map(
+                      (exercicio, indexExercicio) => (
+                        <CustomCard
+                          key={indexExercicio}
+                          title={`Exercício - ${exercicio.nome}`}
+                          items={[
+                            {
+                              label: 'Grupo Muscular',
+                              value: exercicio.grupoMuscular
+                            },
+                            { label: 'Séries', value: exercicio.series },
+                            {
+                              label: 'Repetições',
+                              value: exercicio.repeticoes
+                            },
+                            { label: 'Carga', value: exercicio.carga },
+                            {
+                              label: 'Status',
+                              value: exercicio.finalizado
+                                ? 'Finalizado'
+                                : 'Não Finalizado'
+                            }
+                          ]}
+                        />
+                      )
+                    )
                   }
                 ]}
                 style={{

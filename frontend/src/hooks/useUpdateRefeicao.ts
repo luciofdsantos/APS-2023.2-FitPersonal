@@ -3,22 +3,22 @@ import { useMutation } from '@tanstack/react-query';
 const endpoint = 'http://localhost:8080/api/refeicoes';
 
 interface Refeicao {
-    alimento: string;
-    quantidade: number;
-    kcal: number;
-    carboidrato: number;
-    proteina: number;
-    gordura: number;
-    tipoRefeicao: TipoRefeicao;
-    planoAlimentarId?: number;
-  }
+  alimento: string;
+  quantidade: number;
+  kcal: number;
+  carboidrato: number;
+  proteina: number;
+  gordura: number;
+  tipoRefeicao: TipoRefeicao;
+  planoAlimentarId?: number;
+}
 
-  export enum TipoRefeicao {
-    CAFE_DA_MANHA = 'CAFE_DA_MANHA',
-    ALMOCO = 'ALMOCO',
-    JANTAR = 'JANTAR',
-    LANCHE = 'LANCHE'
-  }
+export enum TipoRefeicao {
+  CAFE_DA_MANHA = 'CAFE_DA_MANHA',
+  ALMOCO = 'ALMOCO',
+  JANTAR = 'JANTAR',
+  LANCHE = 'LANCHE'
+}
 
 interface UseUpdateRefeicaoProps {
   onSuccess: () => void;

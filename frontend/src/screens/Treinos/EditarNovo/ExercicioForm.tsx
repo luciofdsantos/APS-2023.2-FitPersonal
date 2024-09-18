@@ -18,13 +18,19 @@ interface ExercicioFormProps {
   newExercicio: Exercicio;
   setNewExercicio?: React.Dispatch<React.SetStateAction<Exercicio>>;
   disabled?: boolean;
+  selectedExercicios: Exercicio[];
 }
 
 export default function ExercicioForm({
   newExercicio,
   setNewExercicio,
-  disabled = false
+  disabled = false,
+  selectedExercicios
 }: ExercicioFormProps) {
+  const existe = selectedExercicios?.some(
+    (exercicio) => exercicio.nome === newExercicio.nome
+  );
+
   return (
     <form noValidate autoComplete="off">
       <Grid container spacing={2}>
@@ -33,6 +39,11 @@ export default function ExercicioForm({
             label="Nome"
             fullWidth
             value={newExercicio.nome}
+            aria-label={
+              existe
+                ? 'Esse nome já está em uso. Por favor, escolha outro.'
+                : ''
+            }
             onChange={(e) =>
               setNewExercicio &&
               setNewExercicio({ ...newExercicio, nome: e.target.value })

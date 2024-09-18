@@ -1,5 +1,6 @@
 package com.fitpersonal.fitpersonal.entities.treino;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fitpersonal.fitpersonal.entities.aluno.Aluno;
 import com.fitpersonal.fitpersonal.entities.exercicio.Exercicio;
 import com.fitpersonal.fitpersonal.entities.usuario.Usuario;
@@ -37,6 +38,7 @@ public class Treino {
 
     @ManyToOne
     @JoinColumn(name = "aluno_id")
+    @JsonIgnore
     private Aluno aluno;
 
     @OneToMany(mappedBy = "treino", cascade =  CascadeType.ALL, orphanRemoval = true)

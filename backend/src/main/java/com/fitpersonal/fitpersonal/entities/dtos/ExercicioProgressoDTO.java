@@ -6,5 +6,5 @@ import lombok.Data;
 public class ExercicioProgressoDTO {
     private Long exercicioId;
     private Boolean feito;
-
+    private String nome;
 }
