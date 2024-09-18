@@ -48,33 +48,33 @@ const theme = (mode: 'light' | 'dark') => {
           }
         },
         typography: {
-          fontFamily: 'Inter, Arial, sans-serif', // Fonte padrão
+          fontFamily: 'Inter, Arial, sans-serif',
           body1: {
-            fontFamily: 'Inter, Arial, sans-serif', // Fonte para body1
+            fontFamily: 'Inter, Arial, sans-serif',
             color: mode === 'light' ? grey[600] : grey[50],
             fontWeight: 500
           },
           body2: {
-            fontFamily: 'Inter, Arial, sans-serif', // Fonte para body2
+            fontFamily: 'Inter, Arial, sans-serif',
             fontWeight: 500
           },
           h1: {
-            fontFamily: 'Oswald, Arial, sans-serif' // Fonte para h1
+            fontFamily: 'Oswald, Arial, sans-serif'
           },
           h2: {
-            fontFamily: 'Oswald, Arial, sans-serif' // Fonte para h2
+            fontFamily: 'Oswald, Arial, sans-serif'
           },
           h3: {
-            fontFamily: 'Oswald, Arial, sans-serif' // Fonte para h3
+            fontFamily: 'Oswald, Arial, sans-serif'
           },
           h4: {
-            fontFamily: 'Oswald, Arial, sans-serif' // Fonte para h4
+            fontFamily: 'Oswald, Arial, sans-serif'
           },
           h5: {
-            fontFamily: 'Oswald, Arial, sans-serif' // Fonte para h5
+            fontFamily: 'Oswald, Arial, sans-serif'
           },
           h6: {
-            fontFamily: 'Oswald, Arial, sans-serif', // Fonte para h6
+            fontFamily: 'Oswald, Arial, sans-serif',
             fontWeight: 500
           },
           subtitle2: {
@@ -90,7 +90,7 @@ const theme = (mode: 'light' | 'dark') => {
                 }
               },
               body: {
-                fontFamily: 'Inter, Arial, sans-serif' // Fonte para o body global
+                fontFamily: 'Inter, Arial, sans-serif'
               }
             }
           },

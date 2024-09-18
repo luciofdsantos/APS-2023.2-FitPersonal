@@ -121,7 +121,7 @@ export default function Alunos() {
         <Grid item xs={12}>
           <GroupButtons
             buttons={[
-              { text: 'Atualizar Tabela', onClick: () => refetchAlunos() } // Fixed the onClick function
+              { text: 'Atualizar Tabela', onClick: () => refetchAlunos() }
             ]}
             height="40%"
           />
