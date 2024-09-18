@@ -7,7 +7,11 @@ import {
 } from '../../components';
 import { useAlert } from '../../components/CustomAlert';
 import { Grid, CircularProgress, Box } from '@mui/material';
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import {
+  Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTreinos, useDeleteTreino } from '../../hooks';
 import { useParams } from 'react-router-dom';
@@ -87,6 +91,12 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
         state: { login: location.state.login, treino: treino }
       }
     );
+  };
+
+  const handleView = (treino: Treino) => {
+    navigate(`/treinos/${treino.id}`, {
+      state: { login: location.state.login, treino: treino, isViewAluno: true }
+    });
   };
 
   const handleEditNovo = () => {
@@ -172,6 +182,13 @@ export default function Treinos({ vinculado = false }: TreinosProps) {
                   boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)'
                 }}
                 buttons={[
+                  {
+                    startIcon: <VisibilityIcon />,
+                    onClick: () => handleView(treino),
+                    backgroundColor: 'transparent',
+                    iconColor: '#6842FF',
+                    border: 'none'
+                  },
                   {
                     startIcon: <EditIcon />,
                     onClick: () => handleEdit(treino),

@@ -4,12 +4,6 @@ import {
   IconButton,
   Toolbar
 } from '@mui/material';
-import {
-  FitnessCenter,
-  PersonAdd,
-  Person,
-  FoodBank
-} from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from '../ListItems';
