@@ -48,6 +48,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
     [Dayany](https://github.com/dayanylima) "Acho que faltou uma melhor comunicação e uma divisão mais clara das responsabilidades. Não ficou muito claro quem era responsável por cada tarefa, o que acabou gerando confusão e fez com que nos perdêssemos um pouco."
 
+    [Graciely]{https://github.com/grahduarte12) "A falta de comunicação entre o grupo até mesmo para comunicar que estava com problemas no desenvolvimento ou o assumimento de responsabilidades afetou o desenvolvimento, de modo geral, mesmo tendo sido utilizado ferramentas como o Trello para organização dos entregaveis, os que estavam sendo realizados, os conclídos e os que necessitavam serem iniciados."
 
   - **Experiência fora da curva:**  
     [Deise](https://github.com/deisesan) "Para mim, foi uma experiência muito fora da curva. Pegar um projeto do zero me fez perceber que preciso colocar em prática padrões de projeto e ser mais minimalista."
@@ -56,10 +57,14 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
     [Dayany](https://github.com/dayanylima) "Com esse trabalho tive a oportunidade de aprender uma nova tecnologia, então para mim esse foi um ponto positivo que me despertou a vontade de aprender mais sobre."
 
+    [Graciely](https://github.com/grahduarte12) "Foi uma experiencia atípica para mim, porém com todos os desafios encontrados e adversidades foi uma experiência totalmente gratificante fazer parte do desenvolvimento de um software do zero."
+
   - **Liderança:**  
     [Deise](https://github.com/deisesan) "Senti que faltou muito um líder. Warley tomou a frente de muitas coisas, o que foi uma iniciativa importante, mas a ausência de uma definição clara de líder deixou tudo muito solto."
 
     [Warley](https://github.com/warleyramires) "Tive que desempenhar um papel de liderança no qual não estou acostumado. Isso me tirou da zona de conforto e me desafiou a desenvolver habilidades de comunicação, tomada de decisão e organização. Reconheço que, em alguns momentos, faltou o instinto de liderança necessário para tomar decisões rápidas e coordenar melhor a equipe, o que gerou alguns desafios de alinhamento. No entanto, essa experiência me fez entender o valor de uma liderança proativa e a necessidade de melhorar minha capacidade de assumir responsabilidades de forma mais assertiva e inspiradora."
+
+    [Graciely](https://github.com/grahduarte12) "Apesar do nosso líder Warley está totalmente envolvido no desenvolvimento do software. Faltou a delegação de tarefas, prazos e marcar reuniões com toda equipe, pois a única realmente marcada não contou com todos os membros da equipe."
 
   - **Comprometimento:**  
     [Deise](https://github.com/deisesan) "Se todos tivessem assumido o compromisso de definir tarefas ou cobrar entregas, o projeto teria fluído melhor."
@@ -72,6 +77,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
     [Deise](https://github.com/deisesan) "No geral, lidar com pessoas foi a parte mais complicada."
     
     [Warley](https://github.com/warleyramires) "A disposição para compartilhar informações e ajudar quando necessário estava sempre presente entre os membros da equipe. No entanto, percebi que faltava uma iniciativa de alguns integrantes para buscar suporte quando enfrentavam dificuldades."
+
+    [Graciely](https://github.com/grahduarte12) "Para trabalhar com pessoas é necessário comunicação e colaboração, alguns membros da equipe me supreenderam de modo muito positivo pelo empenho para auxiliar e dá suporte quando necessário."
 
 ---
 
@@ -89,7 +96,11 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
   [Dayany](https://github.com/dayanylima)
   
-  - Fazer correções nas partes do projeto que não funcionaram como esperado e adicionar novas funcionalidades.  
+  - Fazer correções nas partes do projeto que não funcionaram como esperado e adicionar novas funcionalidades.
+
+  [Graciely](https://github.com/grahduarte12)
+
+  - Deixa a documentação o mais clara e menos "genérica" possível, possibilitando o auxílio em possíveis manutenções futuras.
 
 ---
 
@@ -102,6 +113,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 [Warley](https://github.com/warleyramires) "Participar deste projeto me proporcionou a oportunidade de conhecer pessoas incríveis e talentosas, enriquecendo minha experiência de trabalho em equipe. Durante o desenvolvimento, descobri áreas de interesse que antes não explorava."
 
 [Dayany](https://github.com/dayanylima) "Consegui ter uma experiência breve de como é trabalhar em uma equipe de desenvolvimento apesar das difuldades enfrentadas."
+
+[Graciely](https://github.com/grahduarte12) "Além de uma breve experiência de como é trabalhar em uma equipe voltada ao desenvolvimento de software, consegui perceber a necessidade de uma documentação detalhada e clara para o desenvolvimento e a importância dos padrões de projeto."
   
 ---
 
