@@ -10,6 +10,23 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
 ## 1. **Aspectos Positivos**
 
+- **Gerenciamento das Tarefas:**
+
+[Graciely](https://github.com/grahduarte12)
+
+- A utilização do Trello para gerir tarefas concluídas, as desenvolvidas, as que necessitavam de correções e as que necessitavam ainda serem iniciadas, deixou mais fácil o gerenciamento das Tarefas.
+
+- **Telas no Figma:**
+
+[Graciely](https://github.com/grahduarte12)
+
+-  As telas no Figma auxíliou a criação dos documentos, pois auxiliava para descrever no fluxo de cada tarefa proposta a ter no software.
+
+- **Desenvolvimento:**
+
+[Graciely](https://github.com/grahduarte12)
+
+-  A escolha de uma arquitetura modular (como o uso do padrão MVC) permitiu que diferentes partes do sistema fossem desenvolvidas, testadas e aprimoradas de maneira independente.
 ---
 
 ## 2. **Áreas de Melhoria**
