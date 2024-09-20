@@ -48,7 +48,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
     [Dayany](https://github.com/dayanylima) "Acho que faltou uma melhor comunicação e uma divisão mais clara das responsabilidades. Não ficou muito claro quem era responsável por cada tarefa, o que acabou gerando confusão e fez com que nos perdêssemos um pouco."
 
-    [Graciely]{https://github.com/grahduarte12) "A falta de comunicação entre o grupo até mesmo para comunicar que estava com problemas no desenvolvimento ou o assumimento de responsabilidades afetou o desenvolvimento, de modo geral, mesmo tendo sido utilizado ferramentas como o Trello para organização dos entregaveis, os que estavam sendo realizados, os conclídos e os que necessitavam serem iniciados."
+    [Graciely](https://github.com/grahduarte12) "A falta de comunicação entre o grupo até mesmo para comunicar que estava com problemas no desenvolvimento ou o assumimento de responsabilidades afetou o desenvolvimento, de modo geral, mesmo tendo sido utilizado ferramentas como o Trello para organização dos entregaveis, os que estavam sendo realizados, os conclídos e os que necessitavam serem iniciados."
 
   - **Experiência fora da curva:**  
     [Deise](https://github.com/deisesan) "Para mim, foi uma experiência muito fora da curva. Pegar um projeto do zero me fez perceber que preciso colocar em prática padrões de projeto e ser mais minimalista."
@@ -125,5 +125,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 [Deise](https://github.com/deisesan) "Resumidamente, a falta de um líder foi um grande ponto que pesou no resultado final do projeto."
 
 [Dayany](https://github.com/dayanylima) "A ideia do projeto era boa e no início estávamos mais empenhados, mas a falta de comunicação acabou afetando o resultado final."
+
+[Graciely](https://github.com/grahduarte12) "De modo geral, a ideia do projeto era boa, foi uma experiência gratificante, mas algumas situações que demonstraram falta de comunicação, comprometimento ou até mesmo responsabilidade afetou o desenvolvimento."
 
 ---
