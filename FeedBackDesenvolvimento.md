@@ -54,6 +54,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
   - **Comprometimento:**  
     [Deise](https://github.com/deisesan) "Se todos tivessem assumido o compromisso de definir tarefas ou cobrar entregas, o projeto teria fluído melhor."
+    
     [Warley](https://github.com/warleyramires) "Em alguns momentos, faltou comprometimento com os prazos estipulados, seja por dificuldades de desenvolvimento ou questões pessoais. Isso impactou o fluxo de trabalho e gerou pressão adicional na equipe."
 
   - **Colaboração entre membros:**  
