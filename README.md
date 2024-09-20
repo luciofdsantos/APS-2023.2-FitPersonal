@@ -43,4 +43,4 @@ O principal objetivo do **Portal Ciência da Computação** é fortalecer a comu
 5. [Modelo de Domínio](https://app.diagrams.net/#G1HeUAcIgh5V9qxsfrwHzBKXr6ATJuHaDF#%7B%22pageId%22%3A%22hHhpomXcHoK5sr4QZyey%22%7D)
 6. [Diagrama de Sequência de Sistema](https://app.diagrams.net/#G1wk_JZytv7qVZjUtf6t8aXzU_wE2PJJ_v#%7B%22pageId%22%3A%22opEtpKFSlEG7xH13b8S1%22%7D)
 7. [Projeto de Arquitetura](https://docs.google.com/document/d/1OW440lIJA_tzMdoR5wX5rHgho5bqoG7I/edit)
-8. [Feedback sobre o Desenvolvimento](https://github.com/luciofdsantos/APS-2023.2-FitPersonal/blob/main/FeedBackDesenvolvimento.md)
+8. [Feedback sobre o Desenvolvimento](https://github.com/luciofdsantos/APS-2023.2-FitPersonal/blob/main/Documents/FeedBackDesenvolvimento.md)
