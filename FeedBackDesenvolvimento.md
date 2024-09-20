@@ -35,6 +35,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
 [Warley](https://github.com/warleyramires) "Por não dominar grande parte do framework utilizado no backend, acredito não ter utilizado as melhores práticas para resolução de alguns problemas de desenvolvimento."
 
+[Lorena](https://github.com/Lorena-Avelino) "Por não conhecer muito bem as ferramentas usadas no frontend, tive dificuldade para entender o que o código fazia e fiquei um pouco perdida, afentando o meu desempenho na realização das tarefas."
+
 ---
 
 ## 4. **Colaboração com a Equipe**
@@ -50,6 +52,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
     [Graciely](https://github.com/grahduarte12) "A falta de comunicação entre o grupo até mesmo para comunicar que estava com problemas no desenvolvimento ou o assumimento de responsabilidades afetou o desenvolvimento, de modo geral, mesmo tendo sido utilizado ferramentas como o Trello para organização dos entregaveis, os que estavam sendo realizados, os conclídos e os que necessitavam serem iniciados."
 
+    [Lorena](https://github.com/Lorena-Avelino) "Houve falta de comunicação entre os membros da equipe, principalmente no início do projeto, onde não foi definido claramente o que cada um iria fazer e de que forma fazer. Tentamos usar o Trello, porém sem muito sucesso, nos esquecendo de atualizar ele constantemente. Isso acabou interferindo bastante no andamento das tarefas."
+
   - **Experiência fora da curva:**  
     [Deise](https://github.com/deisesan) "Para mim, foi uma experiência muito fora da curva. Pegar um projeto do zero me fez perceber que preciso colocar em prática padrões de projeto e ser mais minimalista."
 
@@ -58,6 +62,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
     [Dayany](https://github.com/dayanylima) "Com esse trabalho tive a oportunidade de aprender uma nova tecnologia, então para mim esse foi um ponto positivo que me despertou a vontade de aprender mais sobre."
 
     [Graciely](https://github.com/grahduarte12) "Foi uma experiencia atípica para mim, porém com todos os desafios encontrados e adversidades foi uma experiência totalmente gratificante fazer parte do desenvolvimento de um software do zero."
+
+    [Lorena](https://github.com/Lorena-Avelino) "Por não conhecer muito bem as ferramentas usadas no frontend, tive dificuldade para entender o que o código fazia e fiquei um pouco perdida, afentando o meu desempenho na realização das tarefas."
 
   - **Liderança:**  
     [Deise](https://github.com/deisesan) "Senti que faltou muito um líder. Warley tomou a frente de muitas coisas, o que foi uma iniciativa importante, mas a ausência de uma definição clara de líder deixou tudo muito solto."
@@ -115,6 +121,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 [Dayany](https://github.com/dayanylima) "Consegui ter uma experiência breve de como é trabalhar em uma equipe de desenvolvimento apesar das difuldades enfrentadas."
 
 [Graciely](https://github.com/grahduarte12) "Além de uma breve experiência de como é trabalhar em uma equipe voltada ao desenvolvimento de software, consegui perceber a necessidade de uma documentação detalhada e clara para o desenvolvimento e a importância dos padrões de projeto."
+
+[Lorena](https://github.com/Lorena-Avelino) "Tive a oportunidade de aprender coisas novas com quem era mais experiente, me fazendo gostar cada vez mais da área. E também a experiência de trabalhar em uma equipe de projeto(o que não é fácil). Acredito que tenha sido a experiência mais parecida com o mercado de trabalho da área de desenvolvimento que já tive até hoje."
   
 ---
 
