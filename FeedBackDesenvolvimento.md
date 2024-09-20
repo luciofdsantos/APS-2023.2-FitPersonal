@@ -70,6 +70,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
   - **Colaboração entre membros:**  
     [Deise](https://github.com/deisesan) "No geral, lidar com pessoas foi a parte mais complicada."
+    
     [Warley](https://github.com/warleyramires) "A disposição para compartilhar informações e ajudar quando necessário estava sempre presente entre os membros da equipe. No entanto, percebi que faltava uma iniciativa de alguns integrantes para buscar suporte quando enfrentavam dificuldades."
 
 ---
