@@ -80,7 +80,9 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
     [Graciely](https://github.com/grahduarte12) "Foi uma experiencia atípica para mim, porém com todos os desafios encontrados e adversidades foi uma experiência totalmente gratificante fazer parte do desenvolvimento de um software do zero."
 
-    [Lorena](https://github.com/Lorena-Avelino) "Por não conhecer muito bem as ferramentas usadas no frontend, tive dificuldade para entender o que o código fazia e fiquei um pouco perdida, afentando o meu desempenho na realização das tarefas."
+    [Lorena](https://github.com/Lorena-Avelino) "Acredito que tenha sido a experiência mais parecida com o mercado de trabalho da área de desenvolvimento que já tive até hoje."
+
+
 
   - **Liderança:**  
     [Deise](https://github.com/deisesan) "Senti que faltou muito um líder. Warley tomou a frente de muitas coisas, o que foi uma iniciativa importante, mas a ausência de uma definição clara de líder deixou tudo muito solto."
@@ -95,6 +97,8 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
     [Warley](https://github.com/warleyramires) "Em alguns momentos, faltou comprometimento com os prazos estipulados, seja por dificuldades de desenvolvimento ou questões pessoais. Isso impactou o fluxo de trabalho e gerou pressão adicional na equipe."
 
     [Dayany](https://github.com/dayanylima) "Acredito que houve falta de comprometimento com as funções designadas e com os prazos de entrega." 
+
+    [Lorena](https://github.com/Lorena-Avelino) "Faltou em alguns momentos comprometimento, muitas das vezes por problemas pessoais e/ou outras disciplinas que tomaram bastante do tempo dos membros da equipe."
 
   - **Colaboração entre membros:**  
     [Deise](https://github.com/deisesan) "No geral, lidar com pessoas foi a parte mais complicada."
@@ -139,7 +143,7 @@ Ressaltar o comprometimento de todos no desenvolvimento do FitPersonal é essenc
 
 [Graciely](https://github.com/grahduarte12) "Além de uma breve experiência de como é trabalhar em uma equipe voltada ao desenvolvimento de software, consegui perceber a necessidade de uma documentação detalhada e clara para o desenvolvimento e a importância dos padrões de projeto."
 
-[Lorena](https://github.com/Lorena-Avelino) "Tive a oportunidade de aprender coisas novas com quem era mais experiente, me fazendo gostar cada vez mais da área. E também a experiência de trabalhar em uma equipe de projeto(o que não é fácil). Acredito que tenha sido a experiência mais parecida com o mercado de trabalho da área de desenvolvimento que já tive até hoje."
+[Lorena](https://github.com/Lorena-Avelino) "Tive a oportunidade de aprender coisas novas com quem era mais experiente, me fazendo gostar cada vez mais da área. E também a experiência de trabalhar em uma equipe de projeto(o que não é fácil)."
   
 ---
 
